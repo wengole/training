@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
 
-    <title>Search &mdash; Mastering Plone 1.1 documentation</title>
+    <title>2. Installation &amp; Setup &mdash; Mastering Plone 1.1 documentation</title>
 
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 
@@ -30,18 +30,20 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/searchtools.js"></script>
-    <script type="text/javascript" src="_static/searchtools.js"></script>
     <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-   
-
+    <link rel="next" title="3. Installing Plone for the Training" href="plone_training_config/instructions.html" />
+    <link rel="prev" title="1. Introduction" href="intro.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="plone_training_config/instructions.html" title="3. Installing Plone for the Training"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="intro.html" title="1. Introduction"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,29 +53,53 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
-  </div>
-  <p>
-    From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.
-  </p>
-  <form action="" method="get">
-    <input type="text" name="q" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>
-  
-  <div id="search-results">
-  
-  </div>
+  <div class="section" id="installation-setup">
+<h1>2. Installation &amp; Setup<a class="headerlink" href="#installation-setup" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-plone">
+<h2>Installing Plone<a class="headerlink" href="#installing-plone" title="Permalink to this headline">¶</a></h2>
+<p>Plone 4.x requires a working Python 2.6 or 2.7 and several other tools.</p>
+<p>Installation is different on every system.</p>
+<ul class="simple">
+<li>use a Python that comes pre-installed in your operating-system (most Linuxes and Mac OS have one)</li>
+<li>use the <a class="reference external" href="https://github.com/collective/buildout.python">python-buildout</a></li>
+<li>building Linux-packages</li>
+<li><a class="reference external" href="http://mxcl.github.com/homebrew">homebrew</a> (Mac OS X)</li>
+<li>PyWin32 (Windows)</li>
+</ul>
+<ul class="simple">
+<li>Philip uses MacOS, the python-buildout and homebrew</li>
+<li>Patrick uses Ubuntu.</li>
+<li>Alan Runyan uses Windows.</li>
+</ul>
+<p>Plone offers some options for being installed:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>One-click installers for Mac and Windows (4.3.2 is not yet finished)</li>
+<li>Unified installers (all &#8216;nix, including MacOS)</li>
+<li>A vagrant/virtualbox install kit (all platforms)</li>
+<li>Use your own buildout</li>
+</ol>
+<p>You can download all these at <a class="reference external" href="http://plone.org/products/plone/releases/4.3.2">http://plone.org/products/plone/releases/4.3.2</a></p>
+</div></blockquote>
+<p>For the training we&#8217;ll use option 3 and 4 to install and run Plone.</p>
+<blockquote>
+<div>Read more about installing Plone: <a class="reference external" href="https://plone.org/documentation/manual/installing-plone">https://plone.org/documentation/manual/installing-plone</a> and <a class="reference external" href="http://developer.plone.org/getstarted/installation.HTML">http://developer.plone.org/getstarted/installation.HTML</a></div></blockquote>
+</div>
+<div class="section" id="hosting-plone">
+<h2>Hosting Plone<a class="headerlink" href="#hosting-plone" title="Permalink to this headline">¶</a></h2>
+<p>Try <a class="reference external" href="http://ploud.com">http://ploud.com</a> to host a Plone-Site for free.</p>
+<p>You can host Plone...</p>
+<ul class="simple">
+<li>with one of many <a class="reference external" href="http://plone.org/support/hosting-providers">hosting-providers</a></li>
+<li>on a virtual private server</li>
+<li>on dedicated servers</li>
+<li>in the cloud (e.g. using Amazon EC2)</li>
+</ul>
+<p>Run Plone on a 5$ plan: <a class="reference external" href="http://www.stevemcmahon.com/steves-blog/plone-on-5-a-month">http://www.stevemcmahon.com/steves-blog/plone-on-5-a-month</a></p>
+<p>Where to host Plone: <a class="reference external" href="http://plone.org/documentation/faq/where-can-i-host-my-plone-site">http://plone.org/documentation/faq/where-can-i-host-my-plone-site</a></p>
+</div>
+</div>
+
 
           </div>
         </div>
@@ -81,9 +107,13 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">2. Installation &amp; Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-plone">Installing Plone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hosting-plone">Hosting Plone</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anatomy.html">4. The Anatomy of Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">5. The Features of Plone</a></li>
@@ -110,6 +140,19 @@
 <li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
 </ul>
 
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -117,6 +160,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="plone_training_config/instructions.html" title="3. Installing Plone for the Training"
+             >next</a></li>
+        <li class="right" >
+          <a href="intro.html" title="1. Introduction"
+             >previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>

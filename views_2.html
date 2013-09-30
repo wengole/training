@@ -1,0 +1,245 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>17. Views II: A default view for “talk” &mdash; Mastering Plone 1.1 documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
+    <link rel="next" title="18. Views III: A Talk list" href="views_3.html" />
+    <link rel="prev" title="16. Customizing existing templates" href="zpt_2.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="views_3.html" title="18. Views III: A Talk list"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="zpt_2.html" title="16. Customizing existing templates"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="views-ii-a-default-view-for-talk">
+<h1>17. Views II: A default view for &#8220;talk&#8221;<a class="headerlink" href="#views-ii-a-default-view-for-talk" title="Permalink to this headline">¶</a></h1>
+<p>ZCML</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+    <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
+    <span class="na">xmlns:browser=</span><span class="s">&quot;http://namespaces.zope.org/browser&quot;</span>
+    <span class="na">i18n_domain=</span><span class="s">&quot;ploneconf.talk&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;browser:page</span>
+       <span class="na">name=</span><span class="s">&quot;demoview&quot;</span>
+       <span class="na">for=</span><span class="s">&quot;*&quot;</span>
+       <span class="na">layer=</span><span class="s">&quot;zope.interface.Interface&quot;</span>
+       <span class="na">class=</span><span class="s">&quot;.views.DemoView&quot;</span>
+       <span class="na">template=</span><span class="s">&quot;templates/demoview.pt&quot;</span>
+       <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+       <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+<p>Code</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.Five.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span>
+
+<span class="k">class</span> <span class="nc">DemoView</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; This does nothing so far</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Do stuff</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">DemoView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__call__</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section" id="grok">
+<h2>Grok<a class="headerlink" href="#grok" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>
+    <span class="n">zip_safe</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">install_requires</span><span class="o">=</span><span class="p">[</span>
+        <span class="s">&#39;setuptools&#39;</span><span class="p">,</span>
+        <span class="s">&#39;five.grok&#39;</span>
+        <span class="c"># -*- Extra requirements: -*-</span>
+    <span class="p">],</span>
+    <span class="n">extras_require</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;test&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;plone.app.testing&#39;</span><span class="p">]},</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+    <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
+    <span class="na">xmlns:five=</span><span class="s">&quot;http://namespaces.zope.org/five&quot;</span>
+    <span class="na">xmlns:i18n=</span><span class="s">&quot;http://namespaces.zope.org/i18n&quot;</span>
+    <span class="na">xmlns:genericsetup=</span><span class="s">&quot;http://namespaces.zope.org/genericsetup&quot;</span>
+    <span class="na">xmlns:grok=</span><span class="s">&quot;http://namespaces.zope.org/grok&quot;</span>
+    <span class="na">xmlns:plone=</span><span class="s">&quot;http://namespaces.plone.org/plone&quot;</span>
+    <span class="na">i18n_domain=</span><span class="s">&quot;ploneconf.talk&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;includeDependencies</span> <span class="na">package=</span><span class="s">&quot;.&quot;</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;grok:grok</span> <span class="na">package=</span><span class="s">&quot;.&quot;</span> <span class="nt">/&gt;</span>
+    ....
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
+<span class="kn">from</span> <span class="nn">plone.directives</span> <span class="kn">import</span> <span class="n">dexterity</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+
+
+<span class="k">class</span> <span class="nc">TalkView</span><span class="p">(</span><span class="n">dexterity</span><span class="o">.</span><span class="n">DisplayForm</span><span class="p">):</span>  <span class="c"># grok.View + dexterity information</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s">&quot;zope2.View&quot;</span><span class="p">)</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">Interface</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-html"><pre>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+    lang="en"
+    metal:use-macro="context/main_template/macros/master"
+    i18n:domain="plonekonf.talk"&gt;
+&lt;body&gt;
+    &lt;metal:content-core fill-slot="content-core"&gt;
+        &lt;p&gt;Suitable for &lt;em tal:replace="context/audience"&gt;&lt;/em&gt;
+        &lt;/p&gt;
+
+        &lt;div tal:content="structure view/w/details/render" /&gt;
+
+        &lt;div&gt;Presenter:
+            &lt;p&gt;
+                &lt;strong tal:content="context/Creator"&gt;
+                User
+                &lt;/strong&gt;
+            &lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/metal:content-core&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre>...
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;allow_discussion&quot;</span><span class="nt">&gt;</span>False<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;default_view&quot;</span><span class="nt">&gt;</span>talkview<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;view_methods&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;talkview&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;default_view_fallback&quot;</span><span class="nt">&gt;</span>False<span class="nt">&lt;/property&gt;</span>
+...
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy.html">4. The Anatomy of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">5. The Features of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_customizing.html">6. Configuring and Customising Plone through the web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">8. Extend Plone with Add-ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Creating content-types with Dexterity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_1.html">14. Views I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt.html">15. Zope Page Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt_2.html">16. Customizing existing templates</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">17. Views II: A default view for &#8220;talk&#8221;</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#grok">Grok</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="views_3.html">18. Views III: A Talk list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_search.html">19. Custom search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ressources.html">20. Ressources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="social_behavior.html">21. Social behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewlets.html">22. Writing Viewlets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_code.html">23. Deploying your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">24. Buildout II: Deploying your site</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_of_plone.html">25. The Future of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="views_3.html" title="18. Views III: A Talk list"
+             >next</a></li>
+        <li class="right" >
+          <a href="zpt_2.html" title="16. Customizing existing templates"
+             >previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Philip Bauer, Patrick Gerken.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

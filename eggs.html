@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
 
-    <title>Search &mdash; Mastering Plone 1.1 documentation</title>
+    <title>12. Creating your own eggs to customize Plone &mdash; Mastering Plone 1.1 documentation</title>
 
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 
@@ -30,18 +30,20 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/searchtools.js"></script>
-    <script type="text/javascript" src="_static/searchtools.js"></script>
     <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-   
-
+    <link rel="next" title="13. Creating content-types with Dexterity" href="dexterity.html" />
+    <link rel="prev" title="11. IDE’s and Editors" href="ide.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="dexterity.html" title="13. Creating content-types with Dexterity"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="ide.html" title="11. IDE’s and Editors"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,29 +53,27 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
-  </div>
-  <p>
-    From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.
-  </p>
-  <form action="" method="get">
-    <input type="text" name="q" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>
-  
-  <div id="search-results">
-  
-  </div>
+  <div class="section" id="creating-your-own-eggs-to-customize-plone">
+<h1>12. Creating your own eggs to customize Plone<a class="headerlink" href="#creating-your-own-eggs-to-customize-plone" title="Permalink to this headline">¶</a></h1>
+<p>Our own code has te be organised as an egg. An Egg is a zip file or a directory that follows certain conventions. We are going to use zopeskel. Zopeskel creates a skeleton projekt. We only need to fill the holes.</p>
+<p>We move to the <tt class="docutils literal"><span class="pre">src</span></tt> directory and call a script called <tt class="docutils literal"><span class="pre">zopeskel</span></tt>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>src
+<span class="nv">$ </span>../bin/zopeskel
+</pre></div>
+</div>
+<p>This returns a list of available templates we might use. We choose plone_basic.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>../bin/zopeskel plone_basic
+</pre></div>
+</div>
+<ul class="simple">
+<li>Enter project name: <tt class="docutils literal"><span class="pre">ploneconf.talk</span></tt></li>
+</ul>
+<p>If this is your first egg, this is a very special moment. We are going to create the egg with a script that pregenerates a lot of necessary files. They all are necessary, but sometimes in a subtle way. It takes a while do understand their full meaning. Only last year I learnt and understood why I should have a manifest.in file. You can get along without one, but trust me, you get along better with a proper manifest file.
+Lets have a look at it.</p>
+<p>bootstrap.py, buildout.cfg CHANGES.txt CONTRIBUTORS.txt docs/* README.txt setup.py
+configure.zcml metadata.xml</p>
+</div>
+
 
           </div>
         </div>
@@ -81,7 +81,7 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
@@ -93,7 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">12. Creating your own eggs to customize Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Creating content-types with Dexterity</a></li>
 <li class="toctree-l1"><a class="reference internal" href="views_1.html">14. Views I</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zpt.html">15. Zope Page Templates</a></li>
@@ -110,6 +110,19 @@
 <li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
 </ul>
 
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -117,6 +130,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="dexterity.html" title="13. Creating content-types with Dexterity"
+             >next</a></li>
+        <li class="right" >
+          <a href="ide.html" title="11. IDE’s and Editors"
+             >previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>

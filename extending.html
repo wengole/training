@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
 
-    <title>Search &mdash; Mastering Plone 1.1 documentation</title>
+    <title>7. Extending Plone &mdash; Mastering Plone 1.1 documentation</title>
 
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 
@@ -30,18 +30,20 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/searchtools.js"></script>
-    <script type="text/javascript" src="_static/searchtools.js"></script>
     <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-   
-
+    <link rel="next" title="8. Extend Plone with Add-ons" href="addons.html" />
+    <link rel="prev" title="6. Configuring and Customising Plone through the web" href="configuring_customizing.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="addons.html" title="8. Extend Plone with Add-ons"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="configuring_customizing.html" title="6. Configuring and Customising Plone through the web"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,29 +53,29 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
-  </div>
-  <p>
-    From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.
-  </p>
-  <form action="" method="get">
-    <input type="text" name="q" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>
-  
-  <div id="search-results">
-  
-  </div>
+  <div class="section" id="extending-plone">
+<h1>7. Extending Plone<a class="headerlink" href="#extending-plone" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="extension-technologies">
+<h2>Extension technologies<a class="headerlink" href="#extension-technologies" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>You can create extensions with new types of objects to add to your Plone site. Usually these are content types.</li>
+<li>You can create an extension that changes or extends functionality. For example to change the way Plone displays search results, or to make pictures searchable by adding a converter from jpg to text.</li>
+</ul>
+<div class="section" id="skin-folders">
+<h3>skin_folders<a class="headerlink" href="#skin-folders" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="genericsetup">
+<h3>GenericSetup<a class="headerlink" href="#genericsetup" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="components">
+<h3>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="what-are-components-what-is-zcml">
+<h2>What are components, what is ZCML<a class="headerlink" href="#what-are-components-what-is-zcml" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
 
           </div>
         </div>
@@ -81,14 +83,18 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anatomy.html">4. The Anatomy of Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">5. The Features of Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuring_customizing.html">6. Configuring and Customising Plone through the web</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">7. Extending Plone</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#extension-technologies">Extension technologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-are-components-what-is-zcml">What are components, what is ZCML</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="addons.html">8. Extend Plone with Add-ons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
@@ -110,6 +116,19 @@
 <li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
 </ul>
 
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -117,6 +136,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="addons.html" title="8. Extend Plone with Add-ons"
+             >next</a></li>
+        <li class="right" >
+          <a href="configuring_customizing.html" title="6. Configuring and Customising Plone through the web"
+             >previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>

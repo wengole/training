@@ -1,0 +1,547 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>15. Zope Page Templates &mdash; Mastering Plone 1.1 documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
+    <link rel="next" title="16. Customizing existing templates" href="zpt_2.html" />
+    <link rel="prev" title="14. Views I" href="views_1.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="zpt_2.html" title="16. Customizing existing templates"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="views_1.html" title="14. Views I"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="zope-page-templates">
+<h1>15. Zope Page Templates<a class="headerlink" href="#zope-page-templates" title="Permalink to this headline">¶</a></h1>
+<p>Page Templates are HTML-files with some additional Information, written in TAL, METAL and TALES.</p>
+<p>Page templates must be valid xml.</p>
+<p>The three languages are:</p>
+<ul class="simple">
+<li>TAL: &#8220;Template Attribute Language&#8221;</li>
+<li>TALES: &#8220;TAL Expression Syntax&#8221;</li>
+<li>METAL: &#8220;Macro Expansion for TAL&#8221;</li>
+<li>TAL and METAL: written like html-attribues (url, src, title).</li>
+<li>TALES: written like the values of these attributes.</li>
+</ul>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;title</span> <span class="na">tal:content=</span><span class="s">&quot;context/title&quot;</span><span class="nt">&gt;</span>
+    The Title of the content
+<span class="nt">&lt;/title&gt;</span>
+</pre></div>
+</div>
+<p>It&#8217;s used to modify the output:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;string:I love red&quot;</span><span class="nt">&gt;</span>I love blue<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>results in:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>I love red<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Edit the file <tt class="docutils literal"><span class="pre">demoview.pt</span></tt></li>
+</ul>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/1999/xhtml&quot;</span> <span class="na">xml:lang=</span><span class="s">&quot;en&quot;</span>
+      <span class="na">lang=</span><span class="s">&quot;en&quot;</span>
+      <span class="na">i18n:domain=</span><span class="s">&quot;ploneconf.talk&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+    <span class="nt">&lt;p&gt;</span>red<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="tal-and-tales">
+<h2>TAL and TALES<a class="headerlink" href="#tal-and-tales" title="Permalink to this headline">¶</a></h2>
+<p>Modify the &lt;p&gt;-tag:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;string:blue&quot;</span><span class="nt">&gt;</span>red<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>Result:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>blue<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>Without restarting Plone open <a class="reference external" href="http://localhost:8080/Plone/&#64;&#64;demo_view">http://localhost:8080/Plone/&#64;&#64;demo_view</a>.</p>
+<p>The same using attributes. Replace the &lt;p&gt;-line with:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://www.mssharepointconference.com&quot;</span>
+   <span class="na">tal:define=</span><span class="s">&quot;a_fine_url string:http://www.ploneconf.org&quot;</span>
+   <span class="na">tal:attributes=</span><span class="s">&quot;href a_fine_url&quot;</span>
+   <span class="na">tal:content=</span><span class="s">&quot;string:A even better conference&quot;</span><span class="nt">&gt;</span>
+    A sharepoint conference
+<span class="nt">&lt;/a&gt;</span>
+</pre></div>
+</div>
+<p>results in:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://www.ploneconf.org&quot;</span><span class="nt">&gt;</span>
+    A even better conference
+<span class="nt">&lt;/a&gt;</span>
+</pre></div>
+</div>
+<p>TAL-attributes:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">tal:define</span></tt></dt>
+<dd>define variables. We definded the variable url to the string &#8220;<a class="reference external" href="http://www.ploneconf.org">http://www.ploneconf.org</a>&#8220;</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:content</span></tt></dt>
+<dd>replace the content of an element. We replaced the default-content about some with &#8220;A even better conference&#8221;</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:attributes</span></tt></dt>
+<dd>dynamically change element attributes. We set the html-attribute <tt class="docutils literal"><span class="pre">href</span></tt> to the variable <tt class="docutils literal"><span class="pre">a_fine_url</span></tt></dd>
+<dt><tt class="docutils literal"><span class="pre">tal:condition</span></tt></dt>
+<dd>tests, if the expression is true or false.</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:repeat</span></tt></dt>
+<dd>repeats an iterable element, in our case the list of talks.</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:replace</span></tt></dt>
+<dd>replace the content of an element like <tt class="docutils literal"><span class="pre">tal:content</span></tt> but removes the element only leaving the content.</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:omit-tag</span></tt></dt>
+<dd>remove an element, leaving the content of the element.</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:on-error</span></tt></dt>
+<dd>handle errors.</dd>
+</dl>
+<div class="section" id="python-expressions">
+<h3>python-expressions<a class="headerlink" href="#python-expressions" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">python:</span></tt> can use python-code:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:define=</span><span class="s">&quot;title context/title&quot;</span>
+   <span class="na">tal:content=</span><span class="s">&quot;python:title.upper()&quot;</span><span class="nt">&gt;</span>
+   A big title
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:define=</span><span class="s">&quot;talks python:[&#39;Dexterity for the win!&#39;,</span>
+<span class="s">                             &#39;Deco is the future&#39;,</span>
+<span class="s">                             &#39;A keynote on some weird topic&#39;,</span>
+<span class="s">                             &#39;The talk that I did not submit&#39;]&quot;</span>
+   <span class="na">tal:content=</span><span class="s">&quot;python:talks[0]&quot;</span><span class="nt">&gt;</span>
+    A talk
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>With python-expressions</p>
+<ul class="simple">
+<li>you can only write single statements</li>
+<li>you could import things but you should not (example: <tt class="docutils literal"><span class="pre">tal:define=&quot;something</span> <span class="pre">modules/Products.PythonScripts/something;</span></tt>).</li>
+</ul>
+</div>
+<div class="section" id="tal-condition">
+<h3>tal:condition<a class="headerlink" href="#tal-condition" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">tal:condition</span></tt></dt>
+<dd>tests, if the expression is true or false.</dd>
+</dl>
+<ul class="simple">
+<li>If it&#8217;s true, then the tag is rendered.</li>
+<li>If it&#8217;s false then the tag <strong>and all its cheildren</strong> are removed and no longer evaluated.</li>
+<li>We can reverse the logic by prepending a <tt class="docutils literal"><span class="pre">not:</span></tt> to the expression.</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><pre>tal:condition="talks"</pre>
+</div>
+<p>Test for the number of talks:</p>
+<div class="highlight-python"><pre>tal:condition="python:len(talks) &gt;= 1"</pre>
+</div>
+<p>Test if a certain talk is in the list of talks:</p>
+<div class="highlight-python"><pre>tal:condition="python:'Deco is the future' in talks"</pre>
+</div>
+</div>
+<div class="section" id="tal-repeat">
+<h3>tal:repeat<a class="headerlink" href="#tal-repeat" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:define=</span><span class="s">&quot;talks python:[&#39;Dexterity for the win!&#39;,</span>
+<span class="s">                             &#39;Deco is the future&#39;,</span>
+<span class="s">                             &#39;A keynote on some weird topic&#39;,</span>
+<span class="s">                             &#39;The talk that I did not submit&#39;]&quot;</span>
+   <span class="na">tal:repeat=</span><span class="s">&quot;talk talks&quot;</span>
+   <span class="na">tal:content=</span><span class="s">&quot;talk&quot;</span><span class="nt">&gt;</span>
+   A talk
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">tal:repeat</span></tt></dt>
+<dd>repeats an iterable element, in our case the list of talks.</dd>
+</dl>
+<p>Construct a list:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;ul</span> <span class="na">tal:define=</span><span class="s">&quot;talks python:[&#39;Dexterity for the win!&#39;,</span>
+<span class="s">                              &#39;Deco is the future&#39;,</span>
+<span class="s">                              &#39;A keynote on some weird topic&#39;,</span>
+<span class="s">                              &#39;The talk that I did not submit&#39;]&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">tal:repeat=</span><span class="s">&quot;talk talks&quot;</span>
+        <span class="na">tal:content=</span><span class="s">&quot;talk&quot;</span><span class="nt">&gt;</span>
+          A talk
+    <span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">tal:condition=</span><span class="s">&quot;not:talks&quot;</span><span class="nt">&gt;</span>
+          Sorry, no talks yet.
+    <span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="path-expressions">
+<h3>path-expressions<a class="headerlink" href="#path-expressions" title="Permalink to this headline">¶</a></h3>
+<p>Starts with a variable name. Can either be an object like <tt class="docutils literal"><span class="pre">context</span></tt>, <tt class="docutils literal"><span class="pre">view</span></tt> or <tt class="docutils literal"><span class="pre">template</span></tt> or a variable defined earlier like <tt class="docutils literal"><span class="pre">talk</span></tt>.</p>
+<p>Divided by <tt class="docutils literal"><span class="pre">/</span></tt> and the name of a sub-object, attribute or callable.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;context/title&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>Chain to get to the information we want.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;context/REQUEST/form&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>Value of the form-dictionary of the HTTPRequest-object.</p>
+<p><tt class="docutils literal"><span class="pre">|</span></tt> (&#8220;or&#8221;): Used to find an alternative value to a path if the first path evaluates to <tt class="docutils literal"><span class="pre">nothing</span></tt> or does not exist.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;context/title | context/id&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p><strong>built in variables</strong>  can be used in paths:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:replace=</span><span class="s">&quot;nothing&quot;</span><span class="nt">&gt;</span>
+    this comment will not be rendered
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>A dict of all the available variables is <tt class="docutils literal"><span class="pre">CONTEXTS</span></tt></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;dl</span> <span class="na">tal:define=</span><span class="s">&quot;path_variables_dict CONTEXTS&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;tal:vars</span> <span class="na">tal:repeat=</span><span class="s">&quot;variable path_variables_dict&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;dt</span> <span class="na">tal:content=</span><span class="s">&quot;variable&quot;</span><span class="nt">&gt;&lt;/dt&gt;</span>
+    <span class="nt">&lt;dd</span> <span class="na">tal:content=</span><span class="s">&quot;python:path_variables_dict[variable]&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+  <span class="nt">&lt;/tal:vars&gt;</span>
+<span class="nt">&lt;/dl&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pure-tal-blocks">
+<h3>pure TAL-blocks<a class="headerlink" href="#pure-tal-blocks" title="Permalink to this headline">¶</a></h3>
+<p>Use TAL-attributes without HTML-Tags</p>
+<p>Syntax:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;tal:block</span> <span class="na">attribute=</span><span class="s">&quot;expression&quot;</span><span class="nt">&gt;</span>some content<span class="nt">&lt;/tal:block&gt;</span>
+</pre></div>
+</div>
+<p>Examples:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;tal:block</span> <span class="na">define=</span><span class="s">&quot;id template/id&quot;</span><span class="nt">&gt;</span>
+...
+  <span class="nt">&lt;b</span> <span class="na">tal:content=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>The id of the template<span class="nt">&lt;/b&gt;</span>
+...
+<span class="nt">&lt;/tal:block&gt;</span>
+
+<span class="nt">&lt;tal:news</span> <span class="na">condition=</span><span class="s">&quot;python:context.content_type == &#39;News Item&#39;&quot;</span><span class="nt">&gt;</span>
+    This text is only visible if the context is a News Item
+<span class="nt">&lt;/tal:news&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="handling-complex-data-in-templates">
+<h3>handling complex data in templates<a class="headerlink" href="#handling-complex-data-in-templates" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>tal:replace</dt>
+<dd>replace the content of an element and removes the element only leaving the content.</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;img</span> <span class="na">tal:define=</span><span class="s">&quot;tag string:&lt;img src=&#39;https://plone.org/logo.png&#39;&gt;&quot;</span>
+         <span class="na">tal:replace=</span><span class="s">&quot;tag&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>Results in:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>
+    <span class="ni">&amp;lt;</span>img src=&#39;https://plone.org/logo.png&#39;<span class="ni">&amp;gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">tal:replace</span></tt> drops its own base-tag in favor of the result of the TALES-expression.</p>
+<p>Prevent escaping with <tt class="docutils literal"><span class="pre">structure</span></tt></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;img</span> <span class="na">tal:define=</span><span class="s">&quot;tag string:&lt;img src=&#39;https://plone.org/logo.png&#39;&gt;&quot;</span>
+         <span class="na">tal:replace=</span><span class="s">&quot;structure tag&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>Complex Example</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;table</span> <span class="na">tal:define=</span><span class="s">&quot;talks python:[{&#39;title&#39;:&#39;Dexterity for the win!&#39;,</span>
+<span class="s">                                  &#39;subjects&#39;:(&#39;content-types&#39;, &#39;dexterity&#39;)},</span>
+<span class="s">                                 {&#39;title&#39;:&#39;Deco is the future&#39;,</span>
+<span class="s">                                  &#39;subjects&#39;:(&#39;layout&#39;, &#39;deco&#39;)},</span>
+<span class="s">                                 {&#39;title&#39;:&#39;The State of Plone&#39;,</span>
+<span class="s">                                  &#39;subjects&#39;:(&#39;keynote&#39;,) },</span>
+<span class="s">                                 {&#39;title&#39;:&#39;Diazo designs dont suck!&#39;,</span>
+<span class="s">                                  &#39;subjects&#39;:(&#39;design&#39;, &#39;diazo&#39;, &#39;xslt&#39;)}</span>
+<span class="s">                                ]&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;tr&gt;</span>
+        <span class="nt">&lt;th&gt;</span>Title<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;th&gt;</span>Topics<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;tr</span> <span class="na">tal:repeat=</span><span class="s">&quot;talk talks&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">tal:content=</span><span class="s">&quot;talk/title&quot;</span><span class="nt">&gt;</span>A talk<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">tal:define=</span><span class="s">&quot;subjects talk/subjects&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">tal:repeat=</span><span class="s">&quot;subject subjects&quot;</span>
+                  <span class="na">tal:replace=</span><span class="s">&quot;subject&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">tal:omit-tag</span></tt></dt>
+<dd>Omit the element tags, leaving only the inner content.</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:on-error</span></tt></dt>
+<dd>handle errors.</dd>
+</dl>
+<p>When an element has multiple statements, they are executed in this order:</p>
+<ol class="arabic simple">
+<li>define</li>
+<li>condition</li>
+<li>repeat</li>
+<li>content or replace</li>
+<li>attributes</li>
+<li>omit-tag</li>
+</ol>
+</div>
+</div>
+<div class="section" id="metal-and-macros">
+<h2>METAL and macros<a class="headerlink" href="#metal-and-macros" title="Permalink to this headline">¶</a></h2>
+<p>Why is our output so ugly? How do we get our html to render in Plone the UI?</p>
+<p>We use METAL (Macro Extension to TAL) to define slots that we can fill and macros that we can reuse.</p>
+<p>We add to the <tt class="docutils literal"><span class="pre">&lt;html&gt;</span></tt>-tag:</p>
+<div class="highlight-python"><pre>metal:use-macro="context/main_template/macros/master"</pre>
+</div>
+<p>And then wrap the code we want to put in the content-area of Plone in:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;metal:content-core</span> <span class="na">fill-slot=</span><span class="s">&quot;content-core&quot;</span><span class="nt">&gt;</span>
+    ...
+<span class="nt">&lt;/metal:content-core&gt;</span>
+</pre></div>
+</div>
+<p>This will put our code in a section defined in the main_template called &#8220;content-core&#8221;.</p>
+<p>The complete template shoud now look like this:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/1999/xhtml&quot;</span> <span class="na">xml:lang=</span><span class="s">&quot;en&quot;</span>
+      <span class="na">lang=</span><span class="s">&quot;en&quot;</span>
+      <span class="na">metal:use-macro=</span><span class="s">&quot;context/main_template/macros/master&quot;</span>
+      <span class="na">i18n:domain=</span><span class="s">&quot;ploneconf.talk&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+<span class="nt">&lt;metal:content-core</span> <span class="na">fill-slot=</span><span class="s">&quot;content-core&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;table</span> <span class="na">tal:define=</span><span class="s">&quot;talks python:[{&#39;title&#39;:&#39;Dexterity for the win!&#39;,</span>
+<span class="s">                                  &#39;subjects&#39;:(&#39;content-types&#39;, &#39;dexterity&#39;)},</span>
+<span class="s">                                 {&#39;title&#39;:&#39;Deco is the future&#39;,</span>
+<span class="s">                                  &#39;subjects&#39;:(&#39;layout&#39;, &#39;deco&#39;)},</span>
+<span class="s">                                 {&#39;title&#39;:&#39;The State of Plone&#39;,</span>
+<span class="s">                                  &#39;subjects&#39;:(&#39;keynote&#39;,) },</span>
+<span class="s">                                 {&#39;title&#39;:&#39;Diazo designs are great&#39;,</span>
+<span class="s">                                  &#39;subjects&#39;:(&#39;design&#39;, &#39;diazo&#39;, &#39;xslt&#39;)}</span>
+<span class="s">                                ]&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;tr&gt;</span>
+        <span class="nt">&lt;th&gt;</span>Title<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;th&gt;</span>Topics<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;tr</span> <span class="na">tal:repeat=</span><span class="s">&quot;talk talks&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">tal:content=</span><span class="s">&quot;talk/title&quot;</span><span class="nt">&gt;</span>A talk<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">tal:define=</span><span class="s">&quot;subjects talk/subjects&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">tal:repeat=</span><span class="s">&quot;subject subjects&quot;</span>
+                  <span class="na">tal:replace=</span><span class="s">&quot;subject&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+
+<span class="nt">&lt;/metal:content-core&gt;</span>
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="macros-in-browser-views">
+<h3>macros in browser-views<a class="headerlink" href="#macros-in-browser-views" title="Permalink to this headline">¶</a></h3>
+<p>writing a macro</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">metal:define-macro=</span><span class="s">&quot;my_macro&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>I can be reused<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<p>in zcml:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;browser:page</span>
+  <span class="na">for=</span><span class="s">&quot;*&quot;</span>
+  <span class="na">name=</span><span class="s">&quot;plonekonf.talk.macros&quot;</span>
+  <span class="na">template=</span><span class="s">&quot;templates/macros.pt&quot;</span>
+  <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+  <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>use it the template:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">metal:use-macro=</span><span class="s">&quot;view/context/@@plonekonf.talk.macros/my_macro&quot;</span><span class="nt">&gt;</span>
+    the macro
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="accessing-plone-from-the-template">
+<h2>Accessing Plone from the template<a class="headerlink" href="#accessing-plone-from-the-template" title="Permalink to this headline">¶</a></h2>
+<p>In our template we have access to the context object on which the view is called on, the browser-view itself (i.e. all python-methods we&#8217;ll put in the view later on), the request and response objects and with these we can get almost anything.</p>
+<p>In templates we can also access other browser-views. Some of those exist to provide easy access to methods we often need:</p>
+<div class="highlight-python"><pre>tal:define="context_state context/@@plone_context_state;
+            portal_state context/@@plone_portal_state;
+            plone_tools context/@@plone_tools;
+            plone_view context/@@plone;"</pre>
+</div>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">&#64;&#64;plone_context_state</span></tt></dt>
+<dd>The BrowserView <tt class="docutils literal"><span class="pre">plone.app.layout.globals.context.ContextState</span></tt> holds usefull methods having to do with the current context object such as <tt class="docutils literal"><span class="pre">is_default_page</span></tt></dd>
+<dt><tt class="docutils literal"><span class="pre">&#64;&#64;plone_portal_state</span></tt></dt>
+<dd>The BrowserView <tt class="docutils literal"><span class="pre">plone.app.layout.globals.portal.PortalState</span></tt> holds methods for the portal like <tt class="docutils literal"><span class="pre">portal_url</span></tt></dd>
+<dt><tt class="docutils literal"><span class="pre">&#64;&#64;plone_tools</span></tt></dt>
+<dd>The BrowserView <tt class="docutils literal"><span class="pre">plone.app.layout.globals.tools.Tools</span></tt> gives access to the most importan tools like <tt class="docutils literal"><span class="pre">plone_tools/catalog</span></tt></dd>
+</dl>
+<p>These are very widely used and there are many more.</p>
+</div>
+<div class="section" id="what-we-missed">
+<h2>What we missed<a class="headerlink" href="#what-we-missed" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">tal:condition=&quot;exists:expression&quot;</span></tt></dt>
+<dd>checks if an object or an attribute exists (seldom used)</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:condition=&quot;nocall:context&quot;</span></tt></dt>
+<dd>to explicitly not call a callable.</dd>
+<dt><tt class="docutils literal"><span class="pre">i18n:translate</span></tt> and <tt class="docutils literal"><span class="pre">i18n:domain</span></tt></dt>
+<dd>the strings we put in templates can be translated automatically.</dd>
+</dl>
+<p>Documentation about TAL and METAL:</p>
+<ul class="simple">
+<li>Using Zope Page Templates: <a class="reference external" href="http://docs.zope.org/zope2/zope2book/ZPT.html">http://docs.zope.org/zope2/zope2book/ZPT.html</a></li>
+<li>Zope Page Templates Reference: <a class="reference external" href="http://docs.zope.org/zope2/zope2book/AppendixC.html">http://docs.zope.org/zope2/zope2book/AppendixC.html</a></li>
+</ul>
+</div>
+<div class="section" id="chameleon">
+<h2>Chameleon<a class="headerlink" href="#chameleon" title="Permalink to this headline">¶</a></h2>
+<p>Chameleon is the successor of TAL and will be shipped in Plone 5.</p>
+<ul class="simple">
+<li>Plip for Chameleon: <a class="reference external" href="https://dev.plone.org/ticket/12198">https://dev.plone.org/ticket/12198</a></li>
+<li>Homepage: <a class="reference external" href="http://www.pagetemplates.org/">http://www.pagetemplates.org/</a></li>
+<li>Integration-layer for Plone: <a class="reference external" href="https://pypi.python.org/pypi/five.pt">five.pt</a></li>
+</ul>
+<p>In Plone 4 we still use the default ZPT.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy.html">4. The Anatomy of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">5. The Features of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_customizing.html">6. Configuring and Customising Plone through the web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">8. Extend Plone with Add-ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Creating content-types with Dexterity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_1.html">14. Views I</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">15. Zope Page Templates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tal-and-tales">TAL and TALES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metal-and-macros">METAL and macros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#accessing-plone-from-the-template">Accessing Plone from the template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-we-missed">What we missed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chameleon">Chameleon</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="zpt_2.html">16. Customizing existing templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_2.html">17. Views II: A default view for &#8220;talk&#8221;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_3.html">18. Views III: A Talk list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_search.html">19. Custom search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ressources.html">20. Ressources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="social_behavior.html">21. Social behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewlets.html">22. Writing Viewlets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_code.html">23. Deploying your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">24. Buildout II: Deploying your site</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_of_plone.html">25. The Future of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="zpt_2.html" title="16. Customizing existing templates"
+             >next</a></li>
+        <li class="right" >
+          <a href="views_1.html" title="14. Views I"
+             >previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Philip Bauer, Patrick Gerken.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,203 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>20. Extending Dexterity-Types with Behaviors &mdash; Mastering Plone 1.1 documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="extending-dexterity-types-with-behaviors">
+<h1>Extending Dexterity-Types with Behaviors<a class="headerlink" href="#extending-dexterity-types-with-behaviors" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>What are Behaviours?</li>
+</ul>
+<div class="section" id="simple-social-behavior">
+<h2>simple social behavior<a class="headerlink" href="#simple-social-behavior" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Behavior &#8220;IVoteable&#8221;</li>
+<li>The Plone API</li>
+</ul>
+<p>Was jetzt noch fehlt ist die Funktionalität, Stimmen abzugeben.
+Damit die Menschen abstimmen können, benötigen wir:</p>
+<ul class="simple">
+<li>Einen Ort zum Abspeichern von Stimmabgaben,</li>
+<li>Eine Logik um aus den Stimmen einen Durchschnitt zu berechnen</li>
+<li>Eine Möglichkeit, den Durchschnitt anzugeben</li>
+<li>Eine Möglichkeit, eine Stimme abzugeben</li>
+</ul>
+<p>Wir könnten einfach Stimmen als Feld hinzufügen, aber dann müsste
+man die Felder verstecken und die ganze Logik in den Views machen.</p>
+<p>Stattdessen schreiben wir ein Behavior. Ein Behavior ist so ähnlich
+wie ein Adapter. Ein Adapter adaptiert einen bestimmten Typ. Ein
+Behavior kann prinzipiell für alle Inhalte verwendet werden, und
+bei Dexterity Content Typen kann man zur Laufzeit ein Behavior einem
+Contenttyp zuweisen. Dank dem Annotations Adapter kann man beliebige
+Daten einem Objekt hinzufügen ohne zu riskieren, Daten von anderen
+zu überschreiben. Ausserdem kann man auch noch einstellen, das
+Objekte die dieses Behavior unterstützen ein Marker Interface
+bekommen. Durch das Marker Interface kann man diesen Objekten eigene
+Views, Viewlets oder auch Portlets zuweisen.</p>
+</div>
+<div class="section" id="writing-the-behavior">
+<h2>Writing the Behavior<a class="headerlink" href="#writing-the-behavior" title="Permalink to this headline">¶</a></h2>
+<p>Viel Code, zunächst kümmern wir uns darum, den Context weg zu
+speichern. Dann holen wir uns die Annotations. Der Annotationadapter
+ist ein Standardweg, zusätzliche Informationen auf einem Objekt zu
+speichern. Der Adapter implementiert eigentlich nur folgenes:
+Er speichert ein PeristentDict auf dem Attribute <tt class="docutils literal"><span class="pre">__annotations__</span></tt> und
+liefert dieses zurück. Wer etwas speichern möchte, muss sich einen
+möglichst eindeutigen Schlüssel ausdenken, wir nehmen den Namen
+unserer Klasse.</p>
+<p>Dann schreiben wir ein wenig Code um sicherzustellen, das unsere
+Datenstruktur schon da ist.</p>
+<p>Warum initalisieren wir das Dict mit version 1 und nicht mit Version 2?</p>
+<p>Wir haben evtl. schon Objekte mit Daten, aber noch mit der alten
+Version an Daten. Dieses Objekt wird beim ersten neuen Laden auf den
+aktuellen Stand gebracht.</p>
+<p>Die nächste Methode, _hash ist ein wenig Magie um halbwegs
+sicherzustellen, das jemand nicht mehrfach abstimmt. Wer Langeweile
+hat kann seine DSL Verbindung trennen, wieder aufbauen und nochmal
+abstimmen.</p>
+<p>Nun kommt das Herzstück, die vote Methode. Das Userinterface erlaubt
+eigentlich nicht, zweimal abzustimmen, trotzdem fangen wir das ab
+und werfen eine Exception. Wenn diese Exception ausgelöst wird,
+kriegt der Nutzer eine hässliche Fehlermeldung, aber er ist sowieso
+nur ein kleiner Hacker. Wir speichern nicht nur die Bewertung,
+sondern auch einen Hash des Requestobjekts, um sicherzustellen, das
+der Nutzer nicht mehrfach abstimmt.</p>
+<p>Nun kommt die Methode zur Berechnung der Durchschnittsstimmen.</p>
+<p>Wir speichern die Daten wie folgt:
+self.annotations[&#8216;votes&#8217;][-1] = &#8220;Anzahl der -1 Stimmen
+self.annotations[&#8216;votes&#8217;][0] = &#8220;Anzahl der 0 Stimmen
+self.annotations[&#8216;votes&#8217;][+1] = &#8220;Anzahl der +1 Stimmen</p>
+<p>Wir multiplizieren nun einfach die Anzahl der Stimmen mit dem
+Stimmenschlüssel, summerieren die einzelnen Ergebnisse und teilen
+diese Zahl durch die Gesamtzahl der Stimmen.</p>
+<p>has_votes benötigen wir für views, wir wollen kein
+Durchschnittsrating abgeben, wenn noch keiner abgestimmt hat.</p>
+<p>already_voted wird im Userinterface verwendet um Leute kein
+Stimmrecht zu geben, wenn sie schon abgestimmt haben.</p>
+<p>clear Wir haben beim Testen festgestellt, das es sehr hilfreich ist,
+mal eben schnell die Stimmen alle zu löschen.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git checkout tutorial-7-behavior
+</pre></div>
+</div>
+<p>Ergänzen wir nun unsere Listenansicht um das Durchschnittsvoting.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git checkout tutorial-8-listview-mit-behavior
+</pre></div>
+</div>
+<p>Ok, wie stimmen wir nun ab?</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy.html">4. The Anatomy of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">5. The Features of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_customizing.html">6. Configuring and Customising Plone through the web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">8. Extend Plone with Add-ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Creating content-types with Dexterity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_1.html">14. Views I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt.html">15. Zope Page Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt_2.html">16. Customizing existing templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_2.html">17. Views II: A default view for &#8220;talk&#8221;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_3.html">18. Views III: A Talk list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_search.html">19. Custom search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ressources.html">20. Ressources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="social_behavior.html">21. Social behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewlets.html">22. Writing Viewlets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_code.html">23. Deploying your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">24. Buildout II: Deploying your site</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_of_plone.html">25. The Future of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Philip Bauer, Patrick Gerken.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

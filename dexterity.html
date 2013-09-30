@@ -1,0 +1,334 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>13. Creating content-types with Dexterity &mdash; Mastering Plone 1.1 documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
+    <link rel="next" title="14. Views I" href="views_1.html" />
+    <link rel="prev" title="12. Creating your own eggs to customize Plone" href="eggs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="views_1.html" title="14. Views I"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="eggs.html" title="12. Creating your own eggs to customize Plone"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="creating-content-types-with-dexterity">
+<h1>13. Creating content-types with Dexterity<a class="headerlink" href="#creating-content-types-with-dexterity" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-a-content-type">
+<h2>What is a content-type?<a class="headerlink" href="#what-is-a-content-type" title="Permalink to this headline">¶</a></h2>
+<p>A content-type is object that can store information and is editable by users.</p>
+<dl class="docutils">
+<dt>Schema</dt>
+<dd>A definition of fields that comprise a content-type
+properties of an object</dd>
+<dt>FTI</dt>
+<dd>The &#8220;Factory Type Information&#8221; configures the content-type in Plone</dd>
+<dt>View</dt>
+<dd>The visual representation of the object and the content of it&#8217;s fields.</dd>
+</dl>
+</div>
+<div class="section" id="dexterity-and-archetypes-a-comparison">
+<h2>Dexterity and Archetypes - A Comparison<a class="headerlink" href="#dexterity-and-archetypes-a-comparison" title="Permalink to this headline">¶</a></h2>
+<p>Two content-frameworks in Plone</p>
+<ul class="simple">
+<li>Dexterity: new and the coming default</li>
+<li>Archetypes: old, tried and tested</li>
+<li>Archetypes: widespread though addons</li>
+<li>Plone 4.x: Archetypes</li>
+<li>Plone 5.x: Dexterity-versions</li>
+<li>add and edit-forms are created automatically from a schema</li>
+</ul>
+<p>Approaches for Developers:</p>
+<ul class="simple">
+<li>TTW-story</li>
+<li>Schema in Dexterity: ttw, xml, python. interface = schema, often no class needed</li>
+<li>Schema in Archetypes: python</li>
+<li>Extendability</li>
+</ul>
+<p>Views:</p>
+<ul class="simple">
+<li>Default-view for all content-types created from schema</li>
+<li>Grok Views</li>
+<li>Display Forms</li>
+<li>Browser Views (zcml)</li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>go to portal_quickinstaller</li>
+<li>install &#8220;Dexterity Content Types&#8221;</li>
+</ul>
+</div>
+<div class="section" id="creating-content-types-ttw">
+<h2>Creating content-types TTW<a class="headerlink" href="#creating-content-types-ttw" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">plone_control_panel</span></tt> &gt; <tt class="docutils literal"><span class="pre">Dexterity</span> <span class="pre">Content</span> <span class="pre">Types</span></tt></li>
+<li>Add new content type &#8220;Talk&#8221;:<ul>
+<li>Add Field &#8220;Audience&#8221;, type &#8220;Multiple Choice&#8221;. Add options: beginner, advanced, pro</li>
+<li>Image &#8220;Image&#8221; (portrait)</li>
+<li>Check the behaviors that are enabled: Basic metadata, Name from title, Referenceable</li>
+</ul>
+</li>
+<li>Test</li>
+<li>Add Richtext-field &#8220;Details&#8221;</li>
+</ul>
+<p>xml-schema created by us:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;model</span> <span class="na">xmlns:security=</span><span class="s">&quot;http://namespaces.plone.org/supermodel/security&quot;</span>
+       <span class="na">xmlns:marshal=</span><span class="s">&quot;http://namespaces.plone.org/supermodel/marshal&quot;</span>
+       <span class="na">xmlns:form=</span><span class="s">&quot;http://namespaces.plone.org/supermodel/form&quot;</span>
+       <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.plone.org/supermodel/schema&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;schema&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;audience&quot;</span> <span class="na">type=</span><span class="s">&quot;zope.schema.Set&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;description/&gt;</span>
+      <span class="nt">&lt;title&gt;</span>Audience<span class="nt">&lt;/title&gt;</span>
+      <span class="nt">&lt;value_type</span> <span class="na">type=</span><span class="s">&quot;zope.schema.Choice&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;values&gt;</span>
+          <span class="nt">&lt;element&gt;</span>beginner<span class="nt">&lt;/element&gt;</span>
+          <span class="nt">&lt;element&gt;</span>advanced<span class="nt">&lt;/element&gt;</span>
+          <span class="nt">&lt;element&gt;</span>pro<span class="nt">&lt;/element&gt;</span>
+        <span class="nt">&lt;/values&gt;</span>
+      <span class="nt">&lt;/value_type&gt;</span>
+    <span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;image&quot;</span> <span class="na">type=</span><span class="s">&quot;plone.namedfile.field.NamedBlobImage&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Some image<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;required&gt;</span>False<span class="nt">&lt;/required&gt;</span>
+      <span class="nt">&lt;title&gt;</span>Image<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;details&quot;</span> <span class="na">type=</span><span class="s">&quot;plone.app.textfield.RichText&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;description/&gt;</span>
+      <span class="nt">&lt;title&gt;</span>Details<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/field&gt;</span>
+  <span class="nt">&lt;/schema&gt;</span>
+<span class="nt">&lt;/model&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="moving-content-types-into-code">
+<h2>Moving content-types into code<a class="headerlink" href="#moving-content-types-into-code" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>version-control</li>
+<li>extendability</li>
+<li>Export the Type Profile</li>
+<li>Delete type from the site</li>
+<li>Add exported files to <tt class="docutils literal"><span class="pre">plonekonf/talk/profiles/default/</span></tt></li>
+</ul>
+<p><tt class="docutils literal"><span class="pre">types.xml</span></tt>:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;portal_types&quot;</span> <span class="na">meta_type=</span><span class="s">&quot;Plone Types Tool&quot;</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span>Controls the available content types in your portal<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;talk&quot;</span> <span class="na">meta_type=</span><span class="s">&quot;Dexterity FTI&quot;</span><span class="nt">/&gt;</span>
+ <span class="c">&lt;!-- -*- extra stuff goes here -*- --&gt;</span>
+<span class="nt">&lt;/object&gt;</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">types/talk.xml</span></tt>:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;talk&quot;</span> <span class="na">meta_type=</span><span class="s">&quot;Dexterity FTI&quot;</span> <span class="na">i18n:domain=</span><span class="s">&quot;plone&quot;</span>
+   <span class="na">xmlns:i18n=</span><span class="s">&quot;http://xml.zope.org/namespaces/i18n&quot;</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;title&quot;</span> <span class="na">i18n:translate=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>Talk<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span> <span class="na">i18n:translate=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span>None<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;icon_expr&quot;</span><span class="nt">&gt;</span>string:${portal_url}/document_icon.png<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;factory&quot;</span><span class="nt">&gt;</span>talk<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;add_view_expr&quot;</span><span class="nt">&gt;</span>string:${folder_url}/++add++talk<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;link_target&quot;</span><span class="nt">&gt;&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;immediate_view&quot;</span><span class="nt">&gt;</span>view<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;global_allow&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;filter_content_types&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;allowed_content_types&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;allow_discussion&quot;</span><span class="nt">&gt;</span>False<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;default_view&quot;</span><span class="nt">&gt;</span>view<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;view_methods&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;view&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;default_view_fallback&quot;</span><span class="nt">&gt;</span>False<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;add_permission&quot;</span><span class="nt">&gt;</span>cmf.AddPortalContent<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;klass&quot;</span><span class="nt">&gt;</span>plone.dexterity.content.Container<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;behaviors&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;plone.app.content.interfaces.INameFromTitle&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;plone.app.dexterity.behaviors.metadata.IDublinCore&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;schema&quot;</span><span class="nt">&gt;&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;model_source&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>model
+    xmlns:security=&quot;http://namespaces.plone.org/supermodel/security&quot;
+    xmlns:marshal=&quot;http://namespaces.plone.org/supermodel/marshal&quot;
+    xmlns:form=&quot;http://namespaces.plone.org/supermodel/form&quot;
+    xmlns=&quot;http://namespaces.plone.org/supermodel/schema&quot;<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>schema<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>field name=&quot;audience&quot; type=&quot;zope.schema.Set&quot;<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>description/<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>title<span class="ni">&amp;gt;</span>Audience<span class="ni">&amp;lt;</span>/title<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>value_type type=&quot;zope.schema.Choice&quot;<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>values<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>element<span class="ni">&amp;gt;</span>beginner<span class="ni">&amp;lt;</span>/element<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>element<span class="ni">&amp;gt;</span>advanced<span class="ni">&amp;lt;</span>/element<span class="ni">&amp;gt;</span>
+            <span class="ni">&amp;lt;</span>element<span class="ni">&amp;gt;</span>pro<span class="ni">&amp;lt;</span>/element<span class="ni">&amp;gt;</span>
+          <span class="ni">&amp;lt;</span>/values<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>/value_type<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/field<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>field name=&quot;image&quot; type=&quot;plone.namedfile.field.NamedBlobImage&quot;<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>description<span class="ni">&amp;gt;</span>Portrait of the speaker<span class="ni">&amp;lt;</span>/description<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>required<span class="ni">&amp;gt;</span>False<span class="ni">&amp;lt;</span>/required<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>title<span class="ni">&amp;gt;</span>Image<span class="ni">&amp;lt;</span>/title<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/field<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>field name=&quot;details&quot; type=&quot;plone.app.textfield.RichText&quot;<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>description/<span class="ni">&amp;gt;</span>
+        <span class="ni">&amp;lt;</span>title<span class="ni">&amp;gt;</span>Details<span class="ni">&amp;lt;</span>/title<span class="ni">&amp;gt;</span>
+      <span class="ni">&amp;lt;</span>/field<span class="ni">&amp;gt;</span>
+    <span class="ni">&amp;lt;</span>/schema<span class="ni">&amp;gt;</span>
+  <span class="ni">&amp;lt;</span>/model<span class="ni">&amp;gt;</span><span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;model_file&quot;</span><span class="nt">&gt;&lt;/property&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;schema_policy&quot;</span><span class="nt">&gt;</span>dexterity<span class="nt">&lt;/property&gt;</span>
+ <span class="nt">&lt;alias</span> <span class="na">from=</span><span class="s">&quot;(Default)&quot;</span> <span class="na">to=</span><span class="s">&quot;(dynamic view)&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;alias</span> <span class="na">from=</span><span class="s">&quot;edit&quot;</span> <span class="na">to=</span><span class="s">&quot;@@edit&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;alias</span> <span class="na">from=</span><span class="s">&quot;sharing&quot;</span> <span class="na">to=</span><span class="s">&quot;@@sharing&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;alias</span> <span class="na">from=</span><span class="s">&quot;view&quot;</span> <span class="na">to=</span><span class="s">&quot;(selected layout)&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;action</span> <span class="na">title=</span><span class="s">&quot;View&quot;</span> <span class="na">action_id=</span><span class="s">&quot;view&quot;</span> <span class="na">category=</span><span class="s">&quot;object&quot;</span> <span class="na">condition_expr=</span><span class="s">&quot;&quot;</span>
+    <span class="na">description=</span><span class="s">&quot;&quot;</span> <span class="na">icon_expr=</span><span class="s">&quot;&quot;</span> <span class="na">link_target=</span><span class="s">&quot;&quot;</span> <span class="na">url_expr=</span><span class="s">&quot;string:${object_url}&quot;</span>
+    <span class="na">visible=</span><span class="s">&quot;True&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;permission</span> <span class="na">value=</span><span class="s">&quot;View&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;/action&gt;</span>
+ <span class="nt">&lt;action</span> <span class="na">title=</span><span class="s">&quot;Edit&quot;</span> <span class="na">action_id=</span><span class="s">&quot;edit&quot;</span> <span class="na">category=</span><span class="s">&quot;object&quot;</span> <span class="na">condition_expr=</span><span class="s">&quot;&quot;</span>
+    <span class="na">description=</span><span class="s">&quot;&quot;</span> <span class="na">icon_expr=</span><span class="s">&quot;&quot;</span> <span class="na">link_target=</span><span class="s">&quot;&quot;</span>
+    <span class="na">url_expr=</span><span class="s">&quot;string:${object_url}/edit&quot;</span> <span class="na">visible=</span><span class="s">&quot;True&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;permission</span> <span class="na">value=</span><span class="s">&quot;Modify portal content&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;/action&gt;</span>
+<span class="nt">&lt;/object&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>restart Plone</li>
+<li>install plonekonf.talk</li>
+<li><tt class="docutils literal"><span class="pre">portal_types</span></tt> &gt; <tt class="docutils literal"><span class="pre">talk</span></tt></li>
+</ul>
+<p>We need to improve the default view.</p>
+<p>Read more about developing with Dexterity here: <a class="reference external" href="http://developer.plone.org/reference_manuals/external/plone.app.dexterity/">http://developer.plone.org/reference_manuals/external/plone.app.dexterity/</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy.html">4. The Anatomy of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">5. The Features of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_customizing.html">6. Configuring and Customising Plone through the web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">8. Extend Plone with Add-ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">13. Creating content-types with Dexterity</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-a-content-type">What is a content-type?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dexterity-and-archetypes-a-comparison">Dexterity and Archetypes - A Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-content-types-ttw">Creating content-types TTW</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#moving-content-types-into-code">Moving content-types into code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="views_1.html">14. Views I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt.html">15. Zope Page Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt_2.html">16. Customizing existing templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_2.html">17. Views II: A default view for &#8220;talk&#8221;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_3.html">18. Views III: A Talk list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_search.html">19. Custom search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ressources.html">20. Ressources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="social_behavior.html">21. Social behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewlets.html">22. Writing Viewlets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_code.html">23. Deploying your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">24. Buildout II: Deploying your site</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_of_plone.html">25. The Future of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="views_1.html" title="14. Views I"
+             >next</a></li>
+        <li class="right" >
+          <a href="eggs.html" title="12. Creating your own eggs to customize Plone"
+             >previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Philip Bauer, Patrick Gerken.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

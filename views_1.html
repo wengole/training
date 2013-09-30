@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
 
-    <title>Search &mdash; Mastering Plone 1.1 documentation</title>
+    <title>14. Views I &mdash; Mastering Plone 1.1 documentation</title>
 
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 
@@ -30,18 +30,20 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/searchtools.js"></script>
-    <script type="text/javascript" src="_static/searchtools.js"></script>
     <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-   
-
+    <link rel="next" title="15. Zope Page Templates" href="zpt.html" />
+    <link rel="prev" title="13. Creating content-types with Dexterity" href="dexterity.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="zpt.html" title="15. Zope Page Templates"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="dexterity.html" title="13. Creating content-types with Dexterity"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,29 +53,55 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
-  </div>
-  <p>
-    From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.
-  </p>
-  <form action="" method="get">
-    <input type="text" name="q" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>
-  
-  <div id="search-results">
-  
-  </div>
+  <div class="section" id="views-i">
+<h1>14. Views I<a class="headerlink" href="#views-i" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-simple-browser-view">
+<h2>A simple browser view<a class="headerlink" href="#a-simple-browser-view" title="Permalink to this headline">¶</a></h2>
+<p>Boilerplate-code to be create a view</p>
+<ul class="simple">
+<li>Add a new direcory <tt class="docutils literal"><span class="pre">src/ploneconf.talk/ploneconf/talk/browser</span></tt>.</li>
+<li>Add an empty file <tt class="docutils literal"><span class="pre">browser/__init__.py</span></tt></li>
+<li>Modify the existing <tt class="docutils literal"><span class="pre">configure.czml</span></tt> and add</li>
+</ul>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;include</span> <span class="na">package=</span><span class="s">&quot;.browser&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Add a file <tt class="docutils literal"><span class="pre">browser/configure.czml</span></tt>:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
+    <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
+    <span class="na">xmlns:browser=</span><span class="s">&quot;http://namespaces.zope.org/browser&quot;</span>
+    <span class="na">i18n_domain=</span><span class="s">&quot;ploneconf.talk&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;browser:page</span>
+       <span class="na">name=</span><span class="s">&quot;demoview&quot;</span>
+       <span class="na">for=</span><span class="s">&quot;*&quot;</span>
+       <span class="na">class=</span><span class="s">&quot;.views.DemoView&quot;</span>
+       <span class="na">template=</span><span class="s">&quot;templates/demoview.pt&quot;</span>
+       <span class="na">permission=</span><span class="s">&quot;zope2.View&quot;</span>
+       <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/configure&gt;</span>
+</pre></div>
+</div>
+<p>Add a file <tt class="docutils literal"><span class="pre">browser/views.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Products.Five.browser</span> <span class="kn">import</span> <span class="n">BrowserView</span>
+
+<span class="k">class</span> <span class="nc">DemoView</span><span class="p">(</span><span class="n">BrowserView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; This does nothing so far</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Add a directory <tt class="docutils literal"><span class="pre">browser/templates</span></tt> and add an file <tt class="docutils literal"><span class="pre">browser/templates/demoview.pt</span></tt></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Hello World<span class="nt">&lt;/h1&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Restart Plone and open <a class="reference external" href="http://localhost:8080/Plone/&#64;&#64;demoview">http://localhost:8080/Plone/&#64;&#64;demoview</a>.</li>
+<li>You should see &#8220;Hello World&#8221;.</li>
+</ul>
+</div>
+</div>
+
 
           </div>
         </div>
@@ -81,7 +109,7 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
@@ -95,7 +123,10 @@
 <li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Creating content-types with Dexterity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="views_1.html">14. Views I</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">14. Views I</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-simple-browser-view">A simple browser view</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="zpt.html">15. Zope Page Templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="zpt_2.html">16. Customizing existing templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="views_2.html">17. Views II: A default view for &#8220;talk&#8221;</a></li>
@@ -110,6 +141,19 @@
 <li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
 </ul>
 
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -117,6 +161,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="zpt.html" title="15. Zope Page Templates"
+             >next</a></li>
+        <li class="right" >
+          <a href="dexterity.html" title="13. Creating content-types with Dexterity"
+             >previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>

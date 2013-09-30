@@ -1,0 +1,222 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>16. Customizing existing templates &mdash; Mastering Plone 1.1 documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
+    <link rel="next" title="17. Views II: A default view for “talk”" href="views_2.html" />
+    <link rel="prev" title="15. Zope Page Templates" href="zpt.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="views_2.html" title="17. Views II: A default view for “talk”"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="zpt.html" title="15. Zope Page Templates"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="customizing-existing-templates">
+<h1>16. Customizing existing templates<a class="headerlink" href="#customizing-existing-templates" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="newsitem-view-pt">
+<h2>newsitem_view.pt<a class="headerlink" href="#newsitem-view-pt" title="Permalink to this headline">¶</a></h2>
+<p>Show the date a News Item is published</p>
+<ul class="simple">
+<li>Create the directoy <tt class="docutils literal"><span class="pre">browser/template_overrides</span></tt></li>
+<li>Add the following to <tt class="docutils literal"><span class="pre">browser/configure.zcml</span></tt>:</li>
+</ul>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;include</span> <span class="na">package=</span><span class="s">&quot;z3c.jbot&quot;</span> <span class="na">file=</span><span class="s">&quot;meta.zcml&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;browser:jbot</span> <span class="na">directory=</span><span class="s">&quot;template_overrides&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Find the file <tt class="docutils literal"><span class="pre">Products/CMFPlone/skins/plone_content/newsitem_view.pt</span></tt> in the directory <tt class="docutils literal"><span class="pre">omelette</span></tt>.</li>
+<li>Copy it into the new folder.</li>
+<li>Rename the new file from <tt class="docutils literal"><span class="pre">newsitem_view.pt</span></tt> to <tt class="docutils literal"><span class="pre">Products.CMFPlone.skins.plone_content.newsitem_view.pt</span></tt>.</li>
+<li>Restart Plone</li>
+</ul>
+<p>Edit the template <tt class="docutils literal"><span class="pre">Products.CMFPlone.skins.plone_content.newsitem_view.pt</span></tt> and insert the following after line 28:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;python:context.Date()&quot;</span><span class="nt">&gt;</span>
+    The current Date
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Open an existing news-item in the browser</li>
+</ul>
+<p>Extend the code:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:define=</span><span class="s">&quot;toLocalizedTime nocall:context/@@plone/toLocalizedTime;</span>
+<span class="s">               date python:context.Date()&quot;</span>
+   <span class="na">tal:content=</span><span class="s">&quot;python:toLocalizedTime(date)&quot;</span><span class="nt">&gt;</span>
+        The current Date in its local short-format
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">nocall:</span></tt> prevents the method <tt class="docutils literal"><span class="pre">toLocalizedTime</span></tt> from being called</li>
+<li><tt class="docutils literal"><span class="pre">toLocalizedTime</span></tt> is provided by the BrowserView <tt class="docutils literal"><span class="pre">Products.CMFPlone.browser.ploneview.Plone</span></tt> and runs the date-object through Plone&#8217;s <tt class="docutils literal"><span class="pre">translation_service</span></tt> and returns the Date in the current locales format</li>
+<li>transforms <tt class="docutils literal"><span class="pre">2013-02-17</span> <span class="pre">19:21:15</span></tt> in <tt class="docutils literal"><span class="pre">17.02.2013</span></tt>.</li>
+</ul>
+<p>Older Plone-versions: <tt class="docutils literal"><span class="pre">python:context.toLocalizedTime(context.Date(),</span> <span class="pre">longFormat=False)</span></tt>. That called the python-script <tt class="docutils literal"><span class="pre">toLocalizedTime.py</span></tt> in the Folder <tt class="docutils literal"><span class="pre">Products/CMFPlone/skins/plone_scripts/</span></tt>.</p>
+</div>
+<div class="section" id="folder-summary-view-pt">
+<h2>folder_summary_view.pt<a class="headerlink" href="#folder-summary-view-pt" title="Permalink to this headline">¶</a></h2>
+<p>&#8220;Summary View&#8221; to list news-releases.</p>
+<p><tt class="docutils literal"><span class="pre">folder_summary_view.pt</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Products</span><span class="o">/</span><span class="n">CMFPlone</span><span class="o">/</span><span class="n">skins</span><span class="o">/</span><span class="n">plone_content</span><span class="o">/</span><span class="n">folder_summary_view</span><span class="o">.</span><span class="n">pt</span>
+</pre></div>
+</div>
+<p>Make a copy and rename it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">browser</span><span class="o">/</span><span class="n">template_overrides</span><span class="o">/</span><span class="n">Products</span><span class="o">.</span><span class="n">CMFPlone</span><span class="o">.</span><span class="n">skins</span><span class="o">.</span><span class="n">plone_content</span><span class="o">.</span><span class="n">folder_summary_view</span><span class="o">.</span><span class="n">pt</span>
+</pre></div>
+</div>
+<p>Add the following after line 25:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:condition=</span><span class="s">&quot;python:item_type == &#39;News Item&#39;&quot;</span>
+   <span class="na">tal:content=</span><span class="s">&quot;python:toLocalizedTime(item.Date)&quot;</span><span class="nt">&gt;</span>
+        News date
+<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+</div>
+<p>The method <tt class="docutils literal"><span class="pre">toLocalizedTime</span></tt> is already defined in the template whose macro this temples uses. Why is that?</p>
+<p>The secret is line 12 of <tt class="docutils literal"><span class="pre">folder_summary_view.pt</span></tt>:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;metal:block</span>
+    <span class="na">define-macro=</span><span class="s">&quot;listing&quot;</span>
+    <span class="na">extend-macro=</span><span class="s">&quot;context/folder_listing/macros/content-core&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">extend-macro</span></tt> tells Plone to extend the macro <tt class="docutils literal"><span class="pre">listing</span></tt> from the view <tt class="docutils literal"><span class="pre">folder_listing</span></tt> which is found in template <tt class="docutils literal"><span class="pre">Products/CMFPlone/skins/plone_content/folder_listing.pt</span></tt>.</p>
+</div>
+<div class="section" id="skin-templates">
+<h2>skin-templates<a class="headerlink" href="#skin-templates" title="Permalink to this headline">¶</a></h2>
+<p>Why don&#8217;t we always only use templates? Because we might want to do something more complicated than get an attribute form the context and render it&#8217;s value in some html-tag.</p>
+<p>There is a deprecated technology called &#8216;skin-templates&#8217; that allows you to simply add some page-template (e.g. &#8216;old_style_template.pt&#8217;) to a certain folder in the ZMI or your egg) and you can access it in the browser by opening a url like <a class="reference external" href="http://localhost:8080/Plone/old_style_template">http://localhost:8080/Plone/old_style_template</a> and it will be rendered. But we don&#8217;t use it and you too should not even though these skin-templates are still all over Plone.</p>
+<p>The templates of the default content-types are skin-templates for example. You could append <tt class="docutils literal"><span class="pre">/document_view</span></tt> to any part of a plone-site to render the default template for documents. You will often get errors since the template <tt class="docutils literal"><span class="pre">document_view.pt</span></tt> expects the context to have a field &#8216;text&#8217; that it attempts to render.</p>
+<p>Skin templates and python-scripts in portal_skin are deprecated because:</p>
+<ul class="simple">
+<li>they use restricted python</li>
+<li>they have no nice way to attach python-code to them</li>
+<li>they are always callable for everything (they can&#8217;t be easily bound to an interface)</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy.html">4. The Anatomy of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">5. The Features of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_customizing.html">6. Configuring and Customising Plone through the web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">8. Extend Plone with Add-ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Creating content-types with Dexterity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_1.html">14. Views I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt.html">15. Zope Page Templates</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">16. Customizing existing templates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#newsitem-view-pt">newsitem_view.pt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#folder-summary-view-pt">folder_summary_view.pt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#skin-templates">skin-templates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="views_2.html">17. Views II: A default view for &#8220;talk&#8221;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_3.html">18. Views III: A Talk list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_search.html">19. Custom search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ressources.html">20. Ressources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="social_behavior.html">21. Social behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewlets.html">22. Writing Viewlets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_code.html">23. Deploying your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">24. Buildout II: Deploying your site</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_of_plone.html">25. The Future of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="views_2.html" title="17. Views II: A default view for “talk”"
+             >next</a></li>
+        <li class="right" >
+          <a href="zpt.html" title="15. Zope Page Templates"
+             >previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Philip Bauer, Patrick Gerken.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

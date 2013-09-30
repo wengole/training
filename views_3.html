@@ -1,0 +1,326 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>18. Views III: A Talk list &mdash; Mastering Plone 1.1 documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
+    <link rel="next" title="19. Custom search" href="custom_search.html" />
+    <link rel="prev" title="17. Views II: A default view for “talk”" href="views_2.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="custom_search.html" title="19. Custom search"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="views_2.html" title="17. Views II: A default view for “talk”"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="views-iii-a-talk-list">
+<h1>18. Views III: A Talk list<a class="headerlink" href="#views-iii-a-talk-list" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="using-portal-catalog">
+<h2>Using portal_catalog<a class="headerlink" href="#using-portal-catalog" title="Permalink to this headline">¶</a></h2>
+<p>Catalog: search-engine for the content in Plone</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: UTF-8 -*-</span>
+<span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
+<span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
+
+
+<span class="k">class</span> <span class="nc">TalkDefaultView</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">View</span><span class="p">):</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">Interface</span><span class="p">)</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s">&#39;zope2.View&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TalkListView</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">View</span><span class="p">):</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">Interface</span><span class="p">)</span>
+    <span class="n">grok</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s">&quot;zope2.View&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">talks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">portal_catalog</span> <span class="o">=</span> <span class="n">getToolByName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;portal_catalog&#39;</span><span class="p">)</span>
+        <span class="n">current_path</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">getPhysicalPath</span><span class="p">())</span>
+
+        <span class="n">talks</span> <span class="o">=</span> <span class="n">portal_catalog</span><span class="p">(</span><span class="n">portal_type</span><span class="o">=</span><span class="s">&quot;talk&quot;</span><span class="p">,</span>
+                               <span class="n">path</span><span class="o">=</span><span class="n">current_path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">brain</span> <span class="ow">in</span> <span class="n">talks</span><span class="p">:</span>
+            <span class="c"># hold on to your hats, we&#39;re awaking the brains!</span>
+            <span class="n">talk</span> <span class="o">=</span> <span class="n">brain</span><span class="o">.</span><span class="n">getObject</span><span class="p">()</span>
+
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="n">brain</span><span class="o">.</span><span class="n">Title</span><span class="p">,</span>
+                <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="n">brain</span><span class="o">.</span><span class="n">getURL</span><span class="p">(),</span>
+                <span class="s">&#39;audience&#39;</span><span class="p">:</span> <span class="n">talk</span><span class="o">.</span><span class="n">audience</span><span class="p">,</span>
+                <span class="s">&#39;uuid&#39;</span><span class="p">:</span> <span class="n">brain</span><span class="o">.</span><span class="n">UID</span><span class="p">,</span>
+                <span class="p">})</span>
+        <span class="k">return</span> <span class="n">results</span>
+</pre></div>
+</div>
+<p>We query the catalog for two things:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">portal_type</span> <span class="pre">=</span> <span class="pre">&quot;talk&quot;</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">path</span> <span class="pre">=</span> <span class="pre">&quot;/&quot;.join(self.context.getPhysicalPath())</span></tt></li>
+</ul>
+</div>
+<div class="section" id="brains-and-objects">
+<h2>brains and objects<a class="headerlink" href="#brains-and-objects" title="Permalink to this headline">¶</a></h2>
+<p>Adding an index:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">plone.indexer.decorator</span> <span class="kn">import</span> <span class="n">indexer</span>
+<span class="kn">from</span> <span class="nn">plonekonf.talk.talk</span> <span class="kn">import</span> <span class="n">ITalk</span>
+
+<span class="nd">@indexer</span><span class="p">(</span><span class="n">ITalk</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">talk_audience</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+     <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">audience</span>
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;adapter</span> <span class="na">name=</span><span class="s">&quot;audience&quot;</span> <span class="na">factory=</span><span class="s">&quot;.indexers.talk_audience&quot;</span> <span class="nt">/&gt;</span>
+
+
+&gt;&gt;&gt; brain.Title == obj.title
+True
+</pre></div>
+</div>
+<p>Querying and indexing: <a class="reference external" href="http://collective-docs.readthedocs.org/en/latest/searching_and_indexing/index.html">http://collective-docs.readthedocs.org/en/latest/searching_and_indexing/index.html</a>.</p>
+</div>
+<div class="section" id="the-template-for-the-listing">
+<h2>The template for the listing<a class="headerlink" href="#the-template-for-the-listing" title="Permalink to this headline">¶</a></h2>
+<p>Add template &#8216;talklistview.pt&#8217;:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&quot;listing&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;thead&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>
+                Title
+            <span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>
+                Speaker
+            <span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>
+                Audience
+            <span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/thead&gt;</span>
+    <span class="nt">&lt;tbody&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;td&gt;</span>
+               The 7 sins of plone-development
+            <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>
+                Philip Bauer
+            <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>
+                Advanced
+            <span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/tbody&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+</pre></div>
+</div>
+<p>After we transform it we have a listing:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&quot;listing&quot;</span> <span class="na">id=</span><span class="s">&quot;talks&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;thead&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>
+                Title
+            <span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>
+                Speaker
+            <span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>
+                Audience
+            <span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/thead&gt;</span>
+    <span class="nt">&lt;tbody&gt;</span>
+        <span class="nt">&lt;tr</span> <span class="na">tal:repeat=</span><span class="s">&quot;talk view/talks&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;td&gt;</span>
+                <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;&quot;</span>
+                   <span class="na">tal:attributes=</span><span class="s">&quot;href talk/url;</span>
+<span class="s">                                   title talk/description&quot;</span>
+                   <span class="na">tal:content=</span><span class="s">&quot;talk/title&quot;</span><span class="nt">&gt;</span>
+                   The 7 sins of plone-development
+                <span class="nt">&lt;/a&gt;</span>
+            <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td</span> <span class="na">tal:content=</span><span class="s">&quot;talk/speaker&quot;</span><span class="nt">&gt;</span>
+                Philip Bauer
+            <span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td</span> <span class="na">tal:content=</span><span class="s">&quot;talk/audience&quot;</span><span class="nt">&gt;</span>
+                Advanced
+            <span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr</span> <span class="na">tal:condition=</span><span class="s">&quot;not:view/talks&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">3</span><span class="nt">&gt;</span>
+                No talks so far :-(
+            <span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/tbody&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">tal:repeat=&quot;talk</span> <span class="pre">view/talks&quot;</span></tt></dt>
+<dd>we iterate over the list of dictionaries returned by our view. <tt class="docutils literal"><span class="pre">view/talks</span></tt> calles the method <tt class="docutils literal"><span class="pre">talks</span></tt> of our view and each <tt class="docutils literal"><span class="pre">talk</span></tt> is in turn a dictionary. Since TAL&#8217;s path-expressions for the lookup of values in dictionaries is the same as the attributes of objects we can write <tt class="docutils literal"><span class="pre">talk/somekey</span></tt> as we could <tt class="docutils literal"><span class="pre">view/somemethod</span></tt>. Handy but sometimes irritating since from looking at the page-template alone we have often no way of knowing if something is an attribute, a method or the value of a dict.</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:content=&quot;talk/speaker&quot;</span></tt></dt>
+<dd>&#8216;speaker&#8217; is a key in the dict &#8216;talk&#8217;. We could also write <tt class="docutils literal"><span class="pre">tal:content=&quot;python:talk['speaker']&quot;</span></tt></dd>
+<dt><tt class="docutils literal"><span class="pre">tal:condition=&quot;not:view/talks&quot;</span></tt></dt>
+<dd>this is a fallback for when no talks are returned by out method talks. It then return an empty list (remember <tt class="docutils literal"><span class="pre">results</span> <span class="pre">=</span> <span class="pre">[]</span></tt>?)</dd>
+<dt><tt class="docutils literal"><span class="pre">tal:content=&quot;talk/average_rating</span> <span class="pre">|&nbsp;nothing&quot;</span></tt></dt>
+<dd><p class="first">you might remember there is no key &#8216;average_rating&#8217; in the dict that we return. The &#8216;|&#8217; (&#8220;or&#8221;) character is used to find an alternative value to a path if the first path evaluates to <tt class="docutils literal"><span class="pre">nothing</span></tt> or does not exist. The | (&#8220;or&#8221;) is the logical &#8216;or&#8217; and will be used if no value exists.</p>
+<p>What will not work is <tt class="docutils literal"><span class="pre">tal:content=&quot;python:talk['average_rating']</span> <span class="pre">or</span> <span class="pre">''&quot;</span></tt>. Who knows what it will yield? We&#8217;ll get <tt class="docutils literal"><span class="pre">KeyError:</span> <span class="pre">'average_rating'</span></tt>. In fact it is bad practice to use | too often since it&#8217;ll swallow errors like a typo in <tt class="docutils literal"><span class="pre">tal:content=&quot;talk/averange_ratting</span> <span class="pre">|&nbsp;nothing&quot;</span></tt> and you might wonder why there are no ratings later on...</p>
+<p class="last">Keep in mind that you can&#8217;t and should not use it to prevent errors like a try/except-block. But in this case it&#8217;s pretty useful since our code does not break event though we have not implemented ratings yet.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="setting-a-custom-view-as-default-view-on-an-object">
+<h2>Setting a custom view as default-view on an object<a class="headerlink" href="#setting-a-custom-view-as-default-view-on-an-object" title="Permalink to this headline">¶</a></h2>
+<p>Hardwired: Append <tt class="docutils literal"><span class="pre">/manage_propertiesForm</span></tt> and set/add the property &#8220;layout&#8221; to &#8220;talklistview&#8221;.</p>
+<p>Configurable for editor: Extend the FTI (<tt class="docutils literal"><span class="pre">folder.xml</span></tt>).</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;Folder&quot;</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;view_methods&quot;</span> <span class="na">purge=</span><span class="s">&quot;False&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;talklistview&quot;</span><span class="nt">/&gt;</span>
+ <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;alias</span> <span class="na">from=</span><span class="s">&quot;@@talklistview&quot;</span> <span class="na">to=</span><span class="s">&quot;talklistview&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/object&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-some-javascript-collective-js-datatables">
+<h2>Adding some javascript (collective.js.datatables)<a class="headerlink" href="#adding-some-javascript-collective-js-datatables" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;metal:head</span> <span class="na">fill-slot=</span><span class="s">&quot;javascript_head_slot&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">media=</span><span class="s">&quot;screen&quot;</span> <span class="na">href=</span><span class="s">&quot;++resource++jquery.datatables/media/css/jquery.dataTables.css&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;++resource++jquery.datatables.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="kd">var</span> <span class="nx">oTable</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#talks&#39;</span><span class="p">).</span><span class="nx">dataTable</span><span class="p">({</span>
+            <span class="p">});</span>
+        <span class="p">})</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/metal:head&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy.html">4. The Anatomy of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">5. The Features of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_customizing.html">6. Configuring and Customising Plone through the web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">8. Extend Plone with Add-ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Creating content-types with Dexterity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_1.html">14. Views I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt.html">15. Zope Page Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt_2.html">16. Customizing existing templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_2.html">17. Views II: A default view for &#8220;talk&#8221;</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">18. Views III: A Talk list</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-portal-catalog">Using portal_catalog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#brains-and-objects">brains and objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-template-for-the-listing">The template for the listing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-a-custom-view-as-default-view-on-an-object">Setting a custom view as default-view on an object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-some-javascript-collective-js-datatables">Adding some javascript (collective.js.datatables)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom_search.html">19. Custom search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ressources.html">20. Ressources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="social_behavior.html">21. Social behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewlets.html">22. Writing Viewlets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_code.html">23. Deploying your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">24. Buildout II: Deploying your site</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_of_plone.html">25. The Future of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="custom_search.html" title="19. Custom search"
+             >next</a></li>
+        <li class="right" >
+          <a href="views_2.html" title="17. Views II: A default view for “talk”"
+             >previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Philip Bauer, Patrick Gerken.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

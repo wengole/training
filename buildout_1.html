@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
 
-    <title>Search &mdash; Mastering Plone 1.1 documentation</title>
+    <title>10. Buildout I &mdash; Mastering Plone 1.1 documentation</title>
 
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 
@@ -30,18 +30,20 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/searchtools.js"></script>
-    <script type="text/javascript" src="_static/searchtools.js"></script>
     <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-   
-
+    <link rel="next" title="11. IDE’s and Editors" href="ide.html" />
+    <link rel="prev" title="9. Theming" href="theming.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ide.html" title="11. IDE’s and Editors"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="theming.html" title="9. Theming"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,29 +53,72 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
-  </div>
-  <p>
-    From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.
-  </p>
-  <form action="" method="get">
-    <input type="text" name="q" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>
-  
-  <div id="search-results">
-  
-  </div>
+  <div class="section" id="buildout-i">
+<h1>10. Buildout I<a class="headerlink" href="#buildout-i" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="k">[buildout]</span>
+<span class="na">parts</span> <span class="o">=</span><span class="s"></span>
+<span class="s">    instance</span>
+<span class="s">    omelette</span>
+<span class="s">    zopeskel</span>
+
+<span class="na">extends</span> <span class="o">=</span><span class="s"></span>
+<span class="s">    http://dist.plone.org/release/4.3.2/versions.cfg</span>
+<span class="s">    versions.cfg</span>
+
+<span class="na">find-links</span> <span class="o">=</span> <span class="s">http://dist.repoze.org/</span>
+
+<span class="c1"># A test-pypi to publish eggs</span>
+<span class="c1">#index = http://testpypi.python.org/simple/</span>
+
+<span class="c1">#extensions = mr.developer</span>
+<span class="c1">#sources = sources</span>
+<span class="c1">#auto-checkout =</span>
+<span class="c1">#    plonekonf.talk</span>
+<span class="c1">#    starzel.votable_behavior</span>
+
+<span class="na">versions</span> <span class="o">=</span> <span class="s">versions</span>
+
+<span class="k">[instance]</span>
+<span class="na">recipe</span> <span class="o">=</span> <span class="s">plone.recipe.zope2instance</span>
+<span class="na">eggs</span> <span class="o">=</span><span class="s"></span>
+<span class="s">    Plone</span>
+<span class="s">    Pillow</span>
+<span class="c1">#    Products.PloneFormGen</span>
+<span class="c1">#    Products.LinguaPlone</span>
+<span class="c1">#    collective.plonetruegallery</span>
+<span class="c1">#    plone.app.themeeditor</span>
+<span class="c1">#    z3c.jbot</span>
+<span class="c1">#    plonekonf.talk</span>
+<span class="c1">#    starzel.votable_behavior</span>
+
+<span class="na">user</span> <span class="o">=</span> <span class="s">admin:admin</span>
+<span class="c1"># The following is only used when we use vagrant.</span>
+<span class="c1"># The shared folder should not contain &quot;big data&quot; or symbolic links.</span>
+<span class="na">file-storage</span> <span class="o">=</span> <span class="s">/home/vagrant/var/filestorage/Data.fs</span>
+<span class="na">blob-storage</span> <span class="o">=</span> <span class="s">/home/vagrant/var/blobstorage</span>
+
+<span class="k">[omelette]</span>
+<span class="na">recipe</span> <span class="o">=</span> <span class="s">collective.recipe.omelette</span>
+<span class="na">eggs</span> <span class="o">=</span> <span class="s">${instance:eggs}</span>
+<span class="c1"># Same as above: We dont want links in the shared folder.</span>
+<span class="c1"># The default omelette-dir is parts/omelette</span>
+<span class="na">location</span> <span class="o">=</span> <span class="s">/home/vagrant/omelette</span>
+
+<span class="k">[zopeskel]</span>
+<span class="c1"># installs paster and Zopeskel</span>
+<span class="na">recipe</span> <span class="o">=</span> <span class="s">zc.recipe.egg</span>
+<span class="na">eggs</span> <span class="o">=</span><span class="s"></span>
+<span class="s">    PasteScript</span>
+<span class="s">    ZopeSkel</span>
+<span class="s">    ${instance:eggs}</span>
+
+<span class="k">[sources]</span>
+<span class="c1">#plonekonf.talk = git https://github.com/starzel/plonekonf.talk.git</span>
+<span class="c1">#starzel.votable_behavior = git git://github.com/starzel/starzel.votable_behavior.git</span>
+</pre></div>
+</div>
+</div>
+
 
           </div>
         </div>
@@ -81,7 +126,7 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
@@ -91,7 +136,7 @@
 <li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="addons.html">8. Extend Plone with Add-ons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">10. Buildout I</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Creating content-types with Dexterity</a></li>
@@ -110,6 +155,19 @@
 <li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
 </ul>
 
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -117,6 +175,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ide.html" title="11. IDE’s and Editors"
+             >next</a></li>
+        <li class="right" >
+          <a href="theming.html" title="9. Theming"
+             >previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>

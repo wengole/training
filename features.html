@@ -1,0 +1,316 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>5. The Features of Plone &mdash; Mastering Plone 1.1 documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
+    <link rel="next" title="6. Configuring and Customising Plone through the web" href="configuring_customizing.html" />
+    <link rel="prev" title="4. The Anatomy of Plone" href="anatomy.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="configuring_customizing.html" title="6. Configuring and Customising Plone through the web"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="anatomy.html" title="4. The Anatomy of Plone"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-features-of-plone">
+<h1>5. The Features of Plone<a class="headerlink" href="#the-features-of-plone" title="Permalink to this headline">¶</a></h1>
+<p>In-depth user-manual: <a class="reference external" href="http://plone.org/documentation/manual/plone-4-user-manual">http://plone.org/documentation/manual/plone-4-user-manual</a></p>
+<div class="section" id="starting-and-stopping-plone">
+<h2>Starting and Stopping Plone<a class="headerlink" href="#starting-and-stopping-plone" title="Permalink to this headline">¶</a></h2>
+<p>Control Plone with a script called &#8220;instance&#8221;:</p>
+<div class="highlight-python"><pre>$ ./bin/instance fg</pre>
+</div>
+<p>starts Plone in foreground.</p>
+<p>Stop it by pressing <tt class="docutils literal"><span class="pre">ctrl</span></tt> + <tt class="docutils literal"><span class="pre">c</span></tt>.</p>
+<p>Options:</p>
+<div class="highlight-python"><pre>$ ./bin/instance fg
+$ ./bin/instance start
+$ ./bin/instance stop
+$ ./bin/instance debug -P Plone</pre>
+</div>
+<p>Plone listens on port 8080. Look at <a class="reference external" href="http://localhost:8080">http://localhost:8080</a></p>
+<p>No Plone yet! Create a Plone site.</p>
+<p>Use &#8220;Plone&#8221; (the default) as the site id.</p>
+</div>
+<div class="section" id="users">
+<h2>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h2>
+<p>A note about messages and warnings:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">They contain important information. Read them and make sure you understand them!</p>
+</div>
+<p>Create user within Plone.</p>
+<p>Fallback: Add zope-users:</p>
+<div class="highlight-python"><pre>$ ./bin/instance adduser &lt;someusername&gt; &lt;supersecretpassword&gt;</pre>
+</div>
+<p>Add a new user:</p>
+<ul class="simple">
+<li>&#8220;admin&#8221; &gt; &#8220;Site setup&#8221; &gt; &#8220;Users and Groups&#8221;</li>
+<li>Add user &lt;yourname&gt; (group Administrator)</li>
+</ul>
+<p>Create user called <tt class="docutils literal"><span class="pre">testuser</span></tt> (normal user).</p>
+<p>Visis Plone in three different roles:</p>
+<ul class="simple">
+<li>as anonymous</li>
+<li>as editor</li>
+<li>as admin</li>
+</ul>
+</div>
+<div class="section" id="configure-a-mailserver">
+<h2>Configure a Mailserver<a class="headerlink" href="#configure-a-mailserver" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Server: <tt class="docutils literal"><span class="pre">mail.gocept.net</span></tt></li>
+<li>Username: <tt class="docutils literal"><span class="pre">training&#64;neww.de</span></tt></li>
+<li>Password: <tt class="docutils literal"><span class="pre">training2013</span></tt></li>
+</ul>
+<p>Please do not abuse this. We&#8217;ll diable this account after the training.</p>
+</div>
+<div class="section" id="walktrough-of-the-ui">
+<h2>Walktrough of the UI<a class="headerlink" href="#walktrough-of-the-ui" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s see what is there...</p>
+<ul class="simple">
+<li>portal-top:<ul>
+<li>personaltools</li>
+<li>logo</li>
+<li>search</li>
+<li>global-navigation</li>
+</ul>
+</li>
+<li>portal-columns:<ul>
+<li>portal-column-one: portlets</li>
+<li>portal-column-content: content</li>
+<li>portal-column-two: portlets</li>
+</ul>
+</li>
+<li>portal-footer: viewlets</li>
+</ul>
+</div>
+<div class="section" id="content-types">
+<h2>Content-Types<a class="headerlink" href="#content-types" title="Permalink to this headline">¶</a></h2>
+<p>Edit a page:</p>
+<ul class="simple">
+<li>Edit the frontpage</li>
+<li>Title: &#8220;Plone Conference 2013, Brazil&#8221;</li>
+<li>Description &#8220;Tutorial&#8221;</li>
+<li>Text &lt;add some text&gt;</li>
+</ul>
+<p>Site-structure:</p>
+<ul class="simple">
+<li>Add folder &#8220;The Event&#8221; and in that ...<ul>
+<li>Folder &#8220;Talks&#8221;</li>
+<li>Folder &#8220;Training&#8221;</li>
+<li>Folder &#8220;Sprint&#8221;</li>
+</ul>
+</li>
+<li>In /news: Add News Item &#8220;conf website online!&#8221; with image</li>
+<li>In /news: Add News Item &#8220;submit your talks!&#8221;</li>
+<li>In /events: Add Event &#8220;Deadline for talk-submission&#8221; Date: 10.10.2013</li>
+<li>Add Folder &#8220;Register&#8221;</li>
+<li>Delete &#8220;members&#8221;</li>
+<li>Add Folder &#8220;Intranet&#8221;</li>
+</ul>
+<p>The default content-types:</p>
+<ul class="simple">
+<li>Document</li>
+<li>News Item</li>
+<li>Event</li>
+<li>File</li>
+<li>Image</li>
+<li>Link</li>
+<li>Folder</li>
+<li>Collection</li>
+</ul>
+</div>
+<div class="section" id="folders">
+<h2>Folders<a class="headerlink" href="#folders" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Go to &#8216;the-event&#8217;</li>
+<li>title/id/url</li>
+<li><tt class="docutils literal"><span class="pre">/folder_contents</span></tt></li>
+<li>dropdown &#8220;Display&#8221;</li>
+<li>default_pages</li>
+</ul>
+</div>
+<div class="section" id="collections">
+<h2>Collections<a class="headerlink" href="#collections" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>add a new collection: all content that has pending as review_state.</li>
+<li>default collections: <a class="reference external" href="http://localhost:8080/Plone/events/aggregator/edit">http://localhost:8080/Plone/events/aggregator/edit</a></li>
+<li>old vs. new collections</li>
+<li>collection-portets</li>
+</ul>
+</div>
+<div class="section" id="content-rules">
+<h2>Content Rules<a class="headerlink" href="#content-rules" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Create new rule &#8220;a new talk is in town&#8221;!</li>
+<li>New content in folder &#8220;Talks&#8221; -&gt; Send Mail to reviewers.</li>
+</ul>
+</div>
+<div class="section" id="history">
+<h2>History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="manage-members-and-groups">
+<h2>Manage members and groups<a class="headerlink" href="#manage-members-and-groups" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>add/edit/delete Users</li>
+<li>roles</li>
+<li>groups<ul>
+<li>Add group: <tt class="docutils literal"><span class="pre">orga</span></tt></li>
+<li>add group: <a href="#id1"><span class="problematic" id="id2">``</span></a>speaker`</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="workflows">
+<h2>Workflows<a class="headerlink" href="#workflows" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>portal_workflow</li>
+<li>plone.app.workflowmanager</li>
+</ul>
+</div>
+<div class="section" id="working-copy">
+<h2>Working copy<a class="headerlink" href="#working-copy" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>enable &#8220;Working copy support&#8221;</li>
+</ul>
+</div>
+<div class="section" id="placeful-workflows">
+<h2>Placeful workflows<a class="headerlink" href="#placeful-workflows" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy.html">4. The Anatomy of Plone</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">5. The Features of Plone</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#starting-and-stopping-plone">Starting and Stopping Plone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#users">Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configure-a-mailserver">Configure a Mailserver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#walktrough-of-the-ui">Walktrough of the UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#content-types">Content-Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#folders">Folders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#collections">Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#content-rules">Content Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#history">History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manage-members-and-groups">Manage members and groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workflows">Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-copy">Working copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#placeful-workflows">Placeful workflows</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuring_customizing.html">6. Configuring and Customising Plone through the web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">8. Extend Plone with Add-ons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theming.html">9. Theming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">10. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ide.html">11. IDE&#8217;s and Editors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eggs.html">12. Creating your own eggs to customize Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Creating content-types with Dexterity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_1.html">14. Views I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt.html">15. Zope Page Templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zpt_2.html">16. Customizing existing templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_2.html">17. Views II: A default view for &#8220;talk&#8221;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views_3.html">18. Views III: A Talk list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_search.html">19. Custom search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ressources.html">20. Ressources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="social_behavior.html">21. Social behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewlets.html">22. Writing Viewlets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_code.html">23. Deploying your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">24. Buildout II: Deploying your site</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future_of_plone.html">25. The Future of Plone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="configuring_customizing.html" title="6. Configuring and Customising Plone through the web"
+             >next</a></li>
+        <li class="right" >
+          <a href="anatomy.html" title="4. The Anatomy of Plone"
+             >previous</a> |</li>
+        <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Philip Bauer, Patrick Gerken.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

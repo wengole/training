@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
 
-    <title>Search &mdash; Mastering Plone 1.1 documentation</title>
+    <title>19. Custom search &mdash; Mastering Plone 1.1 documentation</title>
 
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
 
@@ -30,18 +30,20 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/searchtools.js"></script>
-    <script type="text/javascript" src="_static/searchtools.js"></script>
     <link rel="top" title="Mastering Plone 1.1 documentation" href="index.html" />
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-   
-
+    <link rel="next" title="20. Ressources" href="ressources.html" />
+    <link rel="prev" title="18. Views III: A Talk list" href="views_3.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ressources.html" title="20. Ressources"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="views_3.html" title="18. Views III: A Talk list"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,29 +53,38 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
-  </div>
-  <p>
-    From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.
-  </p>
-  <form action="" method="get">
-    <input type="text" name="q" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>
-  
-  <div id="search-results">
-  
-  </div>
+  <div class="section" id="custom-search">
+<h1>19. Custom search<a class="headerlink" href="#custom-search" title="Permalink to this headline">¶</a></h1>
+<p>Tools that allow you to add amazing custom searches and content-listings through the web:</p>
+<div class="section" id="eea-facetednavigation">
+<h2>eea.facetednavigation<a class="headerlink" href="#eea-facetednavigation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Install eea.facetednavigation</li>
+<li>Enable faceted navigation on a new folder within &#8220;talks&#8221;</li>
+<li>Configure it using <tt class="docutils literal"><span class="pre">Faceted</span> <span class="pre">Criteria</span></tt></li>
+<li>Use the Checkboxes-Widget using the catalog-index &#8220;Tags&#8221;</li>
+<li>Other Noteable widgets: tagcloud, a-z, search, radio</li>
+</ul>
+<p>Examples:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.dipf.de/de/forschung/projekte">http://www.dipf.de/de/forschung/projekte</a></li>
+<li><a class="reference external" href="http://www.dynajet.de/de/hochdruckreiniger">http://www.dynajet.de/de/hochdruckreiniger</a></li>
+</ul>
+<p><a class="reference external" href="http://pypi.python.org/pypi/eea.facetednavigation/">http://pypi.python.org/pypi/eea.facetednavigation/</a></p>
+</div>
+<div class="section" id="collective-formcriteria">
+<h2>collective.formcriteria<a class="headerlink" href="#collective-formcriteria" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://pypi.python.org/pypi/collective.formcriteria/">https://pypi.python.org/pypi/collective.formcriteria/</a></p>
+</div>
+<div class="section" id="advanced-topics">
+<h2>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://developer.plone.org/searching_and_indexing/indexing.html">Adding indexes</a></li>
+<li>Adding vocabularies using <a class="reference external" href="https://pypi.python.org/pypi/Products.ATVocabularyManager">Products.ATVocabularyManager</a></li>
+</ul>
+</div>
+</div>
+
 
           </div>
         </div>
@@ -81,7 +92,7 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">2. Installation &amp; Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plone_training_config/instructions.html">3. Installing Plone for the Training</a></li>
@@ -100,7 +111,12 @@
 <li class="toctree-l1"><a class="reference internal" href="zpt_2.html">16. Customizing existing templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="views_2.html">17. Views II: A default view for &#8220;talk&#8221;</a></li>
 <li class="toctree-l1"><a class="reference internal" href="views_3.html">18. Views III: A Talk list</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_search.html">19. Custom search</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">19. Custom search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#eea-facetednavigation">eea.facetednavigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#collective-formcriteria">collective.formcriteria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-topics">Advanced Topics</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="ressources.html">20. Ressources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="social_behavior.html">21. Social behavior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="viewlets.html">22. Writing Viewlets</a></li>
@@ -110,6 +126,19 @@
 <li class="toctree-l1"><a class="reference internal" href="optional.html">26. Optional</a></li>
 </ul>
 
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -117,6 +146,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ressources.html" title="20. Ressources"
+             >next</a></li>
+        <li class="right" >
+          <a href="views_3.html" title="18. Views III: A Talk list"
+             >previous</a> |</li>
         <li><a href="index.html">Mastering Plone 1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
