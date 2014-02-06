@@ -55,33 +55,104 @@
             
   <div class="section" id="installing-plone-for-the-training">
 <h1>3. Installing Plone for the Training<a class="headerlink" href="#installing-plone-for-the-training" title="Permalink to this headline">¶</a></h1>
+<p>To not waste too much time with installing and debugging the differences between systems we use a virtual machine (Ubuntu 12.04) to run Plone during the training. We rely on Vagrant and VirtualBox to give the same development-environment to everyone.</p>
+<p><a class="reference external" href="http://www.vagrantup.com">Vagrant</a> is a command-line wrapper for Oracle’s <a class="reference external" href="https://www.virtualbox.org">VirtualBox</a> to create and manage virtual environments.</p>
+<p>Keep in mind that you need a fast internet-connection during the process since you&#8217;ll have to download a complete virtual machine (ubuntu) and several packages and updates.</p>
+<div class="section" id="install-virtualbox">
+<h2>Install VirtualBox<a class="headerlink" href="#install-virtualbox" title="Permalink to this headline">¶</a></h2>
+<p>Vagrant depends on Oracle’s VirtualBox to create virtual environments. Here is a link directly to the download page: <a class="reference external" href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a>. We use VirtualBox  4.2.x.</p>
+</div>
 <div class="section" id="install-and-configure-vagrant">
 <h2>Install and configure Vagrant<a class="headerlink" href="#install-and-configure-vagrant" title="Permalink to this headline">¶</a></h2>
+<p>Get the latest version from <a class="reference external" href="http://downloads.vagrantup.com">http://downloads.vagrantup.com</a> for your operating system and install it.</p>
+<p>Now your system has a command <tt class="docutils literal"><span class="pre">vagrant</span></tt> that you can run in the terminal.</p>
+<p>First create a directory where you want to do the training in.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir training
 <span class="nv">$ </span><span class="nb">cd </span>training
 </pre></div>
 </div>
+<p>Download a clean virtual machine (Ubuntu 12.04 Precise Pangolin 32bit). It will be downloaded and made available to the vagrant-command as &#8216;precise32&#8217;. It serves as a basis for your virtual machines and can be reused as often as you like:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vagrant box add precise32 http://files.vagrantup.com/precise32.box
+</pre></div>
+</div>
+<p>Setup Vagrant to automatically install the current guest-additions. You can choose to skip this step if you encounter any problems with it.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vagrant plugin install vagrant-vbguest
 </pre></div>
 </div>
+<p>Now either extract the the files from the attachmeht (if you read this as a mail) or download and extract <a class="reference external" href="http://www.starzel.de/plone-tutorial/plone_training_config.zip">http://www.starzel.de/plone-tutorial/plone_training_config.zip</a> into your training directory. It should now hold the file &#8220;Vagrantfile&#8221; and the directories <tt class="docutils literal"><span class="pre">manifests/</span></tt>  and <tt class="docutils literal"><span class="pre">puppet_modules/</span></tt></p>
+<p>Start the VM that is configured in &#8220;Vagrantfile&#8221;</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vagrant up
 </pre></div>
 </div>
+<p>This takes a very loooong time since it not only sets up the VM but also updates your VM, installs various packages needed for Plone-development and runs the installer for Plone 4.3.2.</p>
+<p>More often than not this stops with the message <em>Skipping because of failed dependencies</em>.</p>
+<p>More often than not this stops with the message:</p>
+<div class="highlight-bash"><div class="highlight"><pre>Skipping because of failed dependencies
+</pre></div>
+</div>
+<p>If this happens or you have the feeling that something has gone wrong and the installation has not finished correctly for some reason you need to run try the following command to repeat the process. This will only repeat steps that have not finished correctly.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vagrant provision
 </pre></div>
 </div>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vagnant ssh
+<p>You can do this multiple times to fix problems, e.g. if your network-connection was down and steps could not finish because of this.</p>
+<p>Once the provisioning-process is completed you can login to the now running virtual machine.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vagrant ssh
 </pre></div>
 </div>
+<p>If you use Windows you&#8217;ll have to login via putty (Install putty and follow the instructions here: <a class="reference external" href="http://vagrantup.com/v1/docs/getting-started/ssh.html">http://vagrantup.com/v1/docs/getting-started/ssh.html</a>)</p>
+<p>You are now logged in as the user vagrant in <tt class="docutils literal"><span class="pre">/home/vagrant</span></tt>. We&#8217;ll do all steps of the training as this user.</p>
+<p>We installed a Plone 4.3.2 for you in the folder <tt class="docutils literal"><span class="pre">/home/vagrant/training/zinstance</span></tt> You can run it now and access it from the browser.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>training/zinstance
 <span class="nv">$ </span>./bin/instance <span class="nb">fg</span>
 </pre></div>
 </div>
+<p>You can now point your browser at <a class="reference external" href="http://localhost:8080">http://localhost:8080</a> and see Plone. This works since the port 8080 is forwarded from the guest-system (the vagrant-Ubuntu) to the host-system (your normal operating-system). Now create a new Plone-Site by clicking &#8220;Create a new Plone-Site&#8221;. The username and the password are both &#8220;admin&#8221; (Never do this on a real site!!!).</p>
+<p>Do not get accustomized to this site, we will create a buildout based plone during the training. We only test now that the installation has finished.</p>
+<p>If you have any problems or questions please mail us at <a class="reference external" href="mailto:team&#37;&#52;&#48;starzel&#46;de">team<span>&#64;</span>starzel<span>&#46;</span>de</a></p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">You can also work on your own machine with your own Python and Plone if you really want to but <strong>please please please</strong> make sure that you have a system that will work since we don&#8217;t want you to loose valuable time learning Plone.</p>
 </div>
-<div class="section" id="buildout-based">
-<h2>Buildout based<a class="headerlink" href="#buildout-based" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vagrant ssh
-<span class="nv">$ </span><span class="nb">cd</span> /vagrant/training
+</div>
+<div class="section" id="what-vagrant-does">
+<h2>What Vagrant does<a class="headerlink" href="#what-vagrant-does" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">These steps are automatically done by vagrant and puppet. They are only explained here if you want to know what goes on below the hood.</p>
+</div>
+<p>The first installation is done by Puppet, a tool to automatically manage servers (real and virtual). We won&#8217;t get into Puppet since it is not that widely used. This is what we basically do if we did it by hand:</p>
+<p>First we install some packages:</p>
+<div class="highlight-python"><pre>$ sudo aptitude update --quiet --assume-yes
+$ sudo apt-get install python-dev python-virtualenv libjpeg62-dev libxslt1-dev git-core subversion zlib1g-dev libbz2-dev wget cURL elinks gettext</pre>
+</div>
+<p>Then we create a virtual python environement using virtualenv. This is alway a good practice since that way we get a clean copy of our system-python, we can&#8217;t break it by installing eggs that might collide with other eggs:</p>
+<div class="highlight-python"><pre>$ virtualenv --no-site-packages py27</pre>
+</div>
+<p>Then we download, unpack and install the unified installer of Plone:</p>
+<div class="highlight-python"><pre>$ mkdir training
+$ mkdir tmp
+$ cd tmp
+$ wget https://launchpad.net/plone/4.3/4.3.2/+download/Plone-4.3.2-UnifiedInstaller.tgz
+$ tar xzf Plone-4.3.2-UnifiedInstaller.tgz
+$ cd Plone-4.3.2-UnifiedInstaller
+$ ./install.sh standalone --with-python=/home/vagrant/py27/bin/python --password=admin --instance=zinstance --target=/home/vagrant/training</pre>
+</div>
+<p>The unified installer is an amazing tool that compiles it&#8217;s own python, brings with it all the python-eggs we need and puts them in a buildout-cache. It then creates a buildout and makes Plone ready to run.</p>
+<p>We will not actually use this Plone during the training. If you want to use it for your own experiments, you can find it in <tt class="docutils literal"><span class="pre">/home/vagrant/training/zinstance</span></tt> on the virtual machine.</p>
+<p>Instead we will now create our own little buildout and only use the python and the eggs that were created when installing the unified installer.</p>
+<p>Checkout our tutorial code from <a class="reference external" href="http://github.com/starzel/training">http://github.com/starzel/training</a>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /vagrant/buildouts
+<span class="nv">$ </span>git clone https://github.com/starzel/training.git
+</pre></div>
+</div>
+<p>In your training directory create another directory called &#8216;plone&#8217;. Copy the contents from chapter3 of the tutorial code into the new directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir /vagrant/plone
+<span class="nv">$ </span><span class="nb">cd</span> /vagrant/plone
+<span class="nv">$ </span>cp -R /vagrant/buildouts/chapter3/* .
+</pre></div>
+</div>
+<p>Then enter the machine via ssh and start building.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /vagrant/plone
 <span class="nv">$ </span>virtualenv .
 <span class="nv">$ </span><span class="nb">source </span>bin/activate
 <span class="nv">$ </span>python bootstrap.py
@@ -89,6 +160,8 @@
 <span class="nv">$ </span>bin/instance <span class="nb">fg</span>
 </pre></div>
 </div>
+<p>Now we have fresh buildout based zope site, ready to get a Plone site. Go to <a class="reference external" href="http://localhost:8080">http://localhost:8080</a> and create a plone Site, only activate the Dexterity plugin.</p>
+<p>You might wonder, why we use the unified installer. We use the unified installer to set up a cache of packages to download in a much shorter time. Without it, your first buildout on a fresh computer would take more than half an hour on a good internet connection.</p>
 </div>
 </div>
 
@@ -103,8 +176,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../intro.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">2. Installation &amp; Setup</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">3. Installing Plone for the Training</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-virtualbox">Install VirtualBox</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#install-and-configure-vagrant">Install and configure Vagrant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#buildout-based">Buildout based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-vagrant-does">What Vagrant does</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../anatomy.html">4. The Anatomy of Plone</a></li>

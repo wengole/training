@@ -55,44 +55,49 @@
             
   <div class="section" id="extend-plone-with-add-ons">
 <h1>8. Extend Plone with Add-ons<a class="headerlink" href="#extend-plone-with-add-ons" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li>1500 addons for Plone</li>
-</ul>
-<div class="section" id="finding-addons">
-<h2>Finding addons<a class="headerlink" href="#finding-addons" title="Permalink to this headline">¶</a></h2>
+<p>There are more than a thousand addons for Plone. We will cover only a handful today.</p>
+<div class="section" id="how-to-find-addons">
+<h2>How to find addons<a class="headerlink" href="#how-to-find-addons" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://pypi.python.org/pypi">https://pypi.python.org/pypi</a> - use the search form!</li>
 <li><a class="reference external" href="http://plone.org/products">http://plone.org/products</a></li>
 <li><a class="reference external" href="https://github.com/collective">https://github.com/collective</a> &gt;1000 repos</li>
 <li><a class="reference external" href="https://github.com/plone">https://github.com/plone</a> &gt;240 repos</li>
 <li><a class="reference external" href="http://news.gmane.org/gmane.comp.web.zope.plone.user">http://news.gmane.org/gmane.comp.web.zope.plone.user</a></li>
-<li>Shortlist (work in progress): <a class="reference external" href="https://docs.google.com/spreadsheet/ccc?key=0At7ok0VqX0egdExISThOa0JBYjVUYi1pWmRDU0QyeUE#gid=0">https://docs.google.com/spreadsheet/ccc?key=0At7ok0VqX0egdExISThOa0JBYjVUYi1pWmRDU0QyeUE#gid=0</a></li>
+<li>Addon shortlist (will come 2014)</li>
 <li>google</li>
 <li>ask</li>
 </ul>
 </div>
 <div class="section" id="installing-addons">
 <h2>Installing Addons<a class="headerlink" href="#installing-addons" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>make the addons code available to Zope for import</li>
-</ul>
-<p><tt class="docutils literal"><span class="pre">vagrant</span> <span class="pre">ssh</span></tt> and change the buildout.cfg file in <tt class="docutils literal"><span class="pre">/vagrant/training</span></tt>.</p>
-<p>Add eggs to <tt class="docutils literal"><span class="pre">[instance]</span></tt>:</p>
+<p>Installation is a two-step process.</p>
+<p>First, we must make the addons code available to Zope. This means, that Zope can import the code. buildout is responsible for this.</p>
+<p>Use <tt class="docutils literal"><span class="pre">vagrant</span> <span class="pre">ssh</span></tt> to ssh to your vagrant, and change the buildout.cfg file in /vagrant/training.</p>
+<p>In the section <tt class="docutils literal"><span class="pre">[instance]</span></tt> there is a variable called <tt class="docutils literal"><span class="pre">eggs</span></tt>, which has multiple <em>eggs</em> as a value. Add the following eggs:</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">Products.PloneFormGen</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">Products.LinguaPlone</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">collective.plonetruegallery</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">plone.app.themeeditor</span></tt></li>
 </ul>
+<p>Usually, one enters the eggs by adding one more line per egg into the configuration.
+You must write the egg name indented, this way Buildout understands that the current line is part of the last variable and not a new variable.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>bin/buildout
 <span class="nv">$ </span>bin/instance <span class="nb">fg</span>
 </pre></div>
 </div>
-<p>code is importable got registered via ZCML.</p>
+<p>Now the code is importable from within Plone and everything got registered via ZCML.
+But your Plone-site has not yet been told to use this. For this, you have to install the addons in your Plone Site.</p>
+<p>In your browser, go the control panel <tt class="docutils literal"><span class="pre">&#64;&#64;plone_control_panel</span></tt>, and open the <tt class="docutils literal"><span class="pre">Addons</span></tt> Panel. You will see that you can install all three packages there.</p>
+<p>Install them now.</p>
+<p>This is what happens: The GenericSetup profile of the product gets loaded. This does things like:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">/&#64;&#64;plone_control_panel</span></tt> &gt; <tt class="docutils literal"><span class="pre">Addons</span></tt></li>
-<li>install all four packages</li>
+<li>configuring new actions,</li>
+<li>registering new content types or</li>
+<li>creating some content/configuration objects in your Plone site.</li>
 </ul>
+<p>Let&#8217; have a look at what we just installed.</p>
 </div>
 <div class="section" id="ploneformgen">
 <h2>PloneFormGen<a class="headerlink" href="#ploneformgen" title="Permalink to this headline">¶</a></h2>
@@ -104,19 +109,18 @@
 </ul>
 <p>Registration-form:</p>
 <ul class="simple">
-<li>Add &#8216;Form Folder&#8217; called &#8216;Registration&#8217;</li>
-<li>QuickEdit</li>
+<li>Add a object of the new type &#8216;Form Folder&#8217; in the site-root. Call it &#8220;Registration&#8221;</li>
+<li>Save and view the result</li>
+<li>Click in QuickEdit</li>
 <li>Remove field &#8220;Subject&#8221;</li>
 <li>Add fields for food-preference and shirt-size</li>
-<li>Add DataSave Adapter</li>
+<li>Add a DataSave Adapter</li>
 </ul>
 </div>
 <div class="section" id="internationalisation">
 <h2>Internationalisation<a class="headerlink" href="#internationalisation" title="Permalink to this headline">¶</a></h2>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">We&#8217;re not doing this!</p>
-</div>
+<p>We&#8217;re not doing this with the demo-site.</p>
+<p>We would use <a class="reference external" href="http://pypi.python.org/pypi/plone.app.multilingual">http://pypi.python.org/pypi/plone.app.multilingual</a> since we use Dexterity for our Content Types.</p>
 <ul class="simple">
 <li>Install</li>
 <li><tt class="docutils literal"><span class="pre">/&#64;&#64;language-controlpanel</span></tt></li>
@@ -126,10 +130,17 @@
 </div>
 <div class="section" id="add-bling-with-collective-plonetruegallery">
 <h2>Add &#8216;bling&#8217; with collective.plonetruegallery<a class="headerlink" href="#add-bling-with-collective-plonetruegallery" title="Permalink to this headline">¶</a></h2>
+<p>collective.plonetruegallery is a role model on how to write a Plone Extension.</p>
+<p>Instead of creating custom content types for Galleries, it integrates with the Plone functionality to choose different views for folderish content types.</p>
+<p><a class="reference external" href="https://pypi.python.org/pypi/collective.plonetruegallery">https://pypi.python.org/pypi/collective.plonetruegallery</a></p>
 </div>
 <div class="section" id="customizing-the-design-with-plone-app-themeeditor">
 <h2>Customizing the design with plone.app.themeeditor<a class="headerlink" href="#customizing-the-design-with-plone-app-themeeditor" title="Permalink to this headline">¶</a></h2>
 <ul>
+<li><p class="first">Installation</p>
+</li>
+<li><p class="first">explain UI</p>
+</li>
 <li><p class="first">change Logo (download <a class="reference external" href="http://www.sixfeetup.com/blog/2011PloneConfLogo.gif">http://www.sixfeetup.com/blog/2011PloneConfLogo.gif</a> - the brazil-logo is to big)</p>
 </li>
 <li><p class="first">change Footer (footer.pt):</p>
@@ -142,11 +153,9 @@
 </pre></div>
 </div>
 </li>
-<li><p class="first">Open <tt class="docutils literal"><span class="pre">ploneCustom.css</span></tt>.</p>
+<li><p class="first">Look at <tt class="docutils literal"><span class="pre">ploneCustom.css</span></tt>. Recognize the changes we did before?:</p>
 </li>
-<li><p class="first">Add responsive-css</p>
-</li>
-</ul>
+<li><p class="first">Add some more css to make our site a little responsive</p>
 <div class="highlight-css"><div class="highlight"><pre><span class="k">@media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">980px</span><span class="o">)</span> <span class="p">{</span>
     <span class="nf">#visual-portal-wrapper</span> <span class="p">{</span>
         <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
@@ -168,15 +177,29 @@
 <span class="p">}</span>
 </pre></div>
 </div>
+</li>
+</ul>
 </div>
 <div class="section" id="export-customizations">
 <h2>export customizations<a class="headerlink" href="#export-customizations" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>export the customizations as an egg (plonekonf.theme)</li>
+<li>export the customizations as an egg (<tt class="docutils literal"><span class="pre">ploneconf.theme</span></tt>)</li>
 </ul>
 </div>
 <div class="section" id="inspect-the-package">
 <h2>inspect the package<a class="headerlink" href="#inspect-the-package" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>what is where?</li>
+<li>jbot, static etc.</li>
+</ul>
+<p>We are now able to change the design of our wesite. We can install extensions and create simple actions.</p>
+<p>But:</p>
+<ul class="simple">
+<li>Can we submit talks now?</li>
+<li>Can we create lists with the most important properties of each tasks?</li>
+<li>Can we allow Visitors to vote on talks?</li>
+</ul>
+<p>We often have to work with structured data. Up to a degree we can do all this TTW, but at some point we reach barriers. In the second part of our Training, we will teach you, how to break these barriers.</p>
 </div>
 </div>
 
@@ -196,7 +219,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuring_customizing.html">6. Configuring and Customising Plone through the web</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">8. Extend Plone with Add-ons</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#finding-addons">Finding addons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-find-addons">How to find addons</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-addons">Installing Addons</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ploneformgen">PloneFormGen</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#internationalisation">Internationalisation</a></li>

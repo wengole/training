@@ -63,7 +63,7 @@
 <dd>A definition of fields that comprise a content-type
 properties of an object</dd>
 <dt>FTI</dt>
-<dd>The &#8220;Factory Type Information&#8221; configures the content-type in Plone</dd>
+<dd>The &#8220;Factory Type Information&#8221; configures the content-type in Plone, assigns a name, an icon, additional features and possible views to it.</dd>
 <dt>View</dt>
 <dd>The visual representation of the object and the content of it&#8217;s fields.</dd>
 </dl>
@@ -79,42 +79,69 @@ properties of an object</dd>
 <li>Plone 5.x: Dexterity-versions</li>
 <li>add and edit-forms are created automatically from a schema</li>
 </ul>
+<p>What are the differences?</p>
+<ul class="simple">
+<li>Dexterity: New, faster, no dark magic for getters und setters. modular</li>
+<li>Archetype had magic setter/getter - use talk.getAudience() for the field &#8216;audience&#8217;</li>
+<li>Dexterity: fields are attributes: talk.audience instead of talk.getAudience()</li>
+</ul>
+<p>TTW:</p>
+<ul class="simple">
+<li>Dexterity has a good TTW-story.</li>
+<li>Archetypes has no ttw-story</li>
+<li>Archetypes has ArchGenXML for UML-modeling (agx will bring this to Dexterity too)</li>
+</ul>
 <p>Approaches for Developers:</p>
 <ul class="simple">
-<li>TTW-story</li>
 <li>Schema in Dexterity: ttw, xml, python. interface = schema, often no class needed</li>
-<li>Schema in Archetypes: python</li>
-<li>Extendability</li>
+<li>Schema in Archetypes: schema only in python</li>
+<li>Dexterity: easy permissions per field, easy custom forms</li>
+<li>Archetypes: permissions per field hard, custom forms even harder</li>
+<li>If you have to programm for old sites you need to know Archetypes!</li>
+<li>If you start new pages you could skip it.</li>
 </ul>
+<p>Extending:</p>
+<ul class="simple">
+<li>Dexterity has Behaviors: easily extendable. Just activate an behavior ttw and you ct is translateable (plone.app.multilingual). There might even be per-instance behaviors at one time...</li>
+<li>Archetypes has archetypes.schemaextender. Powerfull but not as flexible</li>
+</ul>
+<p>We use dexterity whenever possible because of these points.
+We teach Dexterity and not Archetypes since it&#8217;s much more accessible to beginners, has a great TTW-story and is the future.</p>
 <p>Views:</p>
 <ul class="simple">
-<li>Default-view for all content-types created from schema</li>
+<li>Both Dexterity and Archetypes have a default-view for content-types.</li>
 <li>Grok Views</li>
 <li>Display Forms</li>
 <li>Browser Views (zcml)</li>
+<li>TTW (future)</li>
 </ul>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>You don&#8217;t have modify the buildout since Plone 4.3.x already ships with Dexterity. You just have to activate it in the control-panel for Add-ons.</p>
+<p>This time for no obvous reason other than getting more comfortable with the ZMI we&#8217;ll use <tt class="docutils literal"><span class="pre">portal_quickinstaller</span></tt> to install Dexterity.</p>
 <ul class="simple">
 <li>go to portal_quickinstaller</li>
 <li>install &#8220;Dexterity Content Types&#8221;</li>
 </ul>
+<p>In this step we will create a CT called &#8216;Talk&#8217; and try it. When it&#8217;s ready we will move the code from the web to the file system and into our egg. Later we will expand on that type and add behaviors and a viewlet for Talks.</p>
 </div>
 <div class="section" id="creating-content-types-ttw">
 <h2>Creating content-types TTW<a class="headerlink" href="#creating-content-types-ttw" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">plone_control_panel</span></tt> &gt; <tt class="docutils literal"><span class="pre">Dexterity</span> <span class="pre">Content</span> <span class="pre">Types</span></tt></li>
-<li>Add new content type &#8220;Talk&#8221;:<ul>
+<li>There now is a new entry in <tt class="docutils literal"><span class="pre">plone_control_panel</span></tt> called &#8220;Dexterity Content Types&#8221;.</li>
+<li>Add new content type &#8220;Talk&#8221; and some fields for it:<ul>
 <li>Add Field &#8220;Audience&#8221;, type &#8220;Multiple Choice&#8221;. Add options: beginner, advanced, pro</li>
 <li>Image &#8220;Image&#8221; (portrait)</li>
 <li>Check the behaviors that are enabled: Basic metadata, Name from title, Referenceable</li>
 </ul>
 </li>
-<li>Test</li>
-<li>Add Richtext-field &#8220;Details&#8221;</li>
+<li>Test the content-type</li>
+<li>Return to the control panel <a class="reference external" href="http://localhost:8080/Plone/&#64;&#64;dexterity-types">http://localhost:8080/Plone/&#64;&#64;dexterity-types</a></li>
+<li>Extend the new type by adding a Richtext-field &#8220;Details&#8221;</li>
+<li>Test again</li>
 </ul>
-<p>xml-schema created by us:</p>
+<p>Here is the xml-scheme created by our actions:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;model</span> <span class="na">xmlns:security=</span><span class="s">&quot;http://namespaces.plone.org/supermodel/security&quot;</span>
        <span class="na">xmlns:marshal=</span><span class="s">&quot;http://namespaces.plone.org/supermodel/marshal&quot;</span>
        <span class="na">xmlns:form=</span><span class="s">&quot;http://namespaces.plone.org/supermodel/form&quot;</span>
@@ -147,14 +174,13 @@ properties of an object</dd>
 </div>
 <div class="section" id="moving-content-types-into-code">
 <h2>Moving content-types into code<a class="headerlink" href="#moving-content-types-into-code" title="Permalink to this headline">¶</a></h2>
+<p>We want version-control and more extendability so we move our new content-types into code.</p>
 <ul class="simple">
-<li>version-control</li>
-<li>extendability</li>
-<li>Export the Type Profile</li>
-<li>Delete type from the site</li>
-<li>Add exported files to <tt class="docutils literal"><span class="pre">plonekonf/talk/profiles/default/</span></tt></li>
+<li>Export the Type Profile and save the file</li>
+<li>Delete type from the site before installing the type from the file-system</li>
+<li>Extract the files from the exported tar-file and add them to <tt class="docutils literal"><span class="pre">plonekonf/talk/profiles/default/</span></tt></li>
 </ul>
-<p><tt class="docutils literal"><span class="pre">types.xml</span></tt>:</p>
+<p>Here is the result. The file <tt class="docutils literal"><span class="pre">types.xml</span></tt> tells plone that there is a new content type defined in file <tt class="docutils literal"><span class="pre">talk.xml</span></tt>.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
 <span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;portal_types&quot;</span> <span class="na">meta_type=</span><span class="s">&quot;Plone Types Tool&quot;</span><span class="nt">&gt;</span>
  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span>Controls the available content types in your portal<span class="nt">&lt;/property&gt;</span>
@@ -163,7 +189,7 @@ properties of an object</dd>
 <span class="nt">&lt;/object&gt;</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">types/talk.xml</span></tt>:</p>
+<p>Upon installing Plone reads the file <tt class="docutils literal"><span class="pre">types/talk.xml</span></tt> and registers a new type in <tt class="docutils literal"><span class="pre">portal_types</span></tt> with the information derived from that file.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
 <span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;talk&quot;</span> <span class="na">meta_type=</span><span class="s">&quot;Dexterity FTI&quot;</span> <span class="na">i18n:domain=</span><span class="s">&quot;plone&quot;</span>
    <span class="na">xmlns:i18n=</span><span class="s">&quot;http://xml.zope.org/namespaces/i18n&quot;</span><span class="nt">&gt;</span>
@@ -240,9 +266,13 @@ properties of an object</dd>
 <ul class="simple">
 <li>restart Plone</li>
 <li>install plonekonf.talk</li>
-<li><tt class="docutils literal"><span class="pre">portal_types</span></tt> &gt; <tt class="docutils literal"><span class="pre">talk</span></tt></li>
 </ul>
-<p>We need to improve the default view.</p>
+<p>Got to the ZMI and look at the definition of the new type in <tt class="docutils literal"><span class="pre">portal_types</span></tt>.</p>
+<ul class="simple">
+<li>Test the type by adding an object or editing one of the old ones.</li>
+<li>Look at how the talks are presented in the browser.</li>
+</ul>
+<p>Now let&#8217;s see if we can&#8217;t improve the default view. To do this we first need to learn about templates.</p>
 <p>Read more about developing with Dexterity here: <a class="reference external" href="http://developer.plone.org/reference_manuals/external/plone.app.dexterity/">http://developer.plone.org/reference_manuals/external/plone.app.dexterity/</a></p>
 </div>
 </div>

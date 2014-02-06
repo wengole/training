@@ -55,6 +55,10 @@
             
   <div class="section" id="ressources">
 <h1>20. Ressources<a class="headerlink" href="#ressources" title="Permalink to this headline">¶</a></h1>
+<p>We have not yet talked about CSS and Javascript. At the moment these are considered static resources.</p>
+<p>You can declare and access static resources with special urls. In the past, you could just create a static folder, add grok, and your static files have been registered
+Unfortunately this functionality has been removed. Grok is a framework of its own and they implemented an alternative system for embedding resources, <cite>fanstatic</cite> Plone does not use fanstatic so Plone basically lost a functionality.</p>
+<p>We are going to mimic this behavior with plone functionality by adding the following to our configure.zcml:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;plone:static</span>
     <span class="na">type=</span><span class="s">&quot;theme&quot;</span>
     <span class="na">name=</span><span class="s">&quot;ploneconf.talk&quot;</span>
@@ -62,6 +66,12 @@
     <span class="nt">/&gt;</span>
 </pre></div>
 </div>
+<p>For this to work we need to add another namespace-declaration into the header:</p>
+<div class="highlight-python"><pre>xmlns:plone="http://namespaces.plone.org/plone"</pre>
+</div>
+<p>Now all files we put in the static folder can be found via /++theme++/ploneconf.talk/somefile</p>
+<p>How do our javascript and css files and up in the browser? Adding them directly into the html is not a good solution, having many css and js files slows page loading down.
+Plone has a resource manager that is able to concatenate and compress js and css files, resources can be added conditionally and Plone automatically stops concatenating files when you are debugging plone in the foreground. The resources are managed in the Zope database, as need to write a genericsetup step.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
 <span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;portal_javascripts&quot;</span> <span class="na">meta_type=</span><span class="s">&quot;JavaScripts Registry&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;javascript</span> <span class="na">authenticated=</span><span class="s">&quot;False&quot;</span> <span class="na">cacheable=</span><span class="s">&quot;True&quot;</span> <span class="na">compression=</span><span class="s">&quot;safe&quot;</span>

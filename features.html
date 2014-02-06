@@ -58,51 +58,41 @@
 <p>In-depth user-manual: <a class="reference external" href="http://plone.org/documentation/manual/plone-4-user-manual">http://plone.org/documentation/manual/plone-4-user-manual</a></p>
 <div class="section" id="starting-and-stopping-plone">
 <h2>Starting and Stopping Plone<a class="headerlink" href="#starting-and-stopping-plone" title="Permalink to this headline">¶</a></h2>
-<p>Control Plone with a script called &#8220;instance&#8221;:</p>
+<p>We control Plone with a small script called &#8220;instance&#8221;:</p>
 <div class="highlight-python"><pre>$ ./bin/instance fg</pre>
 </div>
-<p>starts Plone in foreground.</p>
-<p>Stop it by pressing <tt class="docutils literal"><span class="pre">ctrl</span></tt> + <tt class="docutils literal"><span class="pre">c</span></tt>.</p>
-<p>Options:</p>
+<p>This starts Plone and we can see what it is doing.</p>
+<p>You can stop it by pressing <tt class="kbd docutils literal"><span class="pre">ctrl</span> <span class="pre">+</span> <span class="pre">c</span></tt>.</p>
+<p>The <strong class="program">instance</strong>-script offers the following options:</p>
 <div class="highlight-python"><pre>$ ./bin/instance fg
 $ ./bin/instance start
 $ ./bin/instance stop
-$ ./bin/instance debug -P Plone</pre>
+$ ./bin/instance debug -O Plone</pre>
 </div>
 <p>Plone listens on port 8080. Look at <a class="reference external" href="http://localhost:8080">http://localhost:8080</a></p>
 <p>No Plone yet! Create a Plone site.</p>
-<p>Use &#8220;Plone&#8221; (the default) as the site id.</p>
-</div>
-<div class="section" id="users">
-<h2>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h2>
-<p>A note about messages and warnings:</p>
+<p>Use <tt class="samp docutils literal"><span class="pre">Plone</span></tt> (the default) as the site id.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">They contain important information. Read them and make sure you understand them!</p>
 </div>
-<p>Create user within Plone.</p>
-<p>Fallback: Add zope-users:</p>
-<div class="highlight-python"><pre>$ ./bin/instance adduser &lt;someusername&gt; &lt;supersecretpassword&gt;</pre>
 </div>
-<p>Add a new user:</p>
-<ul class="simple">
-<li>&#8220;admin&#8221; &gt; &#8220;Site setup&#8221; &gt; &#8220;Users and Groups&#8221;</li>
-<li>Add user &lt;yourname&gt; (group Administrator)</li>
-</ul>
-<p>Create user called <tt class="docutils literal"><span class="pre">testuser</span></tt> (normal user).</p>
-<p>Visis Plone in three different roles:</p>
-<ul class="simple">
-<li>as anonymous</li>
-<li>as editor</li>
-<li>as admin</li>
-</ul>
+<div class="section" id="users">
+<h2>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h2>
+<p>Create some Plone users:</p>
+<ol class="arabic simple">
+<li><em class="guilabel">admin</em> &gt; <em class="guilabel">Site setup</em> &gt; <em class="guilabel">Users and Groups</em></li>
+<li>Add user &lt;yourname&gt; (groups: Administrators)</li>
+<li>Add another user &#8220;testuser&#8221; (groups: Nothing)</li>
+</ol>
+<p>Access the site with each user now.</p>
 </div>
 <div class="section" id="configure-a-mailserver">
 <h2>Configure a Mailserver<a class="headerlink" href="#configure-a-mailserver" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Server: <tt class="docutils literal"><span class="pre">mail.gocept.net</span></tt></li>
-<li>Username: <tt class="docutils literal"><span class="pre">training&#64;neww.de</span></tt></li>
-<li>Password: <tt class="docutils literal"><span class="pre">training2013</span></tt></li>
+<li>Server: <tt class="samp docutils literal"><span class="pre">mail.gocept.net</span></tt></li>
+<li>Username: <tt class="samp docutils literal"><span class="pre">training&#64;neww.de</span></tt></li>
+<li>Password: <tt class="samp docutils literal"><span class="pre">training2013</span></tt></li>
 </ul>
 <p>Please do not abuse this. We&#8217;ll diable this account after the training.</p>
 </div>
@@ -110,32 +100,32 @@ $ ./bin/instance debug -P Plone</pre>
 <h2>Walktrough of the UI<a class="headerlink" href="#walktrough-of-the-ui" title="Permalink to this headline">¶</a></h2>
 <p>Let&#8217;s see what is there...</p>
 <ul class="simple">
-<li>portal-top:<ul>
-<li>personaltools</li>
-<li>logo</li>
-<li>search</li>
-<li>global-navigation</li>
+<li><em class="guilabel">portal-top</em>:<ul>
+<li><em class="guilabel">personaltools</em>: name, logout etc.</li>
+<li><em class="guilabel">logo</em>: with a link to the frontpage</li>
+<li><em class="guilabel">search</em></li>
+<li><em class="guilabel">global</em>-navigation</li>
 </ul>
 </li>
-<li>portal-columns:<ul>
-<li>portal-column-one: portlets</li>
-<li>portal-column-content: content</li>
-<li>portal-column-two: portlets</li>
+<li><em class="guilabel">portal-columns</em>: a container holding:<ul>
+<li><em class="guilabel">portal-column-one</em>: portlets (configurable boxes with tool like navigation, news etc.)</li>
+<li><em class="guilabel">portal-column-content</em>: the content and the editor</li>
+<li><em class="guilabel">portal-column-two</em>: portlets</li>
 </ul>
 </li>
-<li>portal-footer: viewlets</li>
+<li><em class="guilabel">portal-footer</em>: viewlets</li>
 </ul>
 </div>
 <div class="section" id="content-types">
 <h2>Content-Types<a class="headerlink" href="#content-types" title="Permalink to this headline">¶</a></h2>
 <p>Edit a page:</p>
 <ul class="simple">
-<li>Edit the frontpage</li>
-<li>Title: &#8220;Plone Conference 2013, Brazil&#8221;</li>
-<li>Description &#8220;Tutorial&#8221;</li>
-<li>Text &lt;add some text&gt;</li>
+<li><em class="guilabel">Edit frontpage</em></li>
+<li><em class="guilabel">Title</em> <tt class="samp docutils literal"><span class="pre">Plone</span> <span class="pre">Conference</span> <span class="pre">2013,</span> <span class="pre">Brazil</span></tt></li>
+<li><em class="guilabel">Description</em> <tt class="samp docutils literal"><span class="pre">Tutorial</span></tt></li>
+<li><em class="guilabel">Text</em> <tt class="samp docutils literal"><span class="pre">...</span></tt></li>
 </ul>
-<p>Site-structure:</p>
+<p>Create a site-structure:</p>
 <ul class="simple">
 <li>Add folder &#8220;The Event&#8221; and in that ...<ul>
 <li>Folder &#8220;Talks&#8221;</li>
@@ -166,19 +156,22 @@ $ ./bin/instance debug -P Plone</pre>
 <h2>Folders<a class="headerlink" href="#folders" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Go to &#8216;the-event&#8217;</li>
-<li>title/id/url</li>
-<li><tt class="docutils literal"><span class="pre">/folder_contents</span></tt></li>
-<li>dropdown &#8220;Display&#8221;</li>
+<li>explain title/id/url</li>
+<li>explain /folder_contents</li>
+<li>change order</li>
+<li>bulk-actions</li>
+<li>dropdown &#8220;display&#8221;</li>
 <li>default_pages</li>
+<li>Add a page to &#8216;the-event&#8217;: &#8220;The Event&#8221; and make it the default-page</li>
 </ul>
 </div>
 <div class="section" id="collections">
 <h2>Collections<a class="headerlink" href="#collections" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>add a new collection: all content that has pending as review_state.</li>
-<li>default collections: <a class="reference external" href="http://localhost:8080/Plone/events/aggregator/edit">http://localhost:8080/Plone/events/aggregator/edit</a></li>
-<li>old vs. new collections</li>
-<li>collection-portets</li>
+<li>add a new collection: all content that has pending as wf_state.</li>
+<li>explain the default collection for events at <a class="reference external" href="http://localhost:8080/Plone/events/aggregator/edit">http://localhost:8080/Plone/events/aggregator/edit</a></li>
+<li>old vs. new collections (from Plone 4.2 on the new collections are the default)</li>
+<li>mention collection-portets</li>
 </ul>
 </div>
 <div class="section" id="content-rules">
@@ -190,6 +183,7 @@ $ ./bin/instance debug -P Plone</pre>
 </div>
 <div class="section" id="history">
 <h2>History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h2>
+<p>show and explain</p>
 </div>
 <div class="section" id="manage-members-and-groups">
 <h2>Manage members and groups<a class="headerlink" href="#manage-members-and-groups" title="Permalink to this headline">¶</a></h2>
@@ -205,19 +199,21 @@ $ ./bin/instance debug -P Plone</pre>
 </div>
 <div class="section" id="workflows">
 <h2>Workflows<a class="headerlink" href="#workflows" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>portal_workflow</li>
-<li>plone.app.workflowmanager</li>
-</ul>
+<p>Read more at: <a class="reference external" href="http://developer.plone.org/content/workflow.html">http://developer.plone.org/content/workflow.html</a></p>
 </div>
 <div class="section" id="working-copy">
 <h2>Working copy<a class="headerlink" href="#working-copy" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>enable &#8220;Working copy support&#8221;</li>
+<li>enable addon</li>
+<li>explain</li>
 </ul>
 </div>
 <div class="section" id="placeful-workflows">
 <h2>Placeful workflows<a class="headerlink" href="#placeful-workflows" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>enable addon</li>
+<li>explain</li>
+</ul>
 </div>
 </div>
 

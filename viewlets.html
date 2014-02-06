@@ -55,8 +55,16 @@
             
   <div class="section" id="writing-viewlets">
 <h1>22. Writing Viewlets<a class="headerlink" href="#writing-viewlets" title="Permalink to this headline">¶</a></h1>
+<p>A viewlet is no view but a snippet of html and logic that can be put somewhere in the site.</p>
+<ul class="simple">
+<li>show <tt class="docutils literal"><span class="pre">/&#64;&#64;manage-viewlets</span></tt></li>
+<li>we already customized a viewlet (<tt class="docutils literal"><span class="pre">collophon.pt</span></tt>), now we add a new one</li>
+<li>viewlets don&#8217;t save data (portlets do)</li>
+</ul>
 <div class="section" id="social-viewlet">
 <h2>social-viewlet<a class="headerlink" href="#social-viewlet" title="Permalink to this headline">¶</a></h2>
+<p>We add a new folder <tt class="docutils literal"><span class="pre">viewlets</span></tt> with an empty <tt class="docutils literal"><span class="pre">__init__.py</span></tt>. This time we don&#8217;t need a <tt class="docutils literal"><span class="pre">configure.zcml</span></tt> and don&#8217;t need to register the folder in our eggs configure.zcml since we use <tt class="docutils literal"><span class="pre">grok</span></tt> to do that for us.</p>
+<p>We just add a file viewlets.py containing the viewlet-class:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># encoding=utf-8</span>
 <span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
 <span class="kn">from</span> <span class="nn">plone.app.layout.viewlets</span> <span class="kn">import</span> <span class="n">interfaces</span> <span class="k">as</span> <span class="n">viewletIFs</span>
@@ -68,6 +76,8 @@
     <span class="n">grok</span><span class="o">.</span><span class="n">viewletmanager</span><span class="p">(</span><span class="n">viewletIFs</span><span class="o">.</span><span class="n">IBelowContentTitle</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>This will add a viewlet to a slot below the title and expect a template <tt class="docutils literal"><span class="pre">social.pt</span></tt> in a folder <tt class="docutils literal"><span class="pre">viewlets_templates</span></tt>.</p>
+<p>Let&#8217;s add it:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;social-links&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span>
        <span class="na">class=</span><span class="s">&quot;lanyrd-link&quot;</span>
@@ -79,6 +89,7 @@
 <span class="nt">&lt;/div&gt;</span>
 </pre></div>
 </div>
+<p>So now let&#8217;s add some logic to the viewlet-class so that <tt class="docutils literal"><span class="pre">viewlet/lanyrd_link</span></tt> does returns the link:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
 <span class="kn">from</span> <span class="nn">plone.app.layout.viewlets</span> <span class="kn">import</span> <span class="n">interfaces</span> <span class="k">as</span> <span class="n">viewletIFs</span>
 <span class="kn">from</span> <span class="nn">plonekonf.talk.behavior.social</span> <span class="kn">import</span> <span class="n">ISocial</span>
@@ -93,9 +104,28 @@
         <span class="k">return</span> <span class="n">adapted</span><span class="o">.</span><span class="n">lanyrd</span>
 </pre></div>
 </div>
+<p>TAG: 17_SOCIAL_VIEWLET</p>
+<ul class="simple">
+<li>We registered the viewlet to content that have the ISocial Interface.</li>
+<li>we adapt the object to it&#8217;s behavior to be able to access the fields of the behavior</li>
+<li>we return the link</li>
+</ul>
 </div>
 <div class="section" id="voting-viewlet">
 <h2>voting-viewlet<a class="headerlink" href="#voting-viewlet" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Viewlet for IVoteable</li>
+<li>the viewlet-template</li>
+<li>add jquery include statements</li>
+<li>saving the vote on the object using annotations (Patrick)</li>
+</ul>
+<p>We just added the logic that saves votes on the objects. Now let&#8217;s add the user-interface to it.</p>
+<p>Since we want to use the UI on more than one page (not only the talk-view but also the talk-listing) we need to put it somewhere.</p>
+<ul class="simple">
+<li>To handle the user-input we don&#8217;t use a form but links and ajax.</li>
+<li>The voting itself is an fact handles by another view</li>
+</ul>
+<p>We create a new file voting.py:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># encoding=utf-8</span>
 <span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
 <span class="kn">from</span> <span class="nn">plone.app.layout.viewlets</span> <span class="kn">import</span> <span class="n">interfaces</span> <span class="k">as</span> <span class="n">viewletIFs</span>
@@ -107,6 +137,8 @@
     <span class="n">grok</span><span class="o">.</span><span class="n">viewletmanager</span><span class="p">(</span><span class="n">viewletIFs</span><span class="o">.</span><span class="n">IBelowContentTitle</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>This will add a viewlet to a slot below the title and expect a template vote.pt in a folder &#8216;voting_templates&#8217;.</p>
+<p>Let&#8217;s create this file without any logic</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;voting&quot;</span><span class="nt">&gt;</span>
     Wanna vote? Write code!
 <span class="nt">&lt;/div&gt;</span>
@@ -118,9 +150,14 @@
 <span class="nt">&lt;/script&gt;</span>
 </pre></div>
 </div>
+<ul class="simple">
+<li>restart Plone</li>
+<li>show the viewlet</li>
+</ul>
 </div>
 <div class="section" id="writing-the-viewlet-class">
 <h2>writing the viewlet-class<a class="headerlink" href="#writing-the-viewlet-class" title="Permalink to this headline">¶</a></h2>
+<p>Lets see the final code:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># encoding=utf-8</span>
 <span class="kn">from</span> <span class="nn">Products.CMFCore.utils</span> <span class="kn">import</span> <span class="n">getToolByName</span>
 <span class="kn">from</span> <span class="nn">Products.CMFDefault.permissions</span> <span class="kn">import</span> <span class="n">ViewManagementScreens</span>
@@ -156,9 +193,16 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vote</span><span class="o">.</span><span class="n">has_votes</span><span class="p">()</span>
 </pre></div>
 </div>
+<ul class="simple">
+<li>we changed the code so that only content that has the interface &#8216;IVotable&#8217; get&#8217;s the viewlet.</li>
+<li>_vote returns the context object adapted to the Behavior that adds the vote-functionality. This way we can access all methods that are in IVoting.</li>
+<li>voted, average and has_votes do exactly this and return the result of the methods we wrote in IVoting.</li>
+<li>is_manager checks if we are managers so only managers can reset the existing votes. To do this we check if the current user can &#8216;ViewManagementScreens&#8217;.</li>
+</ul>
 </div>
 <div class="section" id="the-template">
 <h2>the template<a class="headerlink" href="#the-template" title="Permalink to this headline">¶</a></h2>
+<p>the final temoplate looks like this:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;voting&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;current_rating&quot;</span> <span class="na">tal:condition=</span><span class="s">&quot;viewlet/has_votes&quot;</span><span class="nt">&gt;</span>
     Average rating: <span class="nt">&lt;span</span> <span class="na">tal:content=</span><span class="s">&quot;viewlet/average&quot;</span><span class="nt">&gt;</span>200<span class="nt">&lt;/span&gt;</span>
@@ -194,6 +238,12 @@
 <span class="nt">&lt;/script&gt;</span>
 </pre></div>
 </div>
+<ul class="simple">
+<li>many small parts, most of which will be hidden by javascript unless needed.</li>
+<li>we use the methods the class provides</li>
+<li>some standard-code to initialize our js-code</li>
+</ul>
+<p>The css for the template:</p>
 <div class="highlight-css"><div class="highlight"><pre><span class="nc">.voting</span> <span class="p">{</span>
     <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
     <span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#ddd</span><span class="p">;</span>
@@ -278,9 +328,42 @@
 <span class="p">}(</span><span class="nx">jQuery</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">starzel_votablebehavior</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">starzel_votablebehavior</span> <span class="o">||</span> <span class="p">{}));</span>
 </pre></div>
 </div>
+<p>Zunächst fragen wir den Marker ab, der anzeigt, ob der aktuelle
+Benutzer schon abgestimmt hat. Abhängig davon zeigen bieten wir die
+Abstimmungsmöglichkeit ab.</p>
+<p>Danach schreiben wir die Funktion, welche die Stimme abgibt.
+Wir sind schreibfaul, deswegen schreiben wir eine Funktion, die eine
+Funktion zurückgibt.</p>
+<p>Danach setzen wir für die einzelnen Abstimmungsmöglichkeiten, einen
+Clickhandler</p>
+<p>Wie funktioniert das? Wir rufen vote auf, die liefert eine Methode
+zurück. Als Clickhandler speichert man normalerweise immer eine
+Methode. Wenn nun jemand auf einen der Texte klickt, wir die Methode
+inner_vote aufgerufen. Innerhalb der inner_vote Methode können wir
+noch immer die gültige rating Variable aufrufen, die wir mit vote
+übergeben haben. Die Methode die also als clickhandler für
+#voting_plus aufgerufen wurde, sieht eine 1 wenn sie rating abfragt,
+#voting_neutral sieht die 0 und so weiter.</p>
+<p>Dann rufen wir die Methode post aus jquery auf, als ersten Parameter
+suchen wir uns aus dem html die context_url die wir dort versteckt
+haben, als Post Parameter übergeben wir das Rating, und zum Schluss
+kommt die Methode, welche nach erfolgreichem Request aufgerufen
+wird, und die Seite neu lädt.</p>
+<p>Danach schreiben wir noch die Handler um per Two Step Verfahren die
+Stimmen löschen zu können.</p>
+<p>Jetzt müssen wir noch die Methoden schreiben, die per HTTP Post
+aufgerufen werden.</p>
 </div>
 <div class="section" id="simpleviews-schreiben-patrick">
 <h2>2 Simpleviews schreiben (Patrick)<a class="headerlink" href="#simpleviews-schreiben-patrick" title="Permalink to this headline">¶</a></h2>
+<p>Diese Views haben IVotable als Context, es gibt sie also nur auf
+Objekten welche Votable sind.</p>
+<p>ClearVotes ist nochmal mit der Management Permission geschützt. Ein
+Hacker der den Javascript code von eben analysiert, könnte das
+Löschen manuell antriggern, dadurch, das der View durch eine
+Managementpermission geschützt ist, kann er keinen Schaden
+anrichten. Ansonsten rufen diese Views nur Methoden des Behaviors
+auf.</p>
 </div>
 </div>
 

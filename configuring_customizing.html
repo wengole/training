@@ -57,9 +57,12 @@
 <h1>6. Configuring and Customising Plone through the web<a class="headerlink" href="#configuring-and-customising-plone-through-the-web" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="the-control-panel">
 <h2>The Control Panel<a class="headerlink" href="#the-control-panel" title="Permalink to this headline">¶</a></h2>
+<p>The most important parts of Plone can be configured in the control-panel.</p>
 <ul class="simple">
-<li>Click on your username &gt; &#8220;Site Setup&#8221;</li>
+<li>Click on your username</li>
+<li>Click &#8220;Site Setup&#8221;</li>
 </ul>
+<p>We&#8217;ll explain every page and mention some of the stuff you can do here.</p>
 <ol class="arabic simple">
 <li>Add-ons (later...)</li>
 <li>Calendar</li>
@@ -85,15 +88,18 @@
 <li>Users and Groups</li>
 <li>Zope Management Interface (here be dragons)</li>
 </ol>
-<p>Below: Plone-, Zope and Python-Versions</p>
+<p>Below the links you find information on your Plone-, Zope and Python-Versions</p>
 </div>
 <div class="section" id="portlets">
 <h2>Portlets<a class="headerlink" href="#portlets" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">&#64;&#64;manage-portlets</span></tt></li>
 <li>UI fit for smart content-editors</li>
-<li>differnt types built in</li>
+<li>various types</li>
 <li>portlet-configuration is inherited</li>
+<li>managing</li>
+<li>ordering/weighting</li>
+<li>will maybe be replaced by tiles</li>
 </ul>
 <p>Example:</p>
 <ul class="simple">
@@ -110,9 +116,12 @@
 <li><tt class="docutils literal"><span class="pre">&#64;&#64;manage-viewlets</span></tt></li>
 <li>no UI - not for content-editors</li>
 <li>not locally addable, no configurable inheritance.</li>
-<li>usually global</li>
+<li>usually global (depends on code)</li>
+<li>will be replaced by tiles?</li>
 <li>the code is much simpler (we&#8217;ll create one tomorrow)</li>
-<li>viewlet-managers</li>
+<li>live in viewlet-managers, can be nested (by adding a viewlet that contains a viewlet-manager)</li>
+<li>ttw-reordering only within the same viewlet-manager</li>
+<li>the code descides when it&#8217;s where and what it shows</li>
 </ul>
 <p>Portlets save Data, Viewlets usually don&#8217;t. Viewlets are often used for UI-Elements.</p>
 <p>Example:</p>
@@ -123,16 +132,20 @@
 </div>
 <div class="section" id="zmi">
 <h2>ZMI<a class="headerlink" href="#zmi" title="Permalink to this headline">¶</a></h2>
-<p>Go to <a class="reference external" href="http://localhost:8080/Plone/manage">http://localhost:8080/Plone/manage</a></p>
+<p>Go into the ZMI (explain <tt class="docutils literal"><span class="pre">/manage</span></tt>)</p>
+<p>Zope is the foundation of Plone. Here you can access the inner working of Zope and Plone alike. Here you can easily break your site so you should know what you are doing.</p>
+<p>We only cover three parts of customisation in the ZMI now. Later on when we added our own code we&#8217;ll come back to the ZMI and will look for it.</p>
+<p>At some point you&#8217;ll have to learn what all that stuff is about. But not today.</p>
 </div>
 <div class="section" id="actions-portal-actions">
 <h2>Actions (portal_actions)<a class="headerlink" href="#actions-portal-actions" title="Permalink to this headline">¶</a></h2>
-<p>Basically links</p>
+<p>Actions are mostly links but really flexible links :-)</p>
+<p>Examples:</p>
 <ul class="simple">
 <li>Links in the Footer (site_actions)</li>
 <li>Actions-Dropdown (folder_buttons)</li>
 </ul>
-<p>Properties:</p>
+<p>Links with properties like:</p>
 <ul class="simple">
 <li>description</li>
 <li>url</li>
@@ -141,19 +154,28 @@
 <li>permissions</li>
 </ul>
 <p>Configurable ttw and through code.</p>
+<p>These actions are usually iterated over in viewlets and displayed.</p>
 <p>Example:</p>
 <ul class="simple">
 <li>Global navigation (portal_tab)</li>
 <li>go to <tt class="docutils literal"><span class="pre">portal_actions</span></tt> &gt; <tt class="docutils literal"><span class="pre">portal_tabs</span></tt></li>
 <li>Edit <tt class="docutils literal"><span class="pre">index_html</span></tt></li>
 </ul>
-<p>Add a link to the imprint:</p>
+<p>Where is the navigation?</p>
+<p>The navigation shows content-objects, which are in Plone&#8217;s root. Plus all actions in portal_tabs</p>
+<p>Explain &amp; edit index_html</p>
+<p>Add a link to the imprint to the bottom:</p>
 <ul class="simple">
-<li>go to <tt class="docutils literal"><span class="pre">site_actions</span></tt></li>
+<li>go to <tt class="docutils literal"><span class="pre">site_actions</span></tt> (we know that because we checked in <tt class="docutils literal"><span class="pre">&#64;&#64;manage-viewlets</span></tt>)</li>
 <li>add a CMF Actions <tt class="docutils literal"><span class="pre">imprint</span></tt></li>
-<li>URL: <tt class="docutils literal"><span class="pre">string:${globals_view/navigationRootUrl}/imprint</span></tt></li>
-<li>Condition: empty</li>
-<li>Permission: <tt class="docutils literal"><span class="pre">View</span></tt></li>
+<li>set its URL to <tt class="docutils literal"><span class="pre">string:${globals_view/navigationRootUrl}/imprint</span></tt></li>
+<li>Leave condition empty</li>
+<li>Set permission to <tt class="docutils literal"><span class="pre">View</span></tt></li>
+</ul>
+<p>If time explain:</p>
+<ul class="simple">
+<li>user &gt; undo (cool!)</li>
+<li>user &gt; login/logout</li>
 </ul>
 </div>
 <div class="section" id="skins-portal-skins">
@@ -165,6 +187,7 @@
 <li>go to <tt class="docutils literal"><span class="pre">ploneCustom.css</span></tt></li>
 <li>click <tt class="docutils literal"><span class="pre">customize</span></tt></li>
 </ul>
+<p>Enter the following css:</p>
 <div class="highlight-css"><div class="highlight"><pre><span class="nf">#visual-portal-wrapper</span> <span class="p">{</span>
     <span class="k">margin</span><span class="o">:</span> <span class="m">0</span> <span class="k">auto</span><span class="p">;</span>
     <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
@@ -172,13 +195,21 @@
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>Check results in the browser. How did that happen?</p>
 </div>
 <div class="section" id="css-registry-portal-css">
 <h2>CSS-Registry (portal_css)<a class="headerlink" href="#css-registry-portal-css" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>go to ZMI &gt; <tt class="docutils literal"><span class="pre">portal_css</span></tt></li>
-<li>At bottom: <tt class="docutils literal"><span class="pre">ploneCustom.css</span></tt></li>
+<li>at the bottom there is <tt class="docutils literal"><span class="pre">ploneCustom.css</span></tt></li>
 </ul>
+<p>The UI leaves a lot to be desired.</p>
+<p>In a professional context this is no-go (since there is no version-control). But everybody uses it to make quick fixes to sites that are allready online.</p>
+<p>Later we&#8217;ll revisit that same css-code.</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>You can configure and customize a lot in Plone through the web. The amount of stuff is overwhelming but you&#8217;ll get the hang of it through a lot of practice.</p>
 </div>
 </div>
 
@@ -203,6 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#actions-portal-actions">Actions (portal_actions)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#skins-portal-skins">Skins (portal_skins)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#css-registry-portal-css">CSS-Registry (portal_css)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="extending.html">7. Extending Plone</a></li>

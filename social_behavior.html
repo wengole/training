@@ -55,9 +55,15 @@
             
   <div class="section" id="social-behavior">
 <h1>21. Social behavior<a class="headerlink" href="#social-behavior" title="Permalink to this headline">¶</a></h1>
+<p>Now let&#8217;s write our own small behavior. This thime we don&#8217;t add a lot of logic but only a additional field:</p>
+<ul class="simple">
+<li>link to lanyrd-site for the talk</li>
+</ul>
+<p>We register a folder called behavior in our configure.zcml</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;include</span> <span class="na">package=</span><span class="s">&quot;.behavior&quot;</span> <span class="nt">/&gt;</span>
 </pre></div>
 </div>
+<p>We add an empty __init__.py and a configute.czml containing</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
     <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
     <span class="na">xmlns:plone=</span><span class="s">&quot;http://namespaces.plone.org/plone&quot;</span>
@@ -77,6 +83,7 @@
 <span class="nt">&lt;/configure&gt;</span>
 </pre></div>
 </div>
+<p>And a social.py containing:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
 <span class="kn">from</span> <span class="nn">plone.directives</span> <span class="kn">import</span> <span class="n">form</span>
 <span class="kn">from</span> <span class="nn">zope</span> <span class="kn">import</span> <span class="n">schema</span>
@@ -99,6 +106,10 @@
 <span class="n">alsoProvides</span><span class="p">(</span><span class="n">ISocial</span><span class="p">,</span> <span class="n">form</span><span class="o">.</span><span class="n">IFormFieldProvider</span><span class="p">)</span>
 </pre></div>
 </div>
+<ul class="simple">
+<li>explain</li>
+</ul>
+<p>TAG: 16_SOCIAL_BEHAVIOR</p>
 </div>
 
 

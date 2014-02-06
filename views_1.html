@@ -57,16 +57,17 @@
 <h1>14. Views I<a class="headerlink" href="#views-i" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="a-simple-browser-view">
 <h2>A simple browser view<a class="headerlink" href="#a-simple-browser-view" title="Permalink to this headline">¶</a></h2>
-<p>Boilerplate-code to be create a view</p>
+<p>We need to add some boilerplate-code to be create a view. Before we write the talk-view itself we need to step back and talk <em>a little</em> about views and templates.</p>
+<p>A basic view in Plone is usually a <tt class="docutils literal"><span class="pre">BrowserView</span></tt>. It can hold a lot of python-code but it can also be only a empty <tt class="docutils literal"><span class="pre">BrowserView</span></tt>-class that renders a template when called. Such an empty class is what we create at first so we can concentrate on the template.</p>
 <ul class="simple">
-<li>Add a new direcory <tt class="docutils literal"><span class="pre">src/ploneconf.talk/ploneconf/talk/browser</span></tt>.</li>
+<li>Add a new direcory <tt class="docutils literal"><span class="pre">src/ploneconf.talk/src/ploneconf/talk/browser</span></tt>. By convention the dir <tt class="docutils literal"><span class="pre">browser</span></tt> should hold all UI displayed in the browser.</li>
 <li>Add an empty file <tt class="docutils literal"><span class="pre">browser/__init__.py</span></tt></li>
-<li>Modify the existing <tt class="docutils literal"><span class="pre">configure.czml</span></tt> and add</li>
+<li>We need to tell Plone to consider this directory. Modify the existing <tt class="docutils literal"><span class="pre">configure.zcml</span></tt> and add</li>
 </ul>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;include</span> <span class="na">package=</span><span class="s">&quot;.browser&quot;</span> <span class="nt">/&gt;</span>
 </pre></div>
 </div>
-<p>Add a file <tt class="docutils literal"><span class="pre">browser/configure.czml</span></tt>:</p>
+<p>Then add a file <tt class="docutils literal"><span class="pre">browser/configure.zcml</span></tt>:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
     <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
     <span class="na">xmlns:browser=</span><span class="s">&quot;http://namespaces.zope.org/browser&quot;</span>
@@ -91,6 +92,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 </div>
+<p>This might seem a lot of boilerplate if we only want to render a template but every bit of it can be changed to achieve different effects. It&#8217;s not useless code but actually very powerful stuff. We only ignore it for now and concentrate on the template.</p>
 <p>Add a directory <tt class="docutils literal"><span class="pre">browser/templates</span></tt> and add an file <tt class="docutils literal"><span class="pre">browser/templates/demoview.pt</span></tt></p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Hello World<span class="nt">&lt;/h1&gt;</span>
 </pre></div>
@@ -99,6 +101,7 @@
 <li>Restart Plone and open <a class="reference external" href="http://localhost:8080/Plone/&#64;&#64;demoview">http://localhost:8080/Plone/&#64;&#64;demoview</a>.</li>
 <li>You should see &#8220;Hello World&#8221;.</li>
 </ul>
+<p>We now have everything in place to learn about zope page templates.</p>
 </div>
 </div>
 

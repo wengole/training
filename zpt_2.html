@@ -55,9 +55,13 @@
             
   <div class="section" id="customizing-existing-templates">
 <h1>16. Customizing existing templates<a class="headerlink" href="#customizing-existing-templates" title="Permalink to this headline">¶</a></h1>
+<p>To dive deeper into real plone-data we now look at some existing templates and customize them.</p>
+<p>These are not templates based on BrowserViews but skin-templates. You should never write skin-templates but you will often have to customize them.</p>
 <div class="section" id="newsitem-view-pt">
 <h2>newsitem_view.pt<a class="headerlink" href="#newsitem-view-pt" title="Permalink to this headline">¶</a></h2>
-<p>Show the date a News Item is published</p>
+<p>We want to show the date a News Item is published. This way people can see at a glance it the are looking at current or old news.</p>
+<p>To do this we will customize the templates that is used to render News Items.</p>
+<p>We&#8217;ll basically do the same as when we used at <tt class="docutils literal"><span class="pre">plone.app.themeeditor</span></tt>, but now we&#8217;ll do it all by hand.</p>
 <ul class="simple">
 <li>Create the directoy <tt class="docutils literal"><span class="pre">browser/template_overrides</span></tt></li>
 <li>Add the following to <tt class="docutils literal"><span class="pre">browser/configure.zcml</span></tt>:</li>
@@ -72,7 +76,8 @@
 <li>Rename the new file from <tt class="docutils literal"><span class="pre">newsitem_view.pt</span></tt> to <tt class="docutils literal"><span class="pre">Products.CMFPlone.skins.plone_content.newsitem_view.pt</span></tt>.</li>
 <li>Restart Plone</li>
 </ul>
-<p>Edit the template <tt class="docutils literal"><span class="pre">Products.CMFPlone.skins.plone_content.newsitem_view.pt</span></tt> and insert the following after line 28:</p>
+<p>Now Plone should use the new file to override the original one.</p>
+<p>Edit the template <tt class="docutils literal"><span class="pre">Products.CMFPlone.skins.plone_content.newsitem_view.pt</span></tt> and insert the following after line 32:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;python:context.Date()&quot;</span><span class="nt">&gt;</span>
     The current Date
 <span class="nt">&lt;/p&gt;</span>
@@ -81,7 +86,7 @@
 <ul class="simple">
 <li>Open an existing news-item in the browser</li>
 </ul>
-<p>Extend the code:</p>
+<p>This will show something like: <tt class="docutils literal"><span class="pre">2013-10-02</span> <span class="pre">19:21:15</span></tt>. Not very user-friendly. Let&#8217;s extend the code and use one of many helpers plone offers.</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:define=</span><span class="s">&quot;toLocalizedTime nocall:context/@@plone/toLocalizedTime;</span>
 <span class="s">               date python:context.Date()&quot;</span>
    <span class="na">tal:content=</span><span class="s">&quot;python:toLocalizedTime(date)&quot;</span><span class="nt">&gt;</span>
@@ -89,17 +94,18 @@
 <span class="nt">&lt;/p&gt;</span>
 </pre></div>
 </div>
+<p>Now we should see the date in a user-friendly format like <tt class="docutils literal"><span class="pre">17.02.2013</span></tt>.</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">nocall:</span></tt> prevents the method <tt class="docutils literal"><span class="pre">toLocalizedTime</span></tt> from being called</li>
-<li><tt class="docutils literal"><span class="pre">toLocalizedTime</span></tt> is provided by the BrowserView <tt class="docutils literal"><span class="pre">Products.CMFPlone.browser.ploneview.Plone</span></tt> and runs the date-object through Plone&#8217;s <tt class="docutils literal"><span class="pre">translation_service</span></tt> and returns the Date in the current locales format</li>
-<li>transforms <tt class="docutils literal"><span class="pre">2013-02-17</span> <span class="pre">19:21:15</span></tt> in <tt class="docutils literal"><span class="pre">17.02.2013</span></tt>.</li>
+<li>With <tt class="docutils literal"><span class="pre">nocall:</span></tt> we prevent the method <tt class="docutils literal"><span class="pre">toLocalizedTime</span></tt> from being called, since we only want to make it available for use.</li>
+<li>The method <tt class="docutils literal"><span class="pre">toLocalizedTime</span></tt> is provided by the BrowserView <tt class="docutils literal"><span class="pre">Products.CMFPlone.browser.ploneview.Plone</span></tt> and runs the date-object through Plone&#8217;s <tt class="docutils literal"><span class="pre">translation_service</span></tt> and returns the Date in the current locales format, thus transforming <tt class="docutils literal"><span class="pre">2013-02-17</span> <span class="pre">19:21:15</span></tt> in <tt class="docutils literal"><span class="pre">17.02.2013</span></tt>.</li>
 </ul>
-<p>Older Plone-versions: <tt class="docutils literal"><span class="pre">python:context.toLocalizedTime(context.Date(),</span> <span class="pre">longFormat=False)</span></tt>. That called the python-script <tt class="docutils literal"><span class="pre">toLocalizedTime.py</span></tt> in the Folder <tt class="docutils literal"><span class="pre">Products/CMFPlone/skins/plone_scripts/</span></tt>.</p>
+<p>On older Plone-versions we used <tt class="docutils literal"><span class="pre">python:context.toLocalizedTime(context.Date(),</span> <span class="pre">longFormat=False)</span></tt>. That called the python-script <tt class="docutils literal"><span class="pre">toLocalizedTime.py</span></tt> in the Folder <tt class="docutils literal"><span class="pre">Products/CMFPlone/skins/plone_scripts/</span></tt>.</p>
+<p>That folder still holds a multitude of useful scripts that are widely used. But they are all deprecated and will hopefully be gone in Plone 5 and replaced by proper python-methods.</p>
 </div>
 <div class="section" id="folder-summary-view-pt">
 <h2>folder_summary_view.pt<a class="headerlink" href="#folder-summary-view-pt" title="Permalink to this headline">¶</a></h2>
-<p>&#8220;Summary View&#8221; to list news-releases.</p>
-<p><tt class="docutils literal"><span class="pre">folder_summary_view.pt</span></tt>:</p>
+<p>We use the view &#8220;Summary View&#8221; to list news-releases. They should also have the date. The template associated with that view is <tt class="docutils literal"><span class="pre">folder_summary_view.pt</span></tt>.</p>
+<p>Let&#8217;s look for the template folder_summary_view.pt:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Products</span><span class="o">/</span><span class="n">CMFPlone</span><span class="o">/</span><span class="n">skins</span><span class="o">/</span><span class="n">plone_content</span><span class="o">/</span><span class="n">folder_summary_view</span><span class="o">.</span><span class="n">pt</span>
 </pre></div>
 </div>
@@ -122,6 +128,10 @@
 </pre></div>
 </div>
 <p><tt class="docutils literal"><span class="pre">extend-macro</span></tt> tells Plone to extend the macro <tt class="docutils literal"><span class="pre">listing</span></tt> from the view <tt class="docutils literal"><span class="pre">folder_listing</span></tt> which is found in template <tt class="docutils literal"><span class="pre">Products/CMFPlone/skins/plone_content/folder_listing.pt</span></tt>.</p>
+<p>The template <tt class="docutils literal"><span class="pre">folder_summary_view.pt</span></tt> is one of the most widely used and most widely customized templates, so you might as well get to know it a little.</p>
+<p>Our addition renders the date of the respective objects that the template iterates over (thus <tt class="docutils literal"><span class="pre">item</span></tt> instead of <tt class="docutils literal"><span class="pre">context</span></tt> since <tt class="docutils literal"><span class="pre">context</span></tt> would be the folder containing the nwws items).</p>
+<p>The date is only displayed if the variable <tt class="docutils literal"><span class="pre">item_type</span></tt> (defined in line 57 of <tt class="docutils literal"><span class="pre">folder_listing.pt</span></tt>) is <tt class="docutils literal"><span class="pre">News</span> <span class="pre">Item</span></tt>.</p>
+<p>There is a lot more going on in <tt class="docutils literal"><span class="pre">folder_listing.pt</span></tt> and <tt class="docutils literal"><span class="pre">folder_summary_view.pt</span></tt> but we&#8217;ll leave it at that.</p>
 </div>
 <div class="section" id="skin-templates">
 <h2>skin-templates<a class="headerlink" href="#skin-templates" title="Permalink to this headline">¶</a></h2>

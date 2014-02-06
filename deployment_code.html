@@ -55,10 +55,21 @@
             
   <div class="section" id="deploying-your-code">
 <h1>23. Deploying your code<a class="headerlink" href="#deploying-your-code" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
+<blockquote>
+<div><ul class="simple">
 <li>zest.releaser</li>
 <li>pypi-test egg deployment</li>
 </ul>
+</div></blockquote>
+<p>We finally have some working code! Depending on your policies, you need repeatable deployments and definitve versions of software. That means you don&#8217;t just run your production site with your latest source code from your source repository. You want to work with eggs.</p>
+<p>Making eggs is easy, making them properly not so much. There are a number of good practices that you would like to ensure.
+Lets see. You want to have a sensible version number. By looking at the version number alone, one should get a good idea, how many changes there are (semantic version number scheme). You of course always document everything, but for upgrades it is even more important to have complete changelogs.</p>
+<p>Sometimes, you cannot upgrade to a newer version, but you need a hotfix or whatever. It is crucial that you are able to checkout the exact version you use for your egg.</p>
+<p>This is a lot of steps to do, and there are a lot of actions that can go wrong. luckily, there is a way to automate it. zest.releaser provides scripts to release an egg, to check what has changed since the release and to check if the documentation has errors.</p>
+<p>There once was a book on python. It also had a chapter on releasing an egg with sample code. The sample code was about a printer of nested lists. There are a lot of packages to print out nestesd lists on pypi.</p>
+<p>We will avoid this. Everybody, go to testpypi.python.org and create an account now.</p>
+<p>Next, copy the pypirc_sample file to ~/.pypirc, modify it to contain your real username and password.</p>
+<p>Now that we are prepared, lets install zest.releaser.</p>
 <ul class="simple">
 <li>lasttagdiff</li>
 <li>longtest</li>

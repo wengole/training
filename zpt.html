@@ -59,12 +59,21 @@
 <p>Page templates must be valid xml.</p>
 <p>The three languages are:</p>
 <ul class="simple">
-<li>TAL: &#8220;Template Attribute Language&#8221;</li>
-<li>TALES: &#8220;TAL Expression Syntax&#8221;</li>
-<li>METAL: &#8220;Macro Expansion for TAL&#8221;</li>
-<li>TAL and METAL: written like html-attribues (url, src, title).</li>
-<li>TALES: written like the values of these attributes.</li>
+<li>TAL: &#8220;Template Attribute Language&#8221;<ul>
+<li>Templating XML/HTML using special Attributes</li>
+<li>Using TAL we include expressions into html</li>
 </ul>
+</li>
+<li>TALES: &#8220;TAL Expression Syntax&#8221;<ul>
+<li>defines the syntax and semantics of these expressions</li>
+</ul>
+</li>
+<li>METAL: &#8220;Macro Expansion for TAL&#8221;<ul>
+<li>this enables us to combine, re-use and nest templates together</li>
+</ul>
+</li>
+</ul>
+<p>TAL and METAL are written like html-attribues (url, src, title). TALES are written like the values of html-attributes. A typical TAL-Statement looks like this:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;title</span> <span class="na">tal:content=</span><span class="s">&quot;context/title&quot;</span><span class="nt">&gt;</span>
     The Title of the content
 <span class="nt">&lt;/title&gt;</span>
@@ -78,9 +87,7 @@
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>I love red<span class="nt">&lt;/p&gt;</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li>Edit the file <tt class="docutils literal"><span class="pre">demoview.pt</span></tt></li>
-</ul>
+<p>Let&#8217;s try it. Open the file <tt class="docutils literal"><span class="pre">demoview.pt</span></tt> and add:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/1999/xhtml&quot;</span> <span class="na">xml:lang=</span><span class="s">&quot;en&quot;</span>
       <span class="na">lang=</span><span class="s">&quot;en&quot;</span>
       <span class="na">i18n:domain=</span><span class="s">&quot;ploneconf.talk&quot;</span><span class="nt">&gt;</span>
@@ -94,16 +101,16 @@
 </div>
 <div class="section" id="tal-and-tales">
 <h2>TAL and TALES<a class="headerlink" href="#tal-and-tales" title="Permalink to this headline">¶</a></h2>
-<p>Modify the &lt;p&gt;-tag:</p>
+<p>Let&#8217;s add some magic and modify the &lt;p&gt;-tag:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;string:blue&quot;</span><span class="nt">&gt;</span>red<span class="nt">&lt;/p&gt;</span>
 </pre></div>
 </div>
-<p>Result:</p>
+<p>This will result in:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>blue<span class="nt">&lt;/p&gt;</span>
 </pre></div>
 </div>
-<p>Without restarting Plone open <a class="reference external" href="http://localhost:8080/Plone/&#64;&#64;demo_view">http://localhost:8080/Plone/&#64;&#64;demo_view</a>.</p>
-<p>The same using attributes. Replace the &lt;p&gt;-line with:</p>
+<p>Without restarting Plone open <a class="reference external" href="http://localhost:8080/Plone/&#64;&#64;demoview">http://localhost:8080/Plone/&#64;&#64;demoview</a>.</p>
+<p>The same happens with attributes. Replace the &lt;p&gt;-line with:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://www.mssharepointconference.com&quot;</span>
    <span class="na">tal:define=</span><span class="s">&quot;a_fine_url string:http://www.ploneconf.org&quot;</span>
    <span class="na">tal:attributes=</span><span class="s">&quot;href a_fine_url&quot;</span>
@@ -118,7 +125,7 @@
 <span class="nt">&lt;/a&gt;</span>
 </pre></div>
 </div>
-<p>TAL-attributes:</p>
+<p>We used three TAL-Attributes here. This is the complete list of TAL-attributes:</p>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">tal:define</span></tt></dt>
 <dd>define variables. We definded the variable url to the string &#8220;<a class="reference external" href="http://www.ploneconf.org">http://www.ploneconf.org</a>&#8220;</dd>
@@ -139,14 +146,14 @@
 </dl>
 <div class="section" id="python-expressions">
 <h3>python-expressions<a class="headerlink" href="#python-expressions" title="Permalink to this headline">¶</a></h3>
-<p><tt class="docutils literal"><span class="pre">python:</span></tt> can use python-code:</p>
+<p>So far we only used one TALES expression (the <tt class="docutils literal"><span class="pre">string:</span></tt>-bit). Let&#8217;s use a different TALES-expression now. With <tt class="docutils literal"><span class="pre">python:</span></tt> we can use python-code. A simple example:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:define=</span><span class="s">&quot;title context/title&quot;</span>
    <span class="na">tal:content=</span><span class="s">&quot;python:title.upper()&quot;</span><span class="nt">&gt;</span>
    A big title
 <span class="nt">&lt;/p&gt;</span>
 </pre></div>
 </div>
-<p>Example:</p>
+<p>And another:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:define=</span><span class="s">&quot;talks python:[&#39;Dexterity for the win!&#39;,</span>
 <span class="s">                             &#39;Deco is the future&#39;,</span>
 <span class="s">                             &#39;A keynote on some weird topic&#39;,</span>
@@ -173,18 +180,19 @@
 <li>If it&#8217;s false then the tag <strong>and all its cheildren</strong> are removed and no longer evaluated.</li>
 <li>We can reverse the logic by prepending a <tt class="docutils literal"><span class="pre">not:</span></tt> to the expression.</li>
 </ul>
-<p>Example:</p>
+<p>Let&#8217;s add another TAL-Attribute to our above example:</p>
 <div class="highlight-python"><pre>tal:condition="talks"</pre>
 </div>
-<p>Test for the number of talks:</p>
+<p>We could also test for the number of talks:</p>
 <div class="highlight-python"><pre>tal:condition="python:len(talks) &gt;= 1"</pre>
 </div>
-<p>Test if a certain talk is in the list of talks:</p>
+<p>or if a certain talk is in the list of talks:</p>
 <div class="highlight-python"><pre>tal:condition="python:'Deco is the future' in talks"</pre>
 </div>
 </div>
 <div class="section" id="tal-repeat">
 <h3>tal:repeat<a class="headerlink" href="#tal-repeat" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s try another statement:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:define=</span><span class="s">&quot;talks python:[&#39;Dexterity for the win!&#39;,</span>
 <span class="s">                             &#39;Deco is the future&#39;,</span>
 <span class="s">                             &#39;A keynote on some weird topic&#39;,</span>
@@ -199,7 +207,7 @@
 <dt><tt class="docutils literal"><span class="pre">tal:repeat</span></tt></dt>
 <dd>repeats an iterable element, in our case the list of talks.</dd>
 </dl>
-<p>Construct a list:</p>
+<p>We change the markup a little to construct a list in which there is an <tt class="docutils literal"><span class="pre">&lt;li&gt;</span></tt> for every talk:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;ul</span> <span class="na">tal:define=</span><span class="s">&quot;talks python:[&#39;Dexterity for the win!&#39;,</span>
 <span class="s">                              &#39;Deco is the future&#39;,</span>
 <span class="s">                              &#39;A keynote on some weird topic&#39;,</span>
@@ -217,21 +225,23 @@
 </div>
 <div class="section" id="path-expressions">
 <h3>path-expressions<a class="headerlink" href="#path-expressions" title="Permalink to this headline">¶</a></h3>
-<p>Starts with a variable name. Can either be an object like <tt class="docutils literal"><span class="pre">context</span></tt>, <tt class="docutils literal"><span class="pre">view</span></tt> or <tt class="docutils literal"><span class="pre">template</span></tt> or a variable defined earlier like <tt class="docutils literal"><span class="pre">talk</span></tt>.</p>
-<p>Divided by <tt class="docutils literal"><span class="pre">/</span></tt> and the name of a sub-object, attribute or callable.</p>
+<p>Regarding TALES so far we used <tt class="docutils literal"><span class="pre">string:</span></tt> or <tt class="docutils literal"><span class="pre">python:</span></tt> or only variables. The next and most common expression are path-expressions. Optionally you can start a path-expression with <tt class="docutils literal"><span class="pre">path:</span></tt></p>
+<p>Every path expression starts with a variable name. It can either be an object like <tt class="docutils literal"><span class="pre">context</span></tt>, <tt class="docutils literal"><span class="pre">view</span></tt> or <tt class="docutils literal"><span class="pre">template</span></tt> or a variable defined earlier like <tt class="docutils literal"><span class="pre">talk</span></tt>.</p>
+<p>After the variable we add a slash <tt class="docutils literal"><span class="pre">/</span></tt> and the name of a sub-object, attribute or callable. The &#8216;/&#8217; is used to end the name of an object and the start of the property name. Properties themselves may be objects that in turn have properties.</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;context/title&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
 </pre></div>
 </div>
-<p>Chain to get to the information we want.</p>
+<p>We can chain several of those to get to the information we want.</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;context/REQUEST/form&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
 </pre></div>
 </div>
-<p>Value of the form-dictionary of the HTTPRequest-object.</p>
-<p><tt class="docutils literal"><span class="pre">|</span></tt> (&#8220;or&#8221;): Used to find an alternative value to a path if the first path evaluates to <tt class="docutils literal"><span class="pre">nothing</span></tt> or does not exist.</p>
+<p>This would return the value of the form-dictionary of the HTTPRequest-object. Useful for form-handling.</p>
+<p>The <tt class="docutils literal"><span class="pre">|</span></tt> (&#8220;or&#8221;) character is used to find an alternative value to a path if the first path evaluates to <tt class="docutils literal"><span class="pre">nothing</span></tt> or does not exist.</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:content=</span><span class="s">&quot;context/title | context/id&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
 </pre></div>
 </div>
-<p><strong>built in variables</strong>  can be used in paths:</p>
+<p>There are several <strong>built in variables</strong>  that can be used in paths:</p>
+<p>The most frequently used one is <tt class="docutils literal"><span class="pre">nothing</span></tt> which is the equivalent to None</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">tal:replace=</span><span class="s">&quot;nothing&quot;</span><span class="nt">&gt;</span>
     this comment will not be rendered
 <span class="nt">&lt;/p&gt;</span>
@@ -246,10 +256,11 @@
 <span class="nt">&lt;/dl&gt;</span>
 </pre></div>
 </div>
+<p>Useful for debugging :-)</p>
 </div>
 <div class="section" id="pure-tal-blocks">
 <h3>pure TAL-blocks<a class="headerlink" href="#pure-tal-blocks" title="Permalink to this headline">¶</a></h3>
-<p>Use TAL-attributes without HTML-Tags</p>
+<p>We can use TAL-attributes auch without HTML-Tags. This is useful when we don&#8217;t need to add any tags to the markup</p>
 <p>Syntax:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;tal:block</span> <span class="na">attribute=</span><span class="s">&quot;expression&quot;</span><span class="nt">&gt;</span>some content<span class="nt">&lt;/tal:block&gt;</span>
 </pre></div>
@@ -269,6 +280,7 @@
 </div>
 <div class="section" id="handling-complex-data-in-templates">
 <h3>handling complex data in templates<a class="headerlink" href="#handling-complex-data-in-templates" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s move on to a little more complex data. And to another TAL-atrribute:</p>
 <dl class="docutils">
 <dt>tal:replace</dt>
 <dd>replace the content of an element and removes the element only leaving the content.</dd>
@@ -280,21 +292,21 @@
 <span class="nt">&lt;/p&gt;</span>
 </pre></div>
 </div>
-<p>Results in:</p>
+<p>this results in:</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>
     <span class="ni">&amp;lt;</span>img src=&#39;https://plone.org/logo.png&#39;<span class="ni">&amp;gt;</span>
 <span class="nt">&lt;/p&gt;</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">tal:replace</span></tt> drops its own base-tag in favor of the result of the TALES-expression.</p>
-<p>Prevent escaping with <tt class="docutils literal"><span class="pre">structure</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">tal:replace</span></tt> drops it&#8217;s own base-tag in favor of the result of the TALES-expression. Thus the original <tt class="docutils literal"><span class="pre">&lt;img...</span> <span class="pre">&gt;</span></tt> is replaced. But the result is escaped by default.</p>
+<p>To prevent escaping we use <tt class="docutils literal"><span class="pre">structure</span></tt></p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;p&gt;</span>
     <span class="nt">&lt;img</span> <span class="na">tal:define=</span><span class="s">&quot;tag string:&lt;img src=&#39;https://plone.org/logo.png&#39;&gt;&quot;</span>
          <span class="na">tal:replace=</span><span class="s">&quot;structure tag&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;/p&gt;</span>
 </pre></div>
 </div>
-<p>Complex Example</p>
+<p>Now let&#8217;s emulate a typical Plone structure by creating a dictionary.</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;table</span> <span class="na">tal:define=</span><span class="s">&quot;talks python:[{&#39;title&#39;:&#39;Dexterity for the win!&#39;,</span>
 <span class="s">                                  &#39;subjects&#39;:(&#39;content-types&#39;, &#39;dexterity&#39;)},</span>
 <span class="s">                                 {&#39;title&#39;:&#39;Deco is the future&#39;,</span>
@@ -319,6 +331,8 @@
 <span class="nt">&lt;/table&gt;</span>
 </pre></div>
 </div>
+<p>We emulate a list of talks and display information obout them in a table. We&#8217;ll get back to the list of talks later when we use the real talk-objects that we created with dexterity.</p>
+<p>To complete the list here are the TAL-Attributes we have not yet used:</p>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">tal:omit-tag</span></tt></dt>
 <dd>Omit the element tags, leaving only the inner content.</dd>
@@ -434,14 +448,19 @@
 </div>
 <div class="section" id="what-we-missed">
 <h2>What we missed<a class="headerlink" href="#what-we-missed" title="Permalink to this headline">¶</a></h2>
+<p>The are some things we did not cover so far:</p>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">tal:condition=&quot;exists:expression&quot;</span></tt></dt>
 <dd>checks if an object or an attribute exists (seldom used)</dd>
 <dt><tt class="docutils literal"><span class="pre">tal:condition=&quot;nocall:context&quot;</span></tt></dt>
 <dd>to explicitly not call a callable.</dd>
+</dl>
+<p>If we refer to content objects, without using the nocall: modifier these objects are unnecessarily rendered in memory as the expression is evaluated.</p>
+<dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">i18n:translate</span></tt> and <tt class="docutils literal"><span class="pre">i18n:domain</span></tt></dt>
 <dd>the strings we put in templates can be translated automatically.</dd>
 </dl>
+<p>There is a lot more about TAL, TALES and METAL that we have not covered. You&#8217;ll only learn it if you keep reading, writing and customizing templates.</p>
 <p>Documentation about TAL and METAL:</p>
 <ul class="simple">
 <li>Using Zope Page Templates: <a class="reference external" href="http://docs.zope.org/zope2/zope2book/ZPT.html">http://docs.zope.org/zope2/zope2book/ZPT.html</a></li>

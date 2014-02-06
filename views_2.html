@@ -55,6 +55,9 @@
             
   <div class="section" id="views-ii-a-default-view-for-talk">
 <h1>17. Views II: A default view for &#8220;talk&#8221;<a class="headerlink" href="#views-ii-a-default-view-for-talk" title="Permalink to this headline">¶</a></h1>
+<p>Earlier we wrote a demo view which we also used to experiment with page templates.
+Let us have a look at the zcml and the Page Template again.
+I have extended the code just slightly.</p>
 <p>ZCML</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
     <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
@@ -89,19 +92,42 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">DemoView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__call__</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>Do you remember the term MultiAdapter? The browser page is just a multiadapter.
+The zcml Statement browser:page registeres a multiadapter and adds additional things needed for a browser view.
+An adapter adapts things, a multi adapter adapts multiple things.
+When you enter an url, Zope tries to find an object for it. At the end, when zope does not find any more objects but there is still a path item left, or there are no more path items, Zope looks for an adapter that will reply to the request.
+The Adapter adapts the request and the object that zope found with the URL.
+The adapter class gets instanciated with the objects to be adapted, then it gets called.</p>
+<p>The code above does the same thing that the standard implementation would do. It makes context and request available as variables on the object.
+I have written down these methods because it important to understand some important concepts.
+The init method gets called while Zope is still <em>trying</em> to find a view. At that phase, the security has not been resolved. Your code is not security checked. For historic reasons, many errors that happen in the init method can result in a page not found error instead of an exception.
+Don&#8217;t do much at all in the init method.
+Instead you have the guarantee the the call method is called before anything else (except the init method). It has the security checks in place and so on.
+From a practical standpoint, consider the call method your init method, the biggest difference is that this method is suposed to return the html already.
+Let your base class handle the html generation.</p>
 <div class="section" id="grok">
 <h2>Grok<a class="headerlink" href="#grok" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>
-    <span class="n">zip_safe</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-    <span class="n">install_requires</span><span class="o">=</span><span class="p">[</span>
-        <span class="s">&#39;setuptools&#39;</span><span class="p">,</span>
-        <span class="s">&#39;five.grok&#39;</span>
-        <span class="c"># -*- Extra requirements: -*-</span>
-    <span class="p">],</span>
-    <span class="n">extras_require</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;test&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;plone.app.testing&#39;</span><span class="p">]},</span>
-    <span class="o">...</span>
-</pre></div>
+<p>Now that we know how to read a zcml statement, we can continue with grok.
+Grok is an alternative declaration language for declaring your components. It is compatible with the Zope Component Architecture, it used just an alternative syntax.
+Instead of writing separate zcml files, you annotate your code and you create content conforming to specific file names so that they are automatically found.
+There has been discussions whether grok should be used in the plone core. The plone community decided against it, because it increases the technology stack without adding functionality.
+Some people are even against using it in Add Ons, because there would not be just one way to declare components, but two. Then there is onle last disadvantage, grok components cannot be overridden by z3c.jbot. I would not be surprised if this could be fixed though.
+After all these negative things let us tell you why we still like it: We like to write as few lines of code and configuration as possible.</p>
+<p>So, we will write our browser view as a grok view. From the component architecture side, nothing changes. We still need to write a multi adapter. All the details like which template to use or for which browser layer the view shall be used is declared with a single line annotation or deduced from file names.</p>
+<p>Grok is not part of plone. We have to add it as a dependency to our egg.</p>
+<p>open setup.py, extended it like this:</p>
+<div class="highlight-python"><pre>...
+    zip_safe=False,
+    install_requires=[
+        'setuptools',
+        'plone.app.dexterity [grok]',
+        # -*- Extra requirements: -*-
+    ],
+    extras_require={'test': ['plone.app.testing']},
+    ...</pre>
 </div>
+<p>You need to run buildout now.</p>
+<p>Grok nearly magicaly does find all its annotations. Since its not complete magic, you have to tell grok where to look for grok code. This requires a single line of zcml, that line ensures that your complete package is <cite>grokked</cite>.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;configure</span>
     <span class="na">xmlns=</span><span class="s">&quot;http://namespaces.zope.org/zope&quot;</span>
     <span class="na">xmlns:five=</span><span class="s">&quot;http://namespaces.zope.org/five&quot;</span>
@@ -117,6 +143,8 @@
     ....
 </pre></div>
 </div>
+<p>This new grok statement takes care of finding everything grok related.</p>
+<p>Now finally on to the grok view in a new file views.py:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
 <span class="kn">from</span> <span class="nn">plone.directives</span> <span class="kn">import</span> <span class="n">dexterity</span>
 <span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">Interface</span>
@@ -127,13 +155,14 @@
     <span class="n">grok</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">Interface</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-html"><pre>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+<p>And the template. Important, the template must be in a subdirectory called <cite>views_templates</cite> and it must be named <cite>talkview.pt</cite>:</p>
+<div class="highlight-python"><pre>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
     lang="en"
     metal:use-macro="context/main_template/macros/master"
     i18n:domain="plonekonf.talk"&gt;
 &lt;body&gt;
     &lt;metal:content-core fill-slot="content-core"&gt;
-        &lt;p&gt;Suitable for &lt;em tal:replace="context/audience"&gt;&lt;/em&gt;
+        &lt;p&gt;Suitable for &lt;em tal:replace="structure view/w/audience/render"&gt;&lt;/em&gt;
         &lt;/p&gt;
 
         &lt;div tal:content="structure view/w/details/render" /&gt;
@@ -149,15 +178,19 @@
 &lt;/body&gt;
 &lt;/html&gt;</pre>
 </div>
-<div class="highlight-xml"><div class="highlight"><pre>...
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;allow_discussion&quot;</span><span class="nt">&gt;</span>False<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;default_view&quot;</span><span class="nt">&gt;</span>talkview<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;view_methods&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;element</span> <span class="na">value=</span><span class="s">&quot;talkview&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;default_view_fallback&quot;</span><span class="nt">&gt;</span>False<span class="nt">&lt;/property&gt;</span>
-...
-</pre></div>
+<p><em>Go through the code line by line</em></p>
+<p>After a restart, we can test our view by going to a talk and add /talkview to the url.</p>
+<p>If you are happy with it, you must tell Plone, that this view shall be the default view.
+This is a configuration that you can change during runtime and is stored in the database, as such it is also managed by genericsetup profiles.</p>
+<p>open profiles/default/types/talk.xml:</p>
+<div class="highlight-python"><pre>...
+&lt;property name="allow_discussion"&gt;False&lt;/property&gt;
+&lt;property name="default_view"&gt;talkdefaultview&lt;/property&gt;
+&lt;property name="view_methods"&gt;
+    &lt;element value="talkdefaultview"/&gt;
+&lt;/property&gt;
+&lt;property name="default_view_fallback"&gt;False&lt;/property&gt;
+...</pre>
 </div>
 </div>
 </div>
