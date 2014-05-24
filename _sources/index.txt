@@ -22,6 +22,7 @@ Contents:
     intro
     installation
     plone_training_config/instructions.rst
+    case
     anatomy
     features
     configuring_customizing
@@ -29,19 +30,29 @@ Contents:
     addons
     theming
     buildout_1
-    ide
-    eggs
+    eggs1
     dexterity
     views_1
     zpt
     zpt_2
     views_2
     views_3
+    behaviors1
+    viewlets_1
+    api
+    ide
+    dexterity_2
     custom_search
+    events
+    user_generated_content
     ressources
-    social_behavior
-    viewlets
-    deployment_code
+    thirdparty_behaviors
+    dexterity_3
+    eggs2
+    behaviors2
+    viewlets_2
+    reusable
+    embed
     deployment_sites
     future_of_plone
     optional
@@ -50,3 +61,5 @@ Contents:
 Please note that this document is not aimed at the larger public. It is the documentation that people get who attend a training. Even though we attempt to include the most important parts of what we teach in this documentation it can not be considered complete without the spoken word.
 
 A more complete documentation can be found at http://developer.plone.org/index.html.
+
+:doc:`changelog`
