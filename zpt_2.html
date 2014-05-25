@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope2">Zope2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#content-management-framework">Content Management Framework</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-toolkit-zope3">Zope Toolkit / Zope3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-component-architecture-zca">Zope Component Architecture (ZCA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#pyramid">Pyramid</a></li>
 </ul>
 </li>
@@ -133,7 +134,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="theming.html">10. Theming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#syntax">Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#a-real-life-example">A real life example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#hello-mr-developer">Hello mr.developer!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#extensible">Extensible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#be-mcguyver">Be McGuyver</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="eggs1.html">12. Creating your own eggs to customize Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Dexterity I: Through the web</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dexterity.html#what-is-a-content-type">What is a content-type?</a></li>
@@ -247,8 +256,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="embed.html">34. Using starzel.votable_behavior in ploneconf.site</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Deploying your site</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Getting ready for deployment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#the-starzel-buildout">The starzel-buildout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#a-deployment-setup">A deployment-setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#other-tools-we-use">Other tools we use</a></li>
 </ul>
 </li>
@@ -369,14 +379,17 @@
 <div class="section" id="finding-the-right-template">
 <h2>Finding the right template<a class="headerlink" href="#finding-the-right-template" title="Permalink to this headline">¶</a></h2>
 <p>We changed the display of the listing of news-items at <a class="reference external" href="http://localhost:8080/Plone/news">http://localhost:8080/Plone/news</a>. But how do we know which template to customize?</p>
-<p>If you don&#8217;t know which template the page you&#8217;re looking at uses you can deduce, start a debug-session or use <tt class="docutils literal"><span class="pre">plone.app.debugtoolbar</span></tt>.</p>
-<p>We could check the html with firebug and look for a structure in the content-area that looks unique. We could also look for the css-class of he body</p>
+<p>If you don&#8217;t know which template the page you&#8217;re looking at uses you can do an educated guess, start a debug-session or use <tt class="docutils literal"><span class="pre">plone.app.debugtoolbar</span></tt>.</p>
+<ol class="arabic">
+<li><p class="first">We could check the html with firebug and look for a structure in the content-area that looks unique. We could also look for the css-class of he body</p>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">&quot;template-summary_view portaltype-collection site-Plone section-news subsection-aggregator icons-on userrole-anonymous&quot;</span> <span class="na">dir=</span><span class="s">&quot;ltr&quot;</span><span class="nt">&gt;</span>
 </pre></div>
 </div>
 <p>The class <tt class="docutils literal"><span class="pre">template-summary_view</span></tt> tells us that the name of the view (but not necessarily the name of the template) is <tt class="docutils literal"><span class="pre">summary_view</span></tt>. So we could search all <tt class="docutils literal"><span class="pre">*.zcml</span></tt>-Files for <tt class="docutils literal"><span class="pre">name=&quot;summary_view&quot;</span></tt> or search all templates calles <tt class="docutils literal"><span class="pre">summary_view.pt</span></tt> and probably find the view and also the corresponding template. But only probably because it would not tell us if the template is already being overridden.</p>
-<p>The safest method is using <tt class="docutils literal"><span class="pre">plone.app.debugtoolbar</span></tt>.  We already have it in our buildout and only need to install it. It adds a &#8220;Debug&#8221;-Dropdown on top of the page. The Section &#8220;Published&#8221; shows the complete path to the template that is used to render the page you are seeing.</p>
-<p>The debug-session to find the template is a little more complicated. Since we have <tt class="docutils literal"><span class="pre">Products.PDBDebugMode</span></tt> in our buildout we can call <tt class="docutils literal"><span class="pre">/pdb</span></tt> on our page.</p>
+</li>
+<li><p class="first">The safest method is using <tt class="docutils literal"><span class="pre">plone.app.debugtoolbar</span></tt>.  We already have it in our buildout and only need to install it. It adds a &#8220;Debug&#8221;-Dropdown on top of the page. The Section &#8220;Published&#8221; shows the complete path to the template that is used to render the page you are seeing.</p>
+</li>
+<li><p class="first">The debug-session to find the template is a little more complicated. Since we have <tt class="docutils literal"><span class="pre">Products.PDBDebugMode</span></tt> in our buildout we can call <tt class="docutils literal"><span class="pre">/pdb</span></tt> on our page.</p>
 <p>The object that the url points to is by default <tt class="docutils literal"><span class="pre">self.context</span></tt>. But the first problem is, that the url we&#8217;re seeing is not the url of the collection where we want to modify since the collection is the default-page of the folder <tt class="docutils literal"><span class="pre">news</span></tt>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span>
 <span class="go">&lt;Folder at /Plone/news&gt;</span>
@@ -395,6 +408,8 @@
 </pre></div>
 </div>
 <p>Now we see that we already customized the template.</p>
+</li>
+</ol>
 </div>
 <div class="section" id="skin-templates">
 <h2>skin-templates<a class="headerlink" href="#skin-templates" title="Permalink to this headline">¶</a></h2>

@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope2">Zope2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#content-management-framework">Content Management Framework</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-toolkit-zope3">Zope Toolkit / Zope3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-component-architecture-zca">Zope Component Architecture (ZCA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#pyramid">Pyramid</a></li>
 </ul>
 </li>
@@ -133,7 +134,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="theming.html">10. Theming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#syntax">Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#a-real-life-example">A real life example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#hello-mr-developer">Hello mr.developer!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#extensible">Extensible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#be-mcguyver">Be McGuyver</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="eggs1.html">12. Creating your own eggs to customize Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Dexterity I: Through the web</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dexterity.html#what-is-a-content-type">What is a content-type?</a></li>
@@ -247,8 +256,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="embed.html">34. Using starzel.votable_behavior in ploneconf.site</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Deploying your site</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Getting ready for deployment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#the-starzel-buildout">The starzel-buildout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#a-deployment-setup">A deployment-setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#other-tools-we-use">Other tools we use</a></li>
 </ul>
 </li>
@@ -344,24 +354,29 @@
 <div class="section" id="installing-addons">
 <h2>Installing Addons<a class="headerlink" href="#installing-addons" title="Permalink to this headline">¶</a></h2>
 <p>Installation is a two-step process.</p>
-<p>First, we must make the addons code available to Zope. This means, that Zope can import the code. buildout is responsible for this.</p>
-<p>Use <tt class="docutils literal"><span class="pre">vagrant</span> <span class="pre">ssh</span></tt> to ssh to your vagrant, and edit the buildout.cfg file in /vagrant/training.</p>
+<div class="section" id="making-the-addons-code-available-to-zope">
+<h3>Making the addons code available to Zope<a class="headerlink" href="#making-the-addons-code-available-to-zope" title="Permalink to this headline">¶</a></h3>
+<p>First, we must make the addons code available to Zope. This means, that Zope can import the code. Buildout is responsible for this.</p>
+<p>Look at <tt class="docutils literal"><span class="pre">buildout.cfg</span></tt> file in <tt class="docutils literal"><span class="pre">/vagrant/buildout</span></tt>.</p>
 <p>In the section <tt class="docutils literal"><span class="pre">[instance]</span></tt> there is a variable called <tt class="docutils literal"><span class="pre">eggs</span></tt>, which has multiple <em>eggs</em> as a value. Add the following eggs:</p>
+<p>We already have added the addons that we will use now:</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">Products.PloneFormGen</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">collective.plonetruegallery</span></tt></li>
 </ul>
-<p>Usually, one enters the eggs by adding one more line per egg into the configuration.
-You must write the egg name indented, this way buildout understands that the current line is part of the last variable and not a new variable.</p>
-<p>Run buildout and restart your site.</p>
+<p>Usually, one enters the eggs by adding one more line per egg into the configuration. You must write the egg name indented, this way buildout understands that the current line is part of the last variable and not a new variable.</p>
+<p>If you add new addons here you will have to run buildout and restart the site:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>bin/buildout
 <span class="nv">$ </span>bin/instance <span class="nb">fg</span>
 </pre></div>
 </div>
-<p>Now the code is importable from within Plone and everything got registered via ZCML.
-But your Plone-site has not yet been told to use the addon. For this, you have to install the addons in your Plone Site.</p>
+<p>Now the code is importable from within Plone and everything got registered via ZCML.</p>
+</div>
+<div class="section" id="installing-addons-in-your-plone-site">
+<h3>Installing addons in your Plone Site<a class="headerlink" href="#installing-addons-in-your-plone-site" title="Permalink to this headline">¶</a></h3>
+<p>Your Plone-site has not yet been told to use the addon. For this, you have to install the addons in your Plone Site.</p>
 <p>In your browser, go the control panel <tt class="docutils literal"><span class="pre">&#64;&#64;plone_control_panel</span></tt>, and open the <tt class="docutils literal"><span class="pre">Addons</span></tt> Panel. You will see that you can install the addons there.</p>
-<p>Install them now.</p>
+<p>Install PloneFormGen and collective.plonetruegallery them now.</p>
 <p>This is what happens: The GenericSetup profile of the product gets loaded. This does things like:</p>
 <ul class="simple">
 <li>configuring new actions,</li>
@@ -370,6 +385,7 @@ But your Plone-site has not yet been told to use the addon. For this, you have t
 <li>creating some content/configuration objects in your Plone site.</li>
 </ul>
 <p>Let&#8217; have a look at what we just installed.</p>
+</div>
 </div>
 <div class="section" id="ploneformgen">
 <h2>PloneFormGen<a class="headerlink" href="#ploneformgen" title="Permalink to this headline">¶</a></h2>

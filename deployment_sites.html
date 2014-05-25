@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>35. Buildout II: Deploying your site &mdash; Mastering Plone 1.2 documentation</title>
+  <title>35. Buildout II: Getting ready for deployment &mdash; Mastering Plone 1.2 documentation</title>
   
 
   
@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope2">Zope2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#content-management-framework">Content Management Framework</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-toolkit-zope3">Zope Toolkit / Zope3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-component-architecture-zca">Zope Component Architecture (ZCA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#pyramid">Pyramid</a></li>
 </ul>
 </li>
@@ -133,7 +134,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="theming.html">10. Theming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#syntax">Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#a-real-life-example">A real life example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#hello-mr-developer">Hello mr.developer!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#extensible">Extensible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#be-mcguyver">Be McGuyver</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="eggs1.html">12. Creating your own eggs to customize Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Dexterity I: Through the web</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dexterity.html#what-is-a-content-type">What is a content-type?</a></li>
@@ -247,8 +256,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="embed.html">34. Using starzel.votable_behavior in ploneconf.site</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">35. Buildout II: Deploying your site</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="">35. Buildout II: Getting ready for deployment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-starzel-buildout">The starzel-buildout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-deployment-setup">A deployment-setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#other-tools-we-use">Other tools we use</a></li>
 </ul>
 </li>
@@ -277,7 +287,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>35. Buildout II: Deploying your site</li>
+    <li>35. Buildout II: Getting ready for deployment</li>
       <li class="wy-breadcrumbs-aside">
         
       </li>
@@ -286,11 +296,11 @@
 </div>
           <div role="main">
             
-  <div class="section" id="buildout-ii-deploying-your-site">
-<h1>35. Buildout II: Deploying your site<a class="headerlink" href="#buildout-ii-deploying-your-site" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="buildout-ii-getting-ready-for-deployment">
+<h1>35. Buildout II: Getting ready for deployment<a class="headerlink" href="#buildout-ii-getting-ready-for-deployment" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="the-starzel-buildout">
 <h2>The starzel-buildout<a class="headerlink" href="#the-starzel-buildout" title="Permalink to this headline">¶</a></h2>
-<p>If you want you can have a look at the buildout we use for our projects: <a class="reference external" href="https://github.com/starzel/buildout">https://github.com/starzel/buildout</a></p>
+<p>Have a look at the buildout we use for our projects: <a class="reference external" href="https://github.com/starzel/buildout">https://github.com/starzel/buildout</a></p>
 <p>It has some noteable features:</p>
 <ul>
 <li><p class="first">It extends to files on github shared by all projects of the same version</p>
@@ -306,12 +316,27 @@
 </li>
 </ul>
 </div>
+<div class="section" id="a-deployment-setup">
+<h2>A deployment-setup<a class="headerlink" href="#a-deployment-setup" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>zeoserver and zeoclients</li>
+<li>haproxy</li>
+<li>nagios</li>
+<li>marnish</li>
+<li>monitoring</li>
+<li>supervisor</li>
+<li>backup</li>
+<li>logrotate</li>
+<li>precompiler</li>
+<li>cronjobs</li>
+</ul>
+</div>
 <div class="section" id="other-tools-we-use">
 <h2>Other tools we use<a class="headerlink" href="#other-tools-we-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Fabric (manage sites)</li>
-<li>Ansible (manage and setup servers and tools)</li>
 <li>Sentry (error-monitoring)</li>
+<li>Ansible (manage and setup servers and tools)</li>
 <li>Nagios (server-monitoring)</li>
 <li>jenkins (tests)</li>
 <li>piwik (statictics)</li>

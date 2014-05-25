@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
     <link rel="top" title="Mastering Plone 1.2 documentation" href="index.html"/>
-        <link rel="next" title="35. Buildout II: Deploying your site" href="deployment_sites.html"/>
+        <link rel="next" title="35. Buildout II: Getting ready for deployment" href="deployment_sites.html"/>
         <link rel="prev" title="33. Making our package reusable" href="reusable.html"/> 
 
   
@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope2">Zope2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#content-management-framework">Content Management Framework</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-toolkit-zope3">Zope Toolkit / Zope3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-component-architecture-zca">Zope Component Architecture (ZCA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#pyramid">Pyramid</a></li>
 </ul>
 </li>
@@ -133,7 +134,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="theming.html">10. Theming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#syntax">Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#a-real-life-example">A real life example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#hello-mr-developer">Hello mr.developer!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#extensible">Extensible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#be-mcguyver">Be McGuyver</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="eggs1.html">12. Creating your own eggs to customize Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Dexterity I: Through the web</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dexterity.html#what-is-a-content-type">What is a content-type?</a></li>
@@ -247,8 +256,9 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">34. Using starzel.votable_behavior in ploneconf.site</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Deploying your site</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Getting ready for deployment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#the-starzel-buildout">The starzel-buildout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#a-deployment-setup">A deployment-setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#other-tools-we-use">Other tools we use</a></li>
 </ul>
 </li>
@@ -342,6 +352,11 @@ Else no source code will be available.</p>
 <p>What a weird name. profile- is a prefix you will always need nowadays. Then comes the egg name, and the part after the colon is the name of the profile. The name of the profile is defined in zcml. So far I&#8217;ve stumbled only over one package where the profile directory name was different to the GenericSetup Profile name.</p>
 <p>Now the package is there, but nothing is votable. That is because no content type declares to use this behavior. We can add this behavior via the control panel, export the settings and store it in our egg. Let&#8217;s just add it by hand now.</p>
 <p>We have to add the behavior to talks, we do this in <tt class="file docutils literal"><span class="pre">profiles/default/types/talk.xml</span></tt></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Managing dependencies in metadata.xml is good practice. We can&#8217;t rely on remembering what we&#8217;d have to do by hand. For example, do you remember that we had to add to select <tt class="docutils literal"><span class="pre">Dexterity-based</span> <span class="pre">Plone</span> <span class="pre">Default</span> <span class="pre">Types</span></tt> when creating a new Plone-site?</p>
+<p class="last">We should instead also add <tt class="docutils literal"><span class="pre">&lt;dependency&gt;profile-plone.app.contenttypes:plone-content&lt;/dependency&gt;</span></tt> like the <a class="reference external" href="http://docs.plone.org/external/plone.app.contenttypes/docs/README.html#installation-as-a-dependency-from-another-product">documentation for plone.app.contenttypes</a> recommends.</p>
+</div>
 <div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
@@ -526,7 +541,7 @@ As you can see, the <tt class="samp docutils literal"><span class="pre">transiti
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="deployment_sites.html" class="btn btn-neutral float-right" title="35. Buildout II: Deploying your site"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="deployment_sites.html" class="btn btn-neutral float-right" title="35. Buildout II: Getting ready for deployment"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="reusable.html" class="btn btn-neutral" title="33. Making our package reusable"><span class="fa fa-arrow-circle-left"></span> Previous</a>

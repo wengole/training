@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope2">Zope2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#content-management-framework">Content Management Framework</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-toolkit-zope3">Zope Toolkit / Zope3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-component-architecture-zca">Zope Component Architecture (ZCA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#pyramid">Pyramid</a></li>
 </ul>
 </li>
@@ -133,7 +134,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="theming.html">10. Theming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#syntax">Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#a-real-life-example">A real life example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#hello-mr-developer">Hello mr.developer!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#extensible">Extensible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#be-mcguyver">Be McGuyver</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="eggs1.html">12. Creating your own eggs to customize Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Dexterity I: Through the web</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dexterity.html#what-is-a-content-type">What is a content-type?</a></li>
@@ -247,8 +256,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="embed.html">34. Using starzel.votable_behavior in ploneconf.site</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Deploying your site</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Getting ready for deployment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#the-starzel-buildout">The starzel-buildout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#a-deployment-setup">A deployment-setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#other-tools-we-use">Other tools we use</a></li>
 </ul>
 </li>
@@ -367,18 +377,26 @@
 <div class="section" id="zmi">
 <h2>ZMI<a class="headerlink" href="#zmi" title="Permalink to this headline">¶</a></h2>
 <p>Go to <a class="reference external" href="http://localhost:8080/Plone/manage">http://localhost:8080/Plone/manage</a></p>
-<p>Zope is the foundation of Plone. Here you can access the inner working of Zope and Plone alike. Here you can easily break your site so you should know what you are doing.</p>
+<p>Zope is the foundation of Plone. Here you can access the inner working of Zope and Plone alike.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Here you can easily break your site so you should know what you are doing.</p>
+</div>
 <p>We only cover three parts of customisation in the ZMI now. Later on when we added our own code we&#8217;ll come back to the ZMI and will look for it.</p>
 <p>At some point you&#8217;ll have to learn what all that stuff is about. But not today.</p>
 <div class="section" id="actions-portal-actions">
 <h3>Actions (portal_actions)<a class="headerlink" href="#actions-portal-actions" title="Permalink to this headline">¶</a></h3>
-<p>Actions are mostly links but really flexible links.</p>
+<ul class="simple">
+<li>Actions are mostly links. But <strong>really flexible</strong> links.</li>
+<li>Actions are configurable ttw and through code.</li>
+<li>These actions are usually iterated over in viewlets and displayed.</li>
+</ul>
 <p>Examples:</p>
 <ul class="simple">
 <li>Links in the Footer (site_actions)</li>
 <li>Actions-Dropdown (folder_buttons)</li>
 </ul>
-<p>Links with properties like:</p>
+<p>Actions have properties like:</p>
 <ul class="simple">
 <li>description</li>
 <li>url</li>
@@ -386,8 +404,6 @@
 <li>condition</li>
 <li>permissions</li>
 </ul>
-<p>Configurable ttw and through code.</p>
-<p>These actions are usually iterated over in viewlets and displayed.</p>
 <div class="section" id="site-actions">
 <h4>site_actions<a class="headerlink" href="#site-actions" title="Permalink to this headline">¶</a></h4>
 <p>These are the links at the bottom of the page:</p>
@@ -397,17 +413,24 @@
 <li>Contact</li>
 <li>Site Setup</li>
 </ul>
-<p>We want another link to legal information, called &#8220;Imprint&#8221;.</p>
+<p>We want a new link to legal information, called &#8220;Imprint&#8221;.</p>
 <ul class="simple">
-<li>go to <tt class="docutils literal"><span class="pre">site_actions</span></tt> (we know that because we checked in <tt class="docutils literal"><span class="pre">&#64;&#64;manage-viewlets</span></tt>)</li>
-<li>add a CMF Actions <tt class="docutils literal"><span class="pre">imprint</span></tt></li>
-<li>set its URL to <tt class="docutils literal"><span class="pre">string:${portal_url}/imprint</span></tt></li>
-<li>Leave condition empty</li>
+<li>Go to <tt class="docutils literal"><span class="pre">site_actions</span></tt> (we know that because we checked in <tt class="docutils literal"><span class="pre">&#64;&#64;manage-viewlets</span></tt>)</li>
+<li>Add a CMF Actions <tt class="docutils literal"><span class="pre">imprint</span></tt></li>
+<li>Set URL to <tt class="docutils literal"><span class="pre">string:${portal_url}/imprint</span></tt></li>
+<li>Leave <em>condition</em> empty</li>
 <li>Set permission to <tt class="docutils literal"><span class="pre">View</span></tt></li>
-<li>Save and explain</li>
+<li>Save</li>
+</ul>
+<p>explain</p>
+<ul class="simple">
 <li>Check if the link is on the page</li>
 <li>Create new Document <cite>Imprint</cite> and publish</li>
 </ul>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://docs.plone.org/develop/plone/functionality/actions.html">http://docs.plone.org/develop/plone/functionality/actions.html</a></p>
+</div>
 </div>
 <div class="section" id="global-navigation">
 <h4>Global navigation<a class="headerlink" href="#global-navigation" title="Permalink to this headline">¶</a></h4>
@@ -429,13 +452,13 @@
 </div>
 <div class="section" id="skins-portal-skins">
 <h3>Skins (portal_skins)<a class="headerlink" href="#skins-portal-skins" title="Permalink to this headline">¶</a></h3>
-<p>In portal_skins we cane change certain images, css-files and templates.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>portal_skins is deprecated technology, in fact Plone 5 will get rid of a lot of functionality that still lives in portal_skins.</p>
-<p>We only do some minial changes here.</p>
-<p class="last">We used to do this part of the training with <a class="reference external" href="https://pypi.python.org/pypi/plone.app.themeeditor">plone.app.themeeditor</a> which has a much nicer UI than the ZMI but also has dependencies that are incompatible with ZopeSkel and is not widely used.</p>
-</div>
+<p>In portal_skins we can change certain images, css-files and templates.</p>
+<ul class="simple">
+<li>portal_skins is deprecated technology</li>
+<li>We only do some minial changes here.</li>
+</ul>
+<p>Plone 5 will get rid of a lot of functionality that still lives in portal_skins.</p>
+<p>We used to do this part of the training with <a class="reference external" href="https://pypi.python.org/pypi/plone.app.themeeditor">plone.app.themeeditor</a> which has a much nicer UI than the ZMI but also has dependencies that are incompatible with ZopeSkel and is not widely used.</p>
 <div class="section" id="change-some-css">
 <h4>Change some css<a class="headerlink" href="#change-some-css" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">

@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope2">Zope2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#content-management-framework">Content Management Framework</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-toolkit-zope3">Zope Toolkit / Zope3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anatomy.html#zope-component-architecture-zca">Zope Component Architecture (ZCA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="anatomy.html#pyramid">Pyramid</a></li>
 </ul>
 </li>
@@ -133,7 +134,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="theming.html">10. Theming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buildout_1.html">11. Buildout I</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#syntax">Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#a-real-life-example">A real life example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#hello-mr-developer">Hello mr.developer!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#extensible">Extensible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buildout_1.html#be-mcguyver">Be McGuyver</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="eggs1.html">12. Creating your own eggs to customize Plone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dexterity.html">13. Dexterity I: Through the web</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dexterity.html#what-is-a-content-type">What is a content-type?</a></li>
@@ -247,8 +256,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="embed.html">34. Using starzel.votable_behavior in ploneconf.site</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Deploying your site</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="deployment_sites.html">35. Buildout II: Getting ready for deployment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#the-starzel-buildout">The starzel-buildout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#a-deployment-setup">A deployment-setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deployment_sites.html#other-tools-we-use">Other tools we use</a></li>
 </ul>
 </li>
@@ -570,7 +580,22 @@
 <p>In the <cite>talklistview</cite> we had to wake up all objects to access some of their attributes. That is ok if we don&#8217;t have many objects and they are light dexterity-objects. If we had thousands of objects this might not be a good idea.</p>
 <p>Instead of loading them all into memory we will use catalog-indexes to get the data we want to display.</p>
 <p>Add a new file <tt class="docutils literal"><span class="pre">catalog.xml</span></tt></p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
 <span class="nt">&lt;object</span> <span class="na">name=</span><span class="s">&quot;portal_catalog&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;index</span> <span class="na">name=</span><span class="s">&quot;type_of_talk&quot;</span> <span class="na">meta_type=</span><span class="s">&quot;FieldIndex&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;indexed_attr</span> <span class="na">value=</span><span class="s">&quot;type_of_talk&quot;</span><span class="nt">/&gt;</span>
@@ -587,7 +612,7 @@
   <span class="nt">&lt;column</span> <span class="na">value=</span><span class="s">&quot;speaker&quot;</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/object&gt;</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 <p>This adds new indexes for the three fields we want to show in the listing. Not that <em>audience</em> is a <tt class="docutils literal"><span class="pre">KeywordIndex</span></tt> because the field is multi-valued, but we want a separate index-entry for every value in on an object.</p>
 <p>The <tt class="docutils literal"><span class="pre">column</span> <span class="pre">..</span></tt> entry allows us to display these values of these indexes in the tableview of collections.</p>
 <div class="admonition note">
@@ -670,7 +695,30 @@
 <h2>Add collection criteria<a class="headerlink" href="#add-collection-criteria" title="Permalink to this headline">¶</a></h2>
 <p>To be able to search content in collection using the new indexes we would have to register them as criteria for the querystring-widget that collection use.</p>
 <p>Add a new file <tt class="docutils literal"><span class="pre">profiles/default/registry.xml</span></tt></p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;registry&gt;</span>
+<div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24</pre></div></td><td class="code"><div class="highlight"><pre><span class="nt">&lt;registry&gt;</span>
   <span class="nt">&lt;records</span> <span class="na">interface=</span><span class="s">&quot;plone.app.querystring.interfaces.IQueryField&quot;</span>
            <span class="na">prefix=</span><span class="s">&quot;plone.app.querystring.field.audience&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;value</span> <span class="na">key=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span>Audience<span class="nt">&lt;/value&gt;</span>
@@ -695,7 +743,7 @@
   <span class="nt">&lt;/records&gt;</span>
 <span class="nt">&lt;/registry&gt;</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference external" href="http://docs.plone.org/develop/plone/functionality/collections.html#add-new-collection-criteria-new-style-plone-app-collection-installed">http://docs.plone.org/develop/plone/functionality/collections.html#add-new-collection-criteria-new-style-plone-app-collection-installed</a></p>
@@ -705,7 +753,15 @@
 <h2>Add more features through generic-setup<a class="headerlink" href="#add-more-features-through-generic-setup" title="Permalink to this headline">¶</a></h2>
 <p>Enable versioning and a diff-view for talks through GenericSetup.</p>
 <p>Add new file <tt class="docutils literal"><span class="pre">profiles/default/repositorytool.xml</span></tt></p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
 <span class="nt">&lt;repositorytool&gt;</span>
   <span class="nt">&lt;policymap&gt;</span>
     <span class="nt">&lt;type</span> <span class="na">name=</span><span class="s">&quot;talk&quot;</span><span class="nt">&gt;</span>
@@ -715,9 +771,16 @@
   <span class="nt">&lt;/policymap&gt;</span>
 <span class="nt">&lt;/repositorytool&gt;</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 <p>Add new file <tt class="docutils literal"><span class="pre">profiles/default/diff_tool.xml</span></tt></p>
-<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
 <span class="nt">&lt;object&gt;</span>
   <span class="nt">&lt;difftypes&gt;</span>
     <span class="nt">&lt;type</span> <span class="na">portal_type=</span><span class="s">&quot;talk&quot;</span><span class="nt">&gt;</span>
@@ -726,7 +789,7 @@
   <span class="nt">&lt;/difftypes&gt;</span>
 <span class="nt">&lt;/object&gt;</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 </div>
 </div>
 
