@@ -306,12 +306,6 @@
 <li>add jquery include statements</li>
 <li>saving the vote on the object using annotations</li>
 </ul>
-<p>Earlier we added the logic that saves votes on the objects. We now create the user interface for it.</p>
-<p>Since we want to use the UI on more than one page (not only the talk-view but also the talk-listing) we need to put it somewhere.</p>
-<ul class="simple">
-<li>To handle the user-input we don&#8217;t use a form but links and ajax.</li>
-<li>The voting itself is a fact handled by another view</li>
-</ul>
 <p>We register the viewlet in <tt class="file docutils literal"><span class="pre">browser/configure.zcml</span></tt>.</p>
 <div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -362,7 +356,6 @@
     <span class="k">pass</span>
 </pre></div>
 </td></tr></table></div>
-<p>This will add a viewlet to a slot below the title and expect a template <tt class="file docutils literal"><span class="pre">voting_viewlet.pt</span></tt> in a folder <tt class="file docutils literal"><span class="pre">browser/templates</span></tt>.</p>
 <p>Let&#8217;s create the file <tt class="file docutils literal"><span class="pre">browser/templates/voting_viewlet.pt</span></tt> without any logic</p>
 <div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
@@ -525,8 +518,6 @@
 <span class="nt">&lt;/tal:snippet&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>We have many small parts, most of which will be hidden by javascript unless needed.
-By providing all these status information in HTML, we can use standard translation tools to translate. Translating strings in javascript requires extra work.</p>
 <p>We need some css that we store in <tt class="file docutils literal"><span class="pre">static/starzel_votablebehavior.css</span></tt></p>
 <div class="highlight-css"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -690,33 +681,9 @@ By providing all these status information in HTML, we can use standard translati
 <span class="p">}(</span><span class="nx">jQuery</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">starzel_votablebehavior</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">starzel_votablebehavior</span> <span class="o">||</span> <span class="p">{}));</span>
 </pre></div>
 </td></tr></table></div>
-<p>This js-code adheres to crockfort jshint rules, so all variables are declared at the beginning of the method.
-We show and hide quite a few small html elements here</p>
 </div>
 <div class="section" id="writing-2-simple-view-helpers">
 <h2>Writing 2 simple view helpers<a class="headerlink" href="#writing-2-simple-view-helpers" title="Permalink to this headline">¶</a></h2>
-<p>Our javascript code communicates with our site by calling views that don&#8217;t exist yet.
-These Views do not need to render html, but should return a valid status.
-Exceptions set the right status and aren&#8217;t being shown by javascript, so this will suit us fine.</p>
-<p>As you might remember, the <tt class="samp docutils literal"><span class="pre">vote</span></tt> method might return an exception, if somebody votes twice.
-We do not catch this exception. The user will never see this exception.</p>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p>Catching exceptions contain a gotcha for new developers.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
-    <span class="n">something</span><span class="p">()</span>
-<span class="k">except</span><span class="p">:</span>
-    <span class="n">fix_something</span><span class="p">()</span>
-</pre></div>
-</td></tr></table></div>
-<p>Zope claims some exceptions for themselves. It needs them to work correctly.</p>
-<p>For example, if two requests try to modify something at the same time, one request will throw an exception, a <tt class="samp docutils literal"><span class="pre">ConflictError</span></tt>.</p>
-<p class="last">Zope catches the exception, waits for a random amount of time, and tries to process the request again, up to three times.
-If you catch that exception, you are in trouble, so don&#8217;t do that. Ever.</p>
-</div>
 <p>As so often, we must extend <tt class="file docutils literal"><span class="pre">browser/configure.zcml</span></tt>:</p>
 <div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2

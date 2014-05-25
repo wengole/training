@@ -300,7 +300,6 @@
 <h1>20. Writing Viewlets<a class="headerlink" href="#writing-viewlets" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="a-viewlet-for-the-social-behavior">
 <h2>A viewlet for the social behavior<a class="headerlink" href="#a-viewlet-for-the-social-behavior" title="Permalink to this headline">¶</a></h2>
-<p>A viewlet is no view but a snippet of html and logic that can be put in various places in the site. These places are called <tt class="docutils literal"><span class="pre">viewletmanager</span></tt>.</p>
 <ul class="simple">
 <li>Inspect existing viewlets and their managers by going to <a class="reference external" href="http://localhost:8080/Plone/&#64;&#64;manage-viewlets">http://localhost:8080/Plone/&#64;&#64;manage-viewlets</a>.</li>
 <li>We already customized a viewlet (<tt class="file docutils literal"><span class="pre">collophon.pt</span></tt>). Now we add a new one.</li>
@@ -310,7 +309,6 @@
 </div>
 <div class="section" id="social-viewlet">
 <h2>social-viewlet<a class="headerlink" href="#social-viewlet" title="Permalink to this headline">¶</a></h2>
-<p>Let&#8217;s add a link to the site that uses the information that we collected using the social-behavior.</p>
 <p>We register the viewlet in <tt class="file docutils literal"><span class="pre">browser/configure.zcml</span></tt>.</p>
 <div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
@@ -331,9 +329,6 @@
   <span class="nt">/&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>This registers a viewlet called <tt class="docutils literal"><span class="pre">social</span></tt>.
-It is visible on all content that implements the interface <tt class="docutils literal"><span class="pre">ISocial</span></tt> from our behavior.
-It is also good practice to bind it to the <a class="reference external" href="http://docs.plone.org/develop/plone/views/layers.html?highlight=browserlayer#introduction">BrowserLayer</a> <tt class="docutils literal"><span class="pre">IPloneconfSiteLayer</span></tt> of our addon so it only shows up if our addon is actually installed.</p>
 <p>The viewlet-class <tt class="docutils literal"><span class="pre">SocialViewlet</span></tt> is expected in a file <tt class="docutils literal"><span class="pre">browser/viewlets.py</span></tt>.</p>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
@@ -344,25 +339,6 @@ It is also good practice to bind it to the <a class="reference external" href="h
     <span class="k">pass</span>
 </pre></div>
 </td></tr></table></div>
-<p>This class does nothing except rendering the associated template (That we have to write yet)</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>If we used <tt class="docutils literal"><span class="pre">grok</span></tt> we would not need to register the viewlets in the <tt class="docutils literal"><span class="pre">configure.zcml</span></tt> but do that in python. We would add a file viewlets.py containing the viewlet-class.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">five</span> <span class="kn">import</span> <span class="n">grok</span>
-<span class="kn">from</span> <span class="nn">plone.app.layout.viewlets</span> <span class="kn">import</span> <span class="n">interfaces</span> <span class="k">as</span> <span class="n">viewletIFs</span>
-<span class="kn">from</span> <span class="nn">zope.component</span> <span class="kn">import</span> <span class="n">Interface</span>
-
-<span class="k">class</span> <span class="nc">Social</span><span class="p">(</span><span class="n">grok</span><span class="o">.</span><span class="n">Viewlet</span><span class="p">):</span>
-    <span class="n">grok</span><span class="o">.</span><span class="n">viewletmanager</span><span class="p">(</span><span class="n">viewletIFs</span><span class="o">.</span><span class="n">IBelowContentTitle</span><span class="p">)</span>
-</pre></div>
-</td></tr></table></div>
-<p class="last">This would do the same as the coe above using grok&#8217;s paradigm of convention over configuration.</p>
-</div>
 <p>Let&#8217;s add the missing template <tt class="file docutils literal"><span class="pre">templates/social_viewlet.pt</span></tt>.</p>
 <div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
@@ -383,19 +359,7 @@ It is also good practice to bind it to the <a class="reference external" href="h
 <span class="nt">&lt;/div&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>As you can see this is not a valid html document. That is not needed, because we don&#8217;t want a complete view here, just a html snippet.</p>
-<p>There is a tal define statement, querying for viewlet/lanyrd_link. Like in page templates the template has access to its class. In browser views the reference is called view, in viewlets it is called viewlets.</p>
 <p>We have to extend the Social Viewlet now to add the missing attribute:</p>
-<div class="sidebar">
-<p class="first sidebar-title">Why not to access context directly</p>
-<p>In this example, <tt class="samp docutils literal"><span class="pre">ISocial(self.context)</span></tt> does return the context directly. It is still good to use this idiom for two reasons:</p>
-<blockquote class="last">
-<div><ol class="arabic simple">
-<li>It makes it clear, that we only want to use the ISocial aspect of the object</li>
-<li>If we decide to use a factory, for example to store our attributes in an annotation, we would <cite>not</cite> get back our context, but the adapter</li>
-</ol>
-</div></blockquote>
-</div>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3

@@ -300,14 +300,16 @@
 <h1>31. More complex behaviors<a class="headerlink" href="#more-complex-behaviors" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="using-annotations">
 <h2>Using Annotations<a class="headerlink" href="#using-annotations" title="Permalink to this headline">¶</a></h2>
-<p>We are going to store the information in an annotation. Not because it is needed but because you will find code that uses annotations and need to understand the implications.</p>
-<p><a class="reference external" href="https://pypi.python.org/pypi/zope.annotation/4.2.0">Annotations</a> in Zope/Plone mean that data won&#8217;t be stored directly on an object but in an indirect way and with namespaces so that multiple packages can store information under the same attribute, without colliding.</p>
-<p>So using annotations avoids namespace conflicts. The cost is an indirection. The dictionary is persistent so it has to be stored separately. Also, one could give attributes a name containing a namespace prefix to avoid naming collisions.</p>
+<ul class="simple">
+<li>What are annotations</li>
+<li>When to use them</li>
+</ul>
 </div>
 <div class="section" id="using-schema">
 <h2>Using Schema<a class="headerlink" href="#using-schema" title="Permalink to this headline">¶</a></h2>
-<p>The attribute where we store our data will be declared as a schema field. We mark the field as a ommitted field, because we are not going to create z3c.form widgets for displaying them. We do provide a schema, because many other packages use the schema information to get knowledge of the relevant fields.</p>
-<p>For example, when files have been migrated to blobs, new objects had to be created and every schema field was copied. The code can&#8217;t know about our field, except if we provide schema information.</p>
+<ul class="simple">
+<li>Why to use schemas always</li>
+</ul>
 </div>
 <div class="section" id="writing-code">
 <h2>Writing Code<a class="headerlink" href="#writing-code" title="Permalink to this headline">¶</a></h2>
@@ -366,11 +368,6 @@
 <li>There is a factory</li>
 </ul>
 </div></blockquote>
-<p>The factory is a class that provides the behavior logic and gives access to the attributes we provide.
-Factories in Plone/Zope land are retrieved by adapting an object with an interface.
-If I want my behavior, I&#8217;d write <tt class="samp docutils literal"><span class="pre">IVoting(object)</span></tt></p>
-<p>But in order for this to work, my object may <em>not</em> be implementing the IVoting interface, because if it would, <tt class="samp docutils literal"><span class="pre">IVoting(object)</span></tt> would return the object itself!
-If I need a marker interface for objects providing my behavior, I must provide one, for this we use the marker attribute. My object implements <tt class="samp docutils literal"><span class="pre">IVotable</span></tt> and because of this, we can write views and viewlets just for this content type.</p>
 <p>The interfaces need to be written, in our cases into a file <tt class="file docutils literal"><span class="pre">interfaces.py</span></tt>:</p>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -507,15 +504,6 @@ If I need a marker interface for objects providing my behavior, I must provide o
 <span class="n">alsoProvides</span><span class="p">(</span><span class="n">IVoting</span><span class="p">,</span> <span class="n">IFormFieldProvider</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<p>This is a lot of code. The IVotableLayer we will need later for viewlets and browser views. Lets add it right here.
-The IVotable interface is the simple marker interface. It will only be used to bind browser views and viewlets to content types that provide our behavior, so no code needed.</p>
-<p>The IVoting class is more complex, as you can see. While IVoting is just an interface, we use <tt class="samp docutils literal"><span class="pre">plone.supermodel.model.Schema</span></tt> for advanced dexterity features.
-Zope.schema provides no means for hiding fields. The directives <tt class="samp docutils literal"><span class="pre">form.omitted</span></tt> from <tt class="samp docutils literal"><span class="pre">plone.autoform</span></tt> allow us to annotate this additional information so that the autoform renderers for forms can use the additional information.</p>
-<p>We make this omit conditional. If we run Plone in debug mode, we will be able to see the internal data in the edit form.</p>
-<p>We create minimal schema fields for our internal data structures. For a small test, I removed the form omitted directives and opened the edit view of a talk that uses the behavior. After seeing the ugliness, I decided that I should provide at least  minimum of information. Titles and required are purely optional, but very helpful if the fields won&#8217;t be omitted, something that can be helpful when debugging the behavior.
-Later, when we implement the behavior, the <tt class="samp docutils literal"><span class="pre">votes</span></tt> and <tt class="samp docutils literal"><span class="pre">voted</span></tt> attributes are implemented in such a way that you can&#8217;t just modify these fields, they are read only.</p>
-<p>Then we define the API that we are going to use in browser views and viewlets.</p>
-<p>The last line ensures that the schema fields are known to other packages. Whenever some code wants all schemas from an object, he receives the schema defined directly on the object and the additional schemata. Additional schemata are compiled by looking for behaviors and whether they provide the <tt class="samp docutils literal"><span class="pre">IFormFieldProvider</span></tt> functionality. Only then we fields are known as schema fields.</p>
 <p>Now the only thing that is missing is the behavior, which we must put into <tt class="file docutils literal"><span class="pre">behavior/voting.py</span></tt></p>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -572,21 +560,9 @@ Later, when we implement the behavior, the <tt class="samp docutils literal"><sp
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="p">[</span><span class="s">&#39;voted&#39;</span><span class="p">]</span>
 </pre></div>
 </td></tr></table></div>
-<p>In our <tt class="samp docutils literal"><span class="pre">__init__</span></tt> method we get <em>annotations</em> from the object.
-We look for data with a specific key.</p>
-<p>The key in this example is the same as what I would get with <tt class="samp docutils literal"><span class="pre">__name__+Vote.__name__</span></tt>. But we won&#8217;t create a dynamic name, this would be very clever and clever is bad.</p>
-<p>By declaring a static name, we won&#8217;t run into problems if we restructure the code.</p>
-<p>You can see, that we initialize the data if it doesn&#8217;t exist. We work with PersistentDict and PersistentList. To understand why we do this, it is important to understand how the ZODB works.</p>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p>The ZODB can store objects. It has a special root object that you will never touch. Whatever you store where, will be part of the root object, except if it is an object sublclassing <tt class="samp docutils literal"><span class="pre">persistent.Persistent</span></tt> Then it will be stored independently.</p>
-<p>Zope/ZODB Persistent objects note when you change an attribute on it and mark itself as changed. Changed objects will be saved to the database. This happens automatically. Each request begins a transaction and after our code ran and the Zope Server is preparing to send back the response we generated, the transaction will be committed and everything we changed will be saved.</p>
-<p>Now, if have a normal dictionary on a persistent object, and you will only change the dictionary, the persistent object has no way to know, if the dictionary has been changed. This <a class="reference external" href="https://github.com/plone/Products.CMFEditions/commit/5c07c72bc8701cf28c9cc68ad940186b9e296ddf">happens</a> from time to time.</p>
-<p>So one solution is to change the special attribute <tt class="samp docutils literal"><span class="pre">_p_changed</span></tt> to <tt class="samp docutils literal"><span class="pre">True</span></tt> on the persistent object, or to use a PersistentDict. That is what we are doing here.</p>
-<p class="last">You can find more information in the documentation of the ZODB, in particular <a class="reference external" href="http://www.zodb.org/en/latest/documentation/guide/prog-zodb.html#rules-for-writing-persistent-classes">Rules for Persistent Classes</a></p>
-</div>
-<p>Next we provide the internal fields via properties. Using this form of property, makes them read only property, as we did not define write handlers. We don&#8217;t need them so we won&#8217;t add them.</p>
-<p>As you have seen in the Schema declaration, if you run your site in debug mode, you will see an edit field for these fields. But trying to change these fields will throw an exception.</p>
+<ul class="simple">
+<li>Explain ZODB and Persistent Classes</li>
+</ul>
 <p>Lets continue with this file:</p>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -673,10 +649,6 @@ We look for data with a specific key.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="n">annotations</span><span class="p">[</span><span class="n">KEY</span><span class="p">]</span>
 </pre></div>
 </td></tr></table></div>
-<p>We start with a little helper method which is not exposed via the interface. We don&#8217;t want people to vote twice. There are many ways to ensure this and each one has flaws.</p>
-<p>We chose this way to show you how to access information from the request the browser of the user sent to us. First, we get the ip of the user, then we access a small bunch of headers from the users browser and generate an md5 checksum of this.</p>
-<p>The vote method, wants a vote and a request. We check the preconditions, then we convert the vote to an integer, store the request has to <tt class="samp docutils literal"><span class="pre">voted</span></tt> and the votes into the <tt class="samp docutils literal"><span class="pre">votes</span></tt> dictionary. We just count there, how often any vote has been given.</p>
-<p>Everything else is just boring python.</p>
 </div>
 </div>
 

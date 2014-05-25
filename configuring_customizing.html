@@ -382,8 +382,6 @@
 <p class="first admonition-title">Note</p>
 <p class="last">Here you can easily break your site so you should know what you are doing.</p>
 </div>
-<p>We only cover three parts of customisation in the ZMI now. Later on when we added our own code we&#8217;ll come back to the ZMI and will look for it.</p>
-<p>At some point you&#8217;ll have to learn what all that stuff is about. But not today.</p>
 <div class="section" id="actions-portal-actions">
 <h3>Actions (portal_actions)<a class="headerlink" href="#actions-portal-actions" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -422,7 +420,6 @@
 <li>Set permission to <tt class="docutils literal"><span class="pre">View</span></tt></li>
 <li>Save</li>
 </ul>
-<p>explain</p>
 <ul class="simple">
 <li>Check if the link is on the page</li>
 <li>Create new Document <cite>Imprint</cite> and publish</li>
@@ -457,8 +454,6 @@
 <li>portal_skins is deprecated technology</li>
 <li>We only do some minial changes here.</li>
 </ul>
-<p>Plone 5 will get rid of a lot of functionality that still lives in portal_skins.</p>
-<p>We used to do this part of the training with <a class="reference external" href="https://pypi.python.org/pypi/plone.app.themeeditor">plone.app.themeeditor</a> which has a much nicer UI than the ZMI but also has dependencies that are incompatible with ZopeSkel and is not widely used.</p>
 <div class="section" id="change-some-css">
 <h4>Change some css<a class="headerlink" href="#change-some-css" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
@@ -476,9 +471,12 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Click &#8216;save&#8217; and check results in the a different browser-tab. How did that happen?</p>
-<p>The UI leaves a lot to be desired. In a professional context this is no-go (no version-control, no syntac-highlighting etc. pp.). But everybody uses portal_skins it to make quick fixes to sites that are already online.</p>
-<p>Let&#8217;s add some more css to make our site a little responsive:</p>
+<ul class="simple">
+<li>Save and check the results</li>
+</ul>
+<ul class="simple">
+<li>Add some more css</li>
+</ul>
 <div class="highlight-css"><div class="highlight"><pre><span class="k">@media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">980px</span><span class="o">)</span> <span class="p">{</span>
    <span class="nf">#visual-portal-wrapper</span> <span class="p">{</span>
        <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>

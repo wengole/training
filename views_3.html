@@ -456,10 +456,6 @@
 </pre></div>
 </div>
 <p>Who can guess what <tt class="docutils literal"><span class="pre">brain.title</span></tt> will return since the brain has no such attribute?</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Answer: Acquisition will get the attribute from the nearest parent. <tt class="docutils literal"><span class="pre">brain.__parent__</span></tt> is <tt class="docutils literal"><span class="pre">&lt;CatalogTool</span> <span class="pre">at</span> <span class="pre">/Plone/portal_catalog&gt;</span></tt>. The attribute <tt class="docutils literal"><span class="pre">title</span></tt> of the <tt class="docutils literal"><span class="pre">portal_catalog</span></tt> is &#8216;Indexes all content in the site&#8217;.</p>
-</div>
 <p>Acquisition can be harmfull. Brains have no attribute &#8216;getLayout&#8217; <tt class="docutils literal"><span class="pre">brain.getLayout()</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">brain</span><span class="o">.</span><span class="n">getLayout</span><span class="p">()</span>
 <span class="go">&#39;folder_listing&#39;</span>

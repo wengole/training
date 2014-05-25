@@ -305,17 +305,10 @@
 </ul>
 <div class="section" id="adding-permissions">
 <h2>Adding permissions<a class="headerlink" href="#adding-permissions" title="Permalink to this headline">¶</a></h2>
-<p>Permissions have a long history, there are two types of permissions.</p>
-<p>In Zope2, a permission was just a string.</p>
-<p>In ZTK, a permission is an object that gets registered as an Utility.</p>
-<p>We must support both, in some cases we have to reference the permission by their Zope2 version, in some by their ZTK Version.</p>
-<p>Luckily, there is a zcml statement to register a permission both ways in one step.</p>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p>The configuration registry wanted to solve a problem, but we will now stumble over a problem that did not get resolved properly.</p>
-<p>Our permission is an utility. Our browser views declare this permission as a requirement for viewing them.</p>
-<p class="last">When our browser views get registered, the permissions must exist already. If you try to register the permissions after the views, Zope won&#8217;t start because it doesn&#8217;t know about the permissions.</p>
-</div>
+<ul class="simple">
+<li>Zope 2 Permissions</li>
+<li>Zope 3 Permissions</li>
+</ul>
 <p>Lets modify the file <tt class="file docutils literal"><span class="pre">configure.zcml</span></tt></p>
 <div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -370,9 +363,6 @@
 </div>
 <div class="section" id="using-our-permissions">
 <h2>Using our permissions<a class="headerlink" href="#using-our-permissions" title="Permalink to this headline">¶</a></h2>
-<p>As you can see, we created two permissions, one for voting, one for viewing the votes.</p>
-<p>If one may not see the votings, he does not need access to the vote viewlet.</p>
-<p>While we are at it, if one can&#8217;t vote, he needs no access to the helper view to actually submit a vote.</p>
 <p>We can add this restriction to <tt class="file docutils literal"><span class="pre">browser/configure.zcml</span></tt></p>
 <div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -427,16 +417,6 @@
 <span class="nt">&lt;/configure&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>We are configuring components, so we use the component name of the permission, which is the <tt class="samp docutils literal"><span class="pre">id</span></tt> part of the declaration we added earlier.</p>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p>So, what happens, if we do not protect the browser view to vote?</p>
-<p>The person could still vote, by handcrafting the URL. Browser Views run code without any restriction, it is your job to take care of security.</p>
-<p>But... if a person has no access to the object at all, maybe because the site is configured that Anonymous users cannot access private objects, the unauthorized users will not be able to submit a vote.</p>
-<p class="last">That is, because Zope checks security permissions when trying to find the right object. If it can&#8217;t find the object due to security constraints not met, no view ill ever be called, because that would have been the next step.</p>
-</div>
-<p>We now protect our views and viewlets. We still show the option to vote though.</p>
-<p>We must add a condition in our page template, and we must provide the condition information in our viewlet class.</p>
 <p>Lets move on to <tt class="file docutils literal"><span class="pre">browser/viewlets.py</span></tt></p>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -529,13 +509,9 @@
 <span class="nt">&lt;/tal:snippet&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>Sometimes subtle bugs come up because of changes, in this case, I noticed that I should only animate people to vote, if they are allowed to vote!</p>
 </div>
 <div class="section" id="provide-defaults">
 <h2>Provide defaults<a class="headerlink" href="#provide-defaults" title="Permalink to this headline">¶</a></h2>
-<p>Are we done yet? Who may vote now?</p>
-<p>We have to tell that someone.</p>
-<p>Who has which permissions is managed in Zope, it is persistent, persistent stuff goes to GenericSetup.</p>
 <p>The persistent configuration is managed in another file: <tt class="file docutils literal"><span class="pre">profiles/default/rolemap.xml</span></tt></p>
 <div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2

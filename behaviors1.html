@@ -298,39 +298,20 @@
             
   <div class="section" id="behaviors">
 <h1>19. Behaviors<a class="headerlink" href="#behaviors" title="Permalink to this headline">¶</a></h1>
-<p>You can extend the functionality of your dexterity object by writing an adapter that adapts your dexterity object to add another feature or aspect.</p>
-<p>But if you want to use this adapter, you must somehow know that an object implements that. Also, you could not easily add more fields to an object with such an approach.</p>
 <div class="section" id="dexterity-approach">
 <h2>Dexterity Approach<a class="headerlink" href="#dexterity-approach" title="Permalink to this headline">¶</a></h2>
-<p>Dexterity has a solution for it, with special adapters that are called and registered by the name behavior.</p>
-<p>A behavior can be added to any content type through the web and during runtime.</p>
-<p>All default views know about the concept of behaviors and when rendering forms, the views also check whether there are behaviors referenced with the current context and if these behavior have a schema of their own, these fields get shown in addition.</p>
-<p>This this functionality in place, you can extend your content types during runtime, through the web.</p>
 </div>
 <div class="section" id="names-and-theory">
 <h2>Names and Theory<a class="headerlink" href="#names-and-theory" title="Permalink to this headline">¶</a></h2>
-<p>The name behavior is not a standard term in the software development. But it is a good idea to think of a behavior as an aspect. You are adding an aspect to your content type, you want to write your aspect in such a way, that it works independent of the content type on which the aspect is applied. You should not have dependencies to specific fields of your object or to other behaviors.</p>
-<p>Such an object allows you to apply the <a class="reference external" href="https://en.wikipedia.org/wiki/Open/closed_principle">Open/closed principle</a> to your dexterity objects.</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Open/closed_principle">Open/closed principle</a></p>
 </div>
 <div class="section" id="practical-example">
 <h2>Practical example<a class="headerlink" href="#practical-example" title="Permalink to this headline">¶</a></h2>
-<p>So, let us write our own small behavior.</p>
-<p>In the future, we want our presentation be represented in Lanyrd too. For now we will just provide a link so that visitors can collaborate easily with the lanyrd site.</p>
-<p>So for now, our behavior just adds a new field for storing the url to Lanyrd.</p>
 <p>We want to keep a clean structure, so we create a <tt class="file docutils literal"><span class="pre">behaviors</span></tt> directory first, and include it into the zcml declarations of our <tt class="file docutils literal"><span class="pre">configure.zcml</span></tt>.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;include</span> <span class="na">package=</span><span class="s">&quot;.behaviors&quot;</span> <span class="nt">/&gt;</span>
 </pre></div>
 </div>
 <p>Then, we add an empty <tt class="file docutils literal"><span class="pre">behaviors/__init__.py</span></tt> and a <tt class="file docutils literal"><span class="pre">behaviors/configure.zcml</span></tt> containing</p>
-<div class="sidebar">
-<p class="first sidebar-title">Advanced reference</p>
-<p>The original documentation is doctest code, so no documentation and no debuggable test.</p>
-<p>It can be a bit confusing of when to use factory, or marker interfaces and when not.</p>
-<p>If you do not define a factory, your attributes will be stored directly on the object. This can result in clashes with other behaviors.</p>
-<p>You can avoid this by using the plone.behavior.AnnotationStorage factory. This one stores your attributes in an <a class="reference external" href="http://docs.plone.org/develop/plone/misc/annotations.html#annotations" title="(in Plone Documentation v['4.3'])"><em class="xref std std-ref">Annotation</em></a>.
-But then you <em>must</em> use a marker interface if you want to have custom viewlets, browser views or portlets.</p>
-<p class="last">Without it, you would have no interface against which you could register your views.</p>
-</div>
 <div class="highlight-xml" id="social-behavior-zcml-label"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -402,19 +383,9 @@ But then you <em>must</em> use a marker interface if you want to have custom vie
 <span class="n">alsoProvides</span><span class="p">(</span><span class="n">ISocial</span><span class="p">,</span> <span class="n">IFormFieldProvider</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<p>Lets get through this step by step.</p>
-<ol class="arabic simple">
-<li>We register a behavior in <a class="reference internal" href="#social-behavior-zcml-label"><em>behaviors/configure.zcml</em></a>. We do not say for which content type this behavior is valid. You do this, through the web or in the GenericSetup profile.</li>
-<li>We create a marker interface in <a class="reference internal" href="#social-behavior-python-label"><em>behaviors/social.py</em></a> for our behavior and make it also a schema containing the fields we want to declare.
-We could just use define schema fields on a zope.intereface class, but we use an extended form from <a class="reference external" href="http://docs.plone.org/external/plone.app.dexterity/docs/schema-driven-types.html#schema-interfaces-vs-other-interfaces">plone.supermodel</a>, else we could not use the fieldset features.</li>
-<li>We add a <a class="reference external" href="http://docs.plone.org/develop/addons/schema-driven-forms/customising-form-behaviour/fieldsets.html?highlight=fieldset">fieldset</a> So that our fields are not mixed with the normal fields of the object.</li>
-<li>We add a normal <a class="reference external" href="http://docs.zope.org/zope.schema/fields.html#uri">URI</a> schema field to store the URI to lanyrd.</li>
-<li>We mark our schema es a class that also implements the <a class="reference external" href="http://docs.plone.org/external/plone.app.dexterity/docs/advanced/custom-add-and-edit-forms.html?highlight=iformfieldprovider#edit-forms">IFormFieldProvider</a> interface. This is a marker interface, we do not need to implement anything to provide the interface.</li>
-</ol>
 </div>
 <div class="section" id="adding-it-to-our-talk">
 <h2>Adding it to our talk<a class="headerlink" href="#adding-it-to-our-talk" title="Permalink to this headline">¶</a></h2>
-<p>We could add this behavior now via the plone control panel. But instead, we will do it directly properly in our GenericSetup profile</p>
 <p>We must add the behavior to <tt class="file docutils literal"><span class="pre">profiles/default/types/talk.xml</span></tt>:</p>
 <div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2

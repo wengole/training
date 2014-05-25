@@ -413,11 +413,6 @@
 </div>
 <div class="section" id="skin-templates">
 <h2>skin-templates<a class="headerlink" href="#skin-templates" title="Permalink to this headline">¶</a></h2>
-<p>Why don&#8217;t we always only use templates? Because we might want to do something more complicated than get an attribute form the context and render it&#8217;s value in some html-tag.</p>
-<p>There is a deprecated technology called &#8216;skin-templates&#8217; that allows you to simply add some page-template (e.g. &#8216;old_style_template.pt&#8217;) to a certain folder in the ZMI or your egg) and you can access it in the browser by opening a url like <a class="reference external" href="http://localhost:8080/Plone/old_style_template">http://localhost:8080/Plone/old_style_template</a> and it will be rendered. But we don&#8217;t use it and you too should not even though these skin-templates are still all over Plone.</p>
-<p>Since we use plone.app.contenttypes we do not encounter many skin-templates when dealing with content any more. But mor often than not you&#8217;ll have to customize an old site that still uses skin-templates.</p>
-<p>Until now the templates of the default content-types are skin-templates for example. Since we use plone.app.contenttypes we do not encounter many skin-templates when dealing with content any more. But mor often than not you&#8217;ll have to customize an old site that still uses skin-templates.
-You could append <tt class="docutils literal"><span class="pre">/document_view</span></tt> to any part of a plone-site to render the default template for documents. You will often get errors since the template <tt class="docutils literal"><span class="pre">document_view.pt</span></tt> expects the context to have a field &#8216;text&#8217; that it attempts to render.</p>
 <p>Skin templates and python-scripts in portal_skin are deprecated because:</p>
 <ul class="simple">
 <li>they use restricted python</li>

@@ -298,15 +298,7 @@
             
   <div class="section" id="using-starzel-votable-behavior-in-ploneconf-site">
 <h1>34. Using starzel.votable_behavior in ploneconf.site<a class="headerlink" href="#using-starzel-votable-behavior-in-ploneconf-site" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li>We want to use the votable behavior, so that our reviewers can vote.</li>
-<li>To show how to use events, we are going to auto publish talks that have reached a certain rating.</li>
-<li>We are not going to let everybody vote everything.</li>
-</ul>
 <p>First, we must add our package as a dependency to ploneconf.site.</p>
-<p>We do this in two locations. The egg description <tt class="file docutils literal"><span class="pre">setup.py</span></tt> needs <tt class="samp docutils literal"><span class="pre">starzel.votable_behavior</span></tt> as a dependency.
-Else no source code will be available.</p>
-<p>The persistent configuration needs to be installed when we install our site. This is configured in GenericSetup.</p>
 <p>We start with by editing <tt class="file docutils literal"><span class="pre">setup.py</span></tt></p>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -349,8 +341,6 @@ Else no source code will be available.</p>
 <span class="nt">&lt;/metadata&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>What a weird name. profile- is a prefix you will always need nowadays. Then comes the egg name, and the part after the colon is the name of the profile. The name of the profile is defined in zcml. So far I&#8217;ve stumbled only over one package where the profile directory name was different to the GenericSetup Profile name.</p>
-<p>Now the package is there, but nothing is votable. That is because no content type declares to use this behavior. We can add this behavior via the control panel, export the settings and store it in our egg. Let&#8217;s just add it by hand now.</p>
 <p>We have to add the behavior to talks, we do this in <tt class="file docutils literal"><span class="pre">profiles/default/types/talk.xml</span></tt></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -472,12 +462,6 @@ Talks already have their own workflow. So we won&#8217;t interfere with other pa
 <span class="nt">&lt;/dc-workflow&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>We have to reinstall our product again.</p>
-<p>But this time, this is not enough. Permissions get updated on workflow changes. As long as a workflow change didn&#8217;t happen, the talks have the same permissions as ever.</p>
-<p>Luckily, there is a button for that in the ZMI Workflow view <em class="guilabel">Update security settings</em>.</p>
-<p>After clicking on this, only managers and Reviewers can see the Voting functionality.</p>
-<p>Lastly, we add our silly function to autoapprove talks.</p>
-<p>You quickly end up writing many event handlers, so we put everything into a directory for eventhandlers.</p>
 <p>For the events we need a <tt class="file docutils literal"><span class="pre">events</span></tt> directory.</p>
 <p>Create the <tt class="file docutils literal"><span class="pre">events</span></tt> directory and add an empty <tt class="file docutils literal"><span class="pre">events/__init__.py</span></tt> file.</p>
 <p>Next, register the events directory in <tt class="file docutils literal"><span class="pre">configure.zcml</span></tt></p>
@@ -506,7 +490,6 @@ Talks already have their own workflow. So we won&#8217;t interfere with other pa
 <span class="nt">&lt;/configure&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>This looks like a MultiAdapter. We want to get notified, when an IVotable object gets modified. Our method will receive the votable object, and the event itself.</p>
 <p>And finally, our event handler in <tt class="file docutils literal"><span class="pre">events/votable.py</span></tt></p>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
@@ -529,10 +512,6 @@ Talks already have their own workflow. So we won&#8217;t interfere with other pa
             <span class="n">transition</span><span class="p">(</span><span class="n">votable_object</span><span class="p">,</span> <span class="n">transition</span><span class="o">=</span><span class="s">&#39;publish&#39;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<p>We are using a lot of plone api here. Plone API makes the code a breeze. Also, there is nothing really interesting.
-We will only do something, if the workflow state is pending and the average vote is above 0.5.
-As you can see, the <tt class="samp docutils literal"><span class="pre">transition</span></tt> Method does not want the target state, but the transition to move the state to the target state.</p>
-<p>There is nothing special going on.</p>
 </div>
 
 
