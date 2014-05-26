@@ -358,10 +358,6 @@
 </span><span class="nt">&lt;/property&gt;</span>
 </pre></div>
 </td></tr></table></div>
-<p>Everybody can vote now on talks. That is not what we wanted. Actually, we want reviewers only to vote on pending Talks. This means, depending on the workflow state, the permission has to change. Luckily, workflows can be configured to do just that.
-Talks already have their own workflow. So we won&#8217;t interfere with other packages.</p>
-<p>First, we have to tell the workflow that he will be managing more permissions. Next up, we have to configure for each state, which role has the two new permissions now.</p>
-<p>That is a very verbose configuration, maybe you want to do it in the web interface and export the settings. On the other hand, it is easy to make a simple mistake in both ways. I will just present xml way here.</p>
 <p>The config for the Workflow is in <tt class="file docutils literal"><span class="pre">profiles/default/workfows/talks_workflow.xml</span></tt></p>
 <div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
