@@ -1,4 +1,4 @@
-Ressources
+Resources
 ==========
 
 We have not yet talked about CSS and Javascript. At the moment these are considered static resources.
